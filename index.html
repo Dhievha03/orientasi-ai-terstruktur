@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07182d">
+  <meta name="description" content="Presentasi pemateri TEFA tentang mengarahkan pekerjaan AI, menilai rencana, dan menerima hasil berdasarkan bukti.">
+  <title>Belajar Menggunakan AI untuk Membantu Coding · TEFA</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="calendar.css">
+  <link rel="stylesheet" href="pause-menu.css">
+  <link rel="stylesheet" href="presentation.css">
+  <script src="content.js" defer></script>
+  <script src="water.js" defer></script>
+  <script src="calendar.js" defer></script>
+  <script src="pause-menu.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h14M3 18h10"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M9 15v6"/></symbol>
+    <symbol id="i-notes" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 8h8M8 12h8M8 16h5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L20 5"/></symbol>
+    <symbol id="i-full" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></symbol>
+  </defs></svg>
+  <a class="skip-link" href="#slide">Langsung ke materi</a>
+
+  <div id="app-shell" class="app-shell">
+    <header class="topbar">
+      <button id="menu-button" class="chapter-trigger" aria-label="Buka menu bab (M)" aria-haspopup="dialog"><svg><use href="#i-menu"/></svg><span>BAB</span><kbd>M</kbd></button>
+      <div class="chapter-context"><span id="chapter-label">01</span><span class="context-divider"></span><strong id="chapter-name">Pengantar</strong></div>
+      <div class="header-right"><span id="phase-moon" aria-hidden="true"></span><button id="settings-button" class="icon-button" aria-label="Buka kontrol pemateri" title="Kontrol pemateri"><svg><use href="#i-settings"/></svg></button></div>
+    </header>
+    <main id="stage" class="stage" aria-label="Materi presentasi"><article id="slide" class="slide" tabindex="-1"></article></main>
+    <footer class="slide-footer">
+      <div class="footer-location"><strong id="deck-counter">01 / 28</strong><span id="local-counter">SLIDE 1 DALAM BAB</span></div>
+      <div class="footer-controls"><button id="notes-button" class="notes-toggle" aria-label="Catatan pemateri" aria-expanded="false" aria-controls="notes-panel"><svg aria-hidden="true"><use href="#i-notes"/></svg><span>Catatan <kbd>N</kbd></span></button><div class="slide-navigation"><button id="previous-button" class="nav-button" aria-label="Slide sebelumnya"><svg class="arrow-back"><use href="#i-arrow"/></svg><span>Kembali</span></button><button id="next-button" class="nav-button nav-next" aria-label="Slide berikutnya"><span>Lanjut</span><svg><use href="#i-arrow"/></svg></button></div></div>
+    </footer>
+    <section id="notes-panel" class="notes-panel" aria-labelledby="notes-title" hidden><div class="notes-heading"><h2 id="notes-title">Catatan pemateri</h2><button id="close-notes" class="icon-button" aria-label="Tutup catatan"><svg><use href="#i-close"/></svg></button></div><ul id="notes-content"></ul></section>
+  </div>
+  <button id="exit-clean" class="exit-clean" hidden>Keluar fokus materi <kbd>Esc</kbd></button>
+
+  <dialog id="chapter-menu" class="chapter-menu" aria-labelledby="menu-heading">
+    <canvas id="water-surface" class="water-surface" aria-hidden="true"></canvas>
+    <div class="menu-cut" aria-hidden="true"><span class="menu-title menu-title--light">TEFA</span><div class="menu-title-mask"><span class="menu-title">TEFA</span></div></div>
+    <div class="menu-eyebrow"><span id="menu-heading">PERJALANAN MATERI</span></div>
+    <nav id="chapter-nav" class="chapter-nav" aria-label="Pilih bab"></nav>
+    <section class="pause-topics" aria-labelledby="menu-topic-heading"><h2 id="menu-topic-heading">DALAM BAB INI</h2><ul id="menu-topics"></ul></section>
+    <aside class="menu-preview" aria-label="Ringkasan pilihan"><span class="menu-preview-label">BUKA BAB</span><h2 id="menu-preview-name">Pengantar</h2><p id="menu-preview-description"></p></aside>
+    <div class="menu-actions"><span class="menu-help"><kbd>↑</kbd> <kbd>↓</kbd> pilih</span><button id="open-menu-selection" class="pause-command"><kbd>Enter</kbd><span>Buka bab</span></button><button id="close-menu" class="menu-close pause-command"><kbd>Esc</kbd><span>Kembali</span></button></div>
+    <div class="pause-shards" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  </dialog>
+
+  <dialog id="settings-dialog" class="modal settings-modal" aria-labelledby="settings-title">
+    <div class="modal-head"><div><span class="small-label">PEMATERI</span><h2 id="settings-title">Kontrol presentasi</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup kontrol"><svg><use href="#i-close"/></svg></button></div>
+    <div class="setting-list">
+      <button id="fullscreen-button"><span>Layar penuh</span><span id="fullscreen-state">Buka <kbd>F</kbd></span></button>
+      <button id="clean-button" aria-pressed="false"><span>Fokus materi</span><span id="clean-state">Nonaktif <kbd>P</kbd></span></button>
+      <button id="motion-button" aria-pressed="true"><span>Transisi</span><span id="motion-state">Aktif <kbd>T</kbd></span></button>
+      <button id="water-button" aria-pressed="true"><span>Gerak air pada menu</span><span id="water-state">Aktif <kbd>L</kbd></span></button>
+      <button id="glossary-button"><span>Daftar istilah</span><span> Buka ↗</span></button>
+      <button id="home-button"><span>Kembali ke awal</span><span><kbd>Home</kbd></span></button>
+    </div>
+    <p class="modal-foot">Panah kiri/kanan memindahkan slide. <kbd>B</kbd> membuka pembahasan atau respons berikutnya. Semua perpindahan dilakukan manual.</p>
+  </dialog>
+  <dialog id="glossary-dialog" class="modal" aria-labelledby="glossary-title"><div class="modal-head"><div><span class="small-label">PANDUAN</span><h2 id="glossary-title">Daftar istilah</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup daftar istilah"><svg><use href="#i-close"/></svg></button></div><dl id="glossary-list" class="glossary-list"></dl></dialog>
+  <dialog id="prompt-dialog" class="modal prompt-modal" aria-labelledby="prompt-title"><div class="modal-head"><div><span class="small-label">CONTOH INSTRUKSI / PEMATERI</span><h2 id="prompt-title">Instruksi lengkap</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup instruksi"><svg><use href="#i-close"/></svg></button></div><div id="full-prompt-content" class="full-prompt-content"></div><button id="copy-full-prompt" class="action-button">Salin instruksi <span aria-hidden="true">↗</span></button><p id="copy-status" class="copy-status" role="status"></p></dialog>
+
+  <div id="chapter-transition" class="chapter-transition" role="dialog" aria-modal="true" aria-labelledby="transition-title" hidden>
+    <div class="calendar-band" aria-hidden="true"></div>
+    <div class="calendar-month"><span>TEFA</span><small>BAB</small><strong id="transition-number">08</strong></div>
+    <div class="calendar-heading"><span class="calendar-eyebrow">PERJALANAN MATERI</span><h2 id="transition-title"><span id="transition-title-text">Simulasi bersama AI</span></h2></div>
+    <svg id="calendar-axis" class="calendar-axis" aria-hidden="true"><line id="calendar-axis-line"/></svg><div id="calendar-track" class="calendar-track" aria-hidden="true"></div><div class="calendar-current-ring" aria-hidden="true"><i></i><i></i><i></i></div><div id="transition-moon" class="calendar-focus-moon" aria-hidden="true"></div><div class="calendar-full-light" aria-hidden="true"></div><button id="skip-transition" class="skip-transition">Lewati transisi <svg><use href="#i-arrow"/></svg></button>
+  </div>
+  <div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div id="notice" class="notice" role="status" hidden></div>
+  <noscript><p class="noscript-message">Aktifkan JavaScript untuk membuka presentasi. Materi tersedia lokal tanpa layanan AI.</p></noscript>
+</body>
+</html>

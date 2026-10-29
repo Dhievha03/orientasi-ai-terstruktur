@@ -1,0 +1,131 @@
+<!doctype html>
+<!-- Arsip struktur sebelum redesign; bukan halaman presentasi aktif. -->
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071735">
+  <meta name="description" content="Belajar menggunakan AI untuk membantu coding. Presentasi dan demo micro-task khusus pemateri TEFA.">
+  <title>Belajar Menggunakan AI untuk Membantu Coding · Sharing TEFA</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="content.js" defer></script>
+  <script src="water.js" defer></script>
+  <script src="demo.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7"/></symbol>
+      <symbol id="i-notes" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 8h8M8 12h8M8 16h5"/></symbol>
+      <symbol id="i-full" viewBox="0 0 24 24"><path d="M9 3H3v6m12-6h6v6M3 15v6h6m12-6v6h-6"/></symbol>
+      <symbol id="i-clean" viewBox="0 0 24 24"><path d="M3 5h18v13H3zM8 22l4-4 4 4M9 9l6 3-6 3z"/></symbol>
+      <symbol id="i-motion" viewBox="0 0 24 24"><path d="m14 3-7 10h6l-3 8 8-12h-6l2-6ZM3 5h5M2 10h3M3 17h3"/></symbol>
+      <symbol id="i-water" viewBox="0 0 24 24"><path d="M2 7c3-5 5 5 9 0s6 5 11 0M2 13c3-5 5 5 9 0s6 5 11 0M2 19c3-5 5 5 9 0s6 5 11 0"/></symbol>
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v11h-7v-7h-4v7H3z"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 6C9 3 5 3 2 4v15c4-1 7 0 10 2m0-15c3-3 7-3 10-2v15c-4-1-7 0-10 2V6Z"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m5 5 14 14M19 5 5 19"/></symbol>
+      <symbol id="i-keys" viewBox="0 0 24 24"><path d="M2 5h20v14H2zM5 9h1m3 0h1m3 0h1m3 0h1M5 12h1m3 0h1m3 0h1m3 0h1M7 16h10"/></symbol>
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h14M3 18h10"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L20 5"/></symbol>
+    </defs>
+  </svg>
+
+  <a class="skip-link" href="#slide">Langsung ke materi</a>
+  <div class="scene" aria-hidden="true">
+    <canvas id="water-surface" class="water-surface"></canvas>
+    <div class="white-cut"><div class="scene-type">TEFA</div></div>
+    <span class="shard shard-one"></span><span class="shard shard-two"></span><span class="shard shard-three"></span>
+  </div>
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navigasi materi">
+      <div class="nav-heading">PILIH BAB <span aria-hidden="true">↙</span></div>
+      <nav class="chapter-nav" id="chapter-nav" aria-label="Bab presentasi"></nav>
+    </aside>
+
+    <div class="workspace">
+      <header class="topbar">
+        <button id="menu-button" class="mobile-menu" aria-label="Buka navigasi bab" aria-expanded="false" aria-controls="sidebar"><svg><use href="#i-menu"/></svg><span>BAB</span></button>
+        <div class="lunar-status"><div id="sidebar-moon" class="sidebar-moon" aria-hidden="true"></div><div><span class="micro-label">FASE MATERI</span><strong id="phase-label">New Moon</strong></div></div>
+      </header>
+
+      <main class="stage" id="stage" aria-label="Area presentasi">
+        <article id="slide" class="slide" tabindex="-1" aria-label="Slide presentasi"></article>
+      </main>
+
+      <section id="notes-panel" class="notes-panel" aria-labelledby="notes-heading" hidden>
+        <div class="notes-header"><h2 id="notes-heading"><svg><use href="#i-notes"/></svg> CATATAN PEMATERI</h2><button id="close-notes" class="icon-button" aria-label="Tutup catatan pemateri"><svg><use href="#i-close"/></svg></button></div>
+        <ul id="notes-content"></ul>
+      </section>
+
+      <footer class="slide-footer">
+        <div class="footer-meta"><div class="slide-position"><span class="micro-label" id="chapter-label">BAB 01</span><div><strong id="local-slide-number">01</strong><span id="local-slide-total">/ 05</span></div><span class="position-caption">SLIDE DALAM BAB</span></div><div class="deck-progress"><span id="deck-counter">01 / 45</span><div id="slide-ticks" aria-hidden="true"></div></div></div>
+        <div class="action-bar">
+          <div class="toolbar" aria-label="Kontrol pemateri">
+            <button id="notes-button" class="tool-button" title="Catatan pemateri (N)" aria-label="Catatan pemateri (N)" aria-expanded="false" aria-controls="notes-panel"><svg><use href="#i-notes"/></svg><span>Catatan</span></button>
+            <button id="fullscreen-button" class="tool-button" title="Layar penuh (F)" aria-label="Layar penuh (F)" aria-pressed="false"><svg><use href="#i-full"/></svg><span>Layar penuh</span></button>
+            <button id="clean-button" class="tool-button" title="Fokus materi (P). Keluar dengan Esc." aria-label="Fokus materi (P)" aria-pressed="false"><svg><use href="#i-clean"/></svg><span>Fokus materi</span></button>
+            <button id="motion-button" class="tool-button" title="Transisi aktif (T)" aria-label="Transisi aktif (T)" aria-pressed="true"><svg><use href="#i-motion"/></svg><span>Transisi</span><i class="toggle-light" aria-hidden="true"></i></button>
+            <button id="water-button" class="tool-button" title="Gerak laut aktif (L)" aria-label="Gerak laut aktif (L)" aria-pressed="true"><svg><use href="#i-water"/></svg><span>Laut</span><i class="toggle-light" aria-hidden="true"></i></button>
+            <button id="home-button" class="tool-button" title="Kembali ke awal (Home)" aria-label="Kembali ke awal (Home)"><svg><use href="#i-home"/></svg><span>Awal</span></button>
+            <button id="glossary-button" class="tool-button" title="Daftar istilah dalam materi" aria-label="Buka daftar istilah"><svg><use href="#i-book"/></svg><span>Daftar istilah</span></button>
+            <button id="help-button" class="tool-button" title="Pintasan keyboard (?)" aria-label="Lihat pintasan keyboard (?)"><svg><use href="#i-keys"/></svg><span>Pintasan</span></button>
+          </div>
+          <div class="command-line"><div class="action-caption"><span id="action-description">Lanjutkan materi</span><small>Kontrol</small></div><div class="slide-navigation" aria-label="Navigasi slide"><button id="previous-button" class="nav-button previous" aria-label="Slide sebelumnya"><span class="key-ring"><svg><use href="#i-arrow"/></svg></span><span>Sebelumnya</span></button><button id="next-button" class="nav-button next" aria-label="Slide berikutnya"><span class="key-ring"><svg><use href="#i-arrow"/></svg></span><span>Berikutnya</span></button></div></div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <button id="exit-clean" class="exit-clean" hidden><svg><use href="#i-close"/></svg> Keluar mode bersih <kbd>Esc</kbd></button>
+
+  <div id="chapter-transition" class="chapter-transition" role="dialog" aria-modal="true" aria-labelledby="transition-title" hidden>
+    <div class="calendar-band" aria-hidden="true"></div>
+    <div class="calendar-month"><span>TEFA</span><small>BAB</small><strong id="transition-number">08</strong></div>
+    <div class="calendar-heading"><span class="calendar-eyebrow">PERJALANAN MATERI</span><h2 id="transition-title"><span id="transition-title-text">Full Moon: studi kasus</span></h2><div id="transition-phase" class="calendar-phase">FULL MOON</div></div>
+    <svg id="calendar-axis" class="calendar-axis" aria-hidden="true"><line id="calendar-axis-line"/></svg>
+    <div id="calendar-track" class="calendar-track" aria-hidden="true"></div>
+    <div class="calendar-current-ring" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div id="transition-moon" class="calendar-focus-moon" aria-hidden="true"></div>
+    <div class="calendar-full-light" aria-hidden="true"></div>
+    <button id="skip-transition" class="skip-transition">Lewati transisi <svg><use href="#i-arrow"/></svg></button>
+  </div>
+
+  <dialog id="glossary-dialog" class="modal" aria-labelledby="glossary-title">
+    <div class="modal-head"><div><span class="micro-label">PANDUAN PEMATERI</span><h2 id="glossary-title">Daftar istilah</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup daftar istilah"><svg><use href="#i-close"/></svg></button></div>
+    <p class="modal-intro">Istilah diperkenalkan melalui contoh formulir. Penjelasan singkat ini dapat dibuka kapan diperlukan.</p><dl id="glossary-list" class="glossary-list"></dl>
+  </dialog>
+  <dialog id="prompt-dialog" class="modal" aria-labelledby="prompt-dialog-title">
+    <div class="modal-head"><div><span class="micro-label">BAHAN PEMATERI</span><h2 id="prompt-dialog-title">Instruksi lengkap</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup instruksi lengkap"><svg><use href="#i-close"/></svg></button></div>
+    <pre id="full-prompt-content" class="full-prompt-content"></pre>
+    <button id="copy-full-prompt" type="button" class="inline-action">Salin instruksi lengkap</button>
+  </dialog>
+  <dialog id="demo-dialog" class="modal demo-report-dialog" aria-labelledby="demo-dialog-title">
+    <div class="modal-head"><div><span class="micro-label">DEMO LOKAL / PEMATERI</span><h2 id="demo-dialog-title">Catatan demo formulir</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup catatan demo"><svg><use href="#i-close"/></svg></button></div>
+    <div class="modal-switch" role="group" aria-label="Pilih catatan demo"><button type="button" data-demo-panel="report" aria-pressed="true">Catatan tes</button><button type="button" data-demo-panel="code" aria-pressed="false">Kode & hasil</button></div>
+    <div id="demo-dialog-content"></div>
+  </dialog>
+  <dialog id="help-dialog" class="modal help-modal" aria-labelledby="help-title">
+    <div class="modal-head"><div><span class="micro-label">KENDALI PEMATERI</span><h2 id="help-title">Pintasan keyboard.</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup pintasan keyboard"><svg><use href="#i-close"/></svg></button></div>
+    <dl class="shortcut-list">
+      <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Slide sebelumnya / berikutnya</dd></div>
+      <div><dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Pindah fokus menu bab; Enter untuk membuka</dd></div>
+      <div><dt><kbd>N</kbd></dt><dd>Buka / tutup catatan pemateri</dd></div>
+      <div><dt><kbd>P</kbd></dt><dd>Masuk / keluar mode bersih</dd></div>
+      <div><dt><kbd>Esc</kbd></dt><dd>Keluar mode bersih / lewati transisi / tutup panel</dd></div>
+      <div><dt><kbd>F</kbd></dt><dd>Masuk / keluar layar penuh</dd></div>
+      <div><dt><kbd>T</kbd></dt><dd>Aktifkan / matikan transisi menu dan bab</dd></div>
+      <div><dt><kbd>L</kbd></dt><dd>Aktifkan / jeda gerak laut secara terpisah</dd></div>
+      <div><dt><kbd>B</kbd></dt><dd>Tampilkan / sembunyikan pembahasan atau perbandingan</dd></div>
+      <div><dt><kbd>Home</kbd></dt><dd>Kembali ke awal presentasi</dd></div>
+      <div><dt><kbd>?</kbd></dt><dd>Buka panduan pintasan ini</dd></div>
+    </dl>
+    <p class="modal-foot">Saat transisi tampil, Enter, Spasi, atau Esc dapat melewatinya. Klik tab bab untuk melompat langsung. Semua perpindahan slide dilakukan manual.</p>
+  </dialog>
+
+  <div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <div id="notice" class="notice" role="status" hidden></div>
+  <noscript><div class="noscript-message">Aktifkan JavaScript untuk membuka presentasi interaktif ini. Semua materi tersedia secara lokal tanpa koneksi layanan AI.</div></noscript>
+</body>
+</html>

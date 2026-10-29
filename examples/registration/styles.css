@@ -1,0 +1,19 @@
+*{box-sizing:border-box}
+body{margin:0;background:#eaf0f6;color:#122b48;font:22px/1.4 Arial,sans-serif}
+main{width:min(560px,calc(100% - 40px));margin:30px auto;background:white;padding:28px}
+header p{font-size:14px;font-weight:700;letter-spacing:1px;margin:0 0 8px;color:#356492}
+h1{font-size:30px;line-height:1.1;margin:0 0 25px}
+label{display:block;font-size:22px;font-weight:700;margin-bottom:10px}
+input,select,button{font:inherit;border-radius:0}
+input,select{width:100%;min-height:48px;padding:9px 12px;background:#f3f6f9;border:2px solid #8ca4bc;color:#122b48}
+#evidence-panel{background:white;padding:12px 0 16px}
+#result{font-size:24px;font-weight:700;line-height:1.25;min-height:60px;margin:18px 0 9px;padding:14px 16px;background:#edf3f8;color:#345579}
+#result[data-state=accepted]{background:#e6f6ee;color:#176040}
+#result[data-state=rejected]{background:#fdebf0;color:#9b2442}
+.simulation-caption{display:block;font-size:17px;color:#4d6986;margin-top:20px}
+.class-field{margin-top:18px}
+.actions{display:flex;gap:14px;margin-top:25px}
+button{min-height:46px;padding:10px 22px;border:0;background:#164ebf;color:white;cursor:pointer}
+button[type=reset]{background:#dce7f2;color:#173f70}
+button:disabled{opacity:.5;cursor:not-allowed}
+:focus-visible{outline:3px solid #0c6bd6;outline-offset:3px}

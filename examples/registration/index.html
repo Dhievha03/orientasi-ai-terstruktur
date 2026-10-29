@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Formulir simulasi TEFA</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main>
+    <header><p>SIMULASI FORMULIR</p><h1>Formulir pendaftaran</h1></header>
+    <form id="registration" novalidate>
+      <section id="evidence-panel" aria-label="Isian Nama dan hasil percobaan">
+        <label for="name">Nama</label>
+        <input id="name" name="name" autocomplete="off" aria-describedby="result">
+        <p id="result" role="status">Isi nama, lalu pilih Daftar.</p>
+      </section>
+      <div class="class-field"><label for="class">Kelas</label><select id="class" name="class"><option>XI RPL</option><option>XII RPL</option></select></div>
+      <div class="actions"><button type="submit" disabled>Daftar</button><button type="reset" disabled>Reset</button></div>
+    </form>
+    <p class="simulation-caption">Formulir simulasi, tanpa pengiriman data.</p>
+  </main>
+  <script>
+    const sources={before:'versions/before.js',first:'versions/first.js',final:'validate-name.js'};
+    const stage=new URLSearchParams(location.search).get('stage')||'final';
+    const labels={before:'SEBELUM PERBAIKAN',first:'PERBAIKAN PERTAMA',final:'SETELAH KOREKSI'};
+    document.querySelector('header p').textContent=`SIMULASI / ${labels[stage]||labels.final}`;
+    const validation=document.createElement('script');validation.src=sources[stage]||sources.final;
+    validation.onload=()=>{const controller=document.createElement('script');controller.src='form.js';document.body.append(controller)};
+    document.body.append(validation);
+  </script>
+</body>
+</html>
