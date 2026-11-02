@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulasi dashboard penjualan TEFA</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="data.js" defer></script>
+  <script src="report-engine.js" defer></script>
+  <script src="report-view.js" defer></script>
+</head>
+<body>
+  <main>
+    <header><p>DATA SIMULASI / TEFA</p><h1>Laporan penjualan</h1><p>Aturan omzet: transaksi completed pada periode terpilih.</p></header>
+    <nav aria-label="Tahap perbaikan"><a href="?stage=before">Versi awal</a><a href="?stage=first">Perbaikan parsial</a><a href="?stage=final">Hasil koreksi</a></nav>
+    <section class="toolbar"><label for="period">Periode transaksi <input id="period" type="date" value="2026-10-19"></label><button id="export" type="button">Ekspor CSV</button></section>
+    <section id="report-panel" aria-label="Ringkasan omzet dan transaksi">
+      <div class="summary"><div><span id="stage-label">HASIL KOREKSI</span><h2>Omzet</h2><strong id="revenue">Memuat laporan…</strong></div><p><b id="included-count">0</b> transaksi dihitung</p></div>
+      <div class="table-wrap"><table><caption>Transaksi dalam periode terpilih</caption><thead><tr><th>ID</th><th>Status</th><th>Nilai</th><th>Dihitung</th></tr></thead><tbody id="orders"></tbody></table></div>
+      <p id="empty" hidden>Tidak ada transaksi pada periode ini.</p>
+    </section>
+    <p id="export-status" role="status"></p>
+    <p class="foot">Dataset untuk simulasi. Nilai transaksi bukan data penjualan perusahaan.</p>
+  </main>
+</body>
+</html>

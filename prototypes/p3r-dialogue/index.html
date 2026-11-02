@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Tools AI untuk AI-Assisted Development · TEFA</title>
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/aigis.webp" as="image">
+  <link rel="preload" href="assets/makoto.webp" as="image">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="workspace.css">
+  <script src="dialogue-data.js" defer></script>
+  <script src="../../examples/extracurricular-registration/example.js" defer></script>
+  <script src="observations.js" defer></script>
+  <script src="registration-scenario.js" defer></script>
+  <script src="dialogue-flow.js" defer></script>
+  <script src="workspace.js" defer></script>
+  <script src="story.js" defer></script>
+</head>
+<body data-mode="intro">
+  <header class="topbar">
+    <div class="identity"><span class="wordmark">TEFA</span><span class="prototype-label">PROTOTIPE<br>DIALOG</span></div>
+    <nav class="utilities" aria-label="Kendali prototipe">
+      <button id="restart" type="button">Ulang</button>
+      <button id="fullscreen" type="button" aria-pressed="false">Layar penuh</button>
+    </nav>
+  </header>
+
+  <svg class="comic-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
+    <symbol id="comic-anger" viewBox="0 0 100 100"><path d="M44 8Q47 37 17 35M57 8Q54 37 84 35M17 51Q46 48 43 79M84 51Q55 48 58 79" fill="none" stroke="currentColor" stroke-width="10" stroke-linecap="round"/></symbol>
+    <symbol id="comic-surprise" viewBox="0 0 100 100"><path d="M39 6H64L59 61H44Z" fill="currentColor"/><circle cx="51" cy="80" r="9" fill="currentColor"/><path d="M12 18 25 33M78 13 72 32" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></symbol>
+    <symbol id="comic-shock" viewBox="0 0 100 100"><path d="M12 10H30L27 57H16Z" fill="currentColor"/><circle cx="21" cy="75" r="7" fill="currentColor"/><path d="M49 26C49 3 87 4 87 27 87 43 67 42 67 57" fill="none" stroke="currentColor" stroke-width="11" stroke-linecap="round"/><circle cx="67" cy="76" r="7" fill="currentColor"/></symbol>
+    <symbol id="comic-stress" viewBox="0 0 100 100"><path d="M18 12V53M34 7V75M50 14V61M66 6V81M82 14V58" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></symbol>
+    <symbol id="comic-smoke-0" viewBox="0 0 100 120"><path d="M48 116C24 118 18 106 30 97 12 92 17 73 34 75 24 63 36 52 53 57 58 47 46 43 32 48 15 51 6 38 15 27 7 12 28 3 41 13 49 1 68 6 70 18 91 13 99 34 83 43 89 57 76 68 64 65 76 78 63 91 49 87 44 96 65 102 48 116Z" fill="#b5bbc1" stroke="#75808a" stroke-width="3" stroke-linejoin="round"/><path d="M28 79C22 86 30 94 39 91 31 101 40 107 50 103 54 95 44 92 49 83 42 76 35 76 28 79ZM19 30C17 20 30 16 37 23 41 10 58 12 60 24 73 17 84 29 75 37 81 46 65 52 57 43 46 51 32 45 33 36 25 41 19 37 19 30Z" fill="#f8f9fa"/><path d="M54 60C67 57 72 64 63 73 77 79 63 89 52 83 65 76 57 70 54 60Z" fill="#dce0e3"/></symbol>
+    <symbol id="comic-smoke-1" viewBox="0 0 100 120"><path d="M47 116C52 100 30 98 37 84 19 93 5 79 14 66 1 56 9 38 23 41 20 26 39 19 48 31 56 15 77 24 76 37 96 31 103 55 88 62 100 77 83 91 68 84 74 98 54 100 54 116Z" fill="#bec4c9" stroke="#75808a" stroke-width="3" stroke-linejoin="round"/><path d="M16 54C13 43 29 41 33 48 30 32 47 29 53 41 60 28 77 35 72 49 87 38 96 57 82 62 89 75 69 83 62 70 53 82 38 75 41 64 27 73 13 66 16 54Z" fill="#fff"/><path d="M25 75C37 81 43 72 48 78 47 91 66 91 58 101 47 97 35 96 40 86 32 88 22 83 25 75Z" fill="#e0e3e5"/></symbol>
+    <symbol id="comic-smoke-2" viewBox="0 0 100 120"><path d="M48 117C33 103 53 95 35 84 19 88 8 74 18 62 5 55 10 38 25 41 15 29 22 15 35 20 35 6 54 4 60 16 72 4 91 16 85 30 100 38 94 55 79 54 87 68 71 78 62 70 59 82 77 92 63 101 57 106 61 113 56 117Z" fill="#afb7be" stroke="#75808a" stroke-width="3" stroke-linejoin="round"/><path d="M25 67C17 59 21 48 31 50 25 41 31 34 40 38 40 26 55 25 58 37 64 30 74 35 71 46 82 40 90 54 79 60 71 57 64 59 65 67 52 63 42 73 41 81 31 81 23 76 25 67Z" fill="#f9fafb"/><path d="M43 21C42 12 55 12 57 23 66 14 82 18 78 31 67 23 63 35 56 29 48 33 43 28 43 21ZM47 87C59 89 64 99 55 104 49 101 44 95 47 87Z" fill="#dce1e5"/></symbol>
+    <symbol id="comic-smoke-3" viewBox="0 0 100 120"><g fill="#c0c6cb" stroke="#75808a" stroke-width="3"><path d="M47 116C35 109 36 99 46 98 40 88 53 81 60 90 70 94 63 108 55 107L53 117Z"/><path d="M24 64C9 61 8 43 20 38 14 23 31 16 41 27 50 15 68 24 64 39 80 41 78 59 66 63 60 76 43 73 39 63 34 71 26 70 24 64Z"/><path d="M70 18C66 9 77 1 84 8 96 5 99 19 90 22 88 32 72 29 70 18Z"/></g><path d="M19 43C18 32 32 30 38 37 41 26 56 30 53 41 66 37 71 50 59 56 52 65 40 59 39 52 28 59 18 53 19 43ZM45 101C43 95 54 92 57 99 64 106 49 110 45 101Z" fill="#fff"/></symbol>
+    <symbol id="comic-spark" viewBox="0 0 100 100"><path d="M53 4 27 37 52 33 29 67 47 61 39 96 72 49 49 54 70 20 48 27Z" fill="#b8f8ff" stroke="#fff" stroke-width="2" stroke-linejoin="round"/></symbol>
+  </defs></svg>
+  <main id="scene" class="scene" data-mode="intro" data-speaker="ai" data-emotion="neutral" tabindex="-1">
+    <div class="scene-backdrop" aria-hidden="true"></div>
+    <div class="scene-environment" aria-hidden="true"><div class="environment-light"></div><div class="environment-panel environment-panel--back"></div><div class="environment-panel environment-panel--front"></div><div class="environment-floor"></div></div>
+    <figure id="portrait-ai" class="portrait portrait-ai">
+      <img src="assets/aigis.webp" width="1113" height="1337" alt="Siluet hitam pembicara AI" fetchpriority="high">
+      <div id="ai-health" class="ai-health" hidden role="img" aria-label="Kondisi AI stabil"><div class="health-status"><div class="health-ribbon"><span class="health-label" aria-hidden="true">HP</span><div class="health-track"><i id="health-fill"></i></div></div></div><span id="health-description" class="sr-only">Stabil</span></div>
+      <div class="emotion-layer" aria-hidden="true"></div>
+    </figure>
+    <figure id="portrait-user" class="portrait portrait-user">
+      <img src="assets/makoto.webp" width="1111" height="1359" alt="Siluet hitam pembicara User">
+      <div class="emotion-layer" aria-hidden="true"></div>
+    </figure>
+    <figure id="portrait-students" class="portrait portrait-students" hidden aria-label="Kelompok siswa yang memprotes">
+      <div class="student student-left"><img src="assets/akihiko.webp" width="1111" height="1392" alt=""><div class="emotion-layer" aria-hidden="true"></div></div>
+      <div class="student student-right"><img src="assets/junpei.webp" width="1181" height="1346" alt=""><div class="emotion-layer" aria-hidden="true"></div></div>
+      <div class="student student-front"><img src="assets/yukari.webp" width="944" height="1338" alt="Siluet tiga siswa"><div class="emotion-layer" aria-hidden="true"></div></div>
+    </figure>
+
+    <section id="intro" class="intro" aria-labelledby="scene-title">
+      <p class="section-label">AI-ASSISTED DEVELOPMENT</p>
+      <h1 id="scene-title">Tolong hapus<br>database.</h1>
+      <p class="intro-context"></p>
+      <ul id="scene-requirements" class="scene-requirements" hidden></ul>
+      <p class="cast">User <span>pemberi instruksi</span><br>AI <span>pelaksana tugas</span></p>
+      <button id="start" class="primary-button" type="button" disabled>Menyiapkan aset…</button>
+      <p id="asset-status" class="asset-status" role="status">Memuat portrait asli.</p>
+    </section>
+
+    <section id="playfield" class="playfield" aria-label="Adegan percakapan" hidden>
+      <section id="choices" class="choices" aria-labelledby="choice-heading" hidden>
+        <h2 id="choice-heading" class="sr-only">Pilih instruksi User</h2>
+        <p class="choice-instruction">Instruksi User</p>
+        <div id="choice-list" class="choice-list"></div>
+      </section>
+      <div class="speech-shell">
+        <div class="nameplate"><span id="speaker-name">User</span></div>
+        <div class="speech-content">
+          <p id="spoken-line" class="spoken-line"><span id="line-reserve" aria-hidden="true"></span><span id="spoken-text" aria-hidden="true"></span><span id="accessible-line" class="sr-only"></span></p>
+          <button id="next" class="next-button" type="button"><span id="next-label">Lanjut</span><svg aria-hidden="true" viewBox="0 0 48 28" width="40" height="24"><path d="M4 3 24 23 44 3" fill="none" stroke="currentColor" stroke-width="4"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="ending" class="ending" aria-labelledby="ending-title" hidden>
+      <h2 id="ending-title"></h2>
+      <button id="open-conclusion" class="primary-button" type="button">Lihat konklusi</button>
+    </section>
+
+    <section id="conclusion" class="conclusion" aria-labelledby="conclusion-title" hidden></section>
+  </main>
+
+  <section id="registration-workspace" class="registration-workspace" hidden aria-label="Kode dan apps pendaftaran">
+    <section id="code-view" class="workspace-view code-view" hidden>
+      <h1 class="sr-only">Kode frontend</h1>
+      <div class="code-layout">
+        <nav class="project-files" aria-label="Berkas frontend">
+          <p class="project-root">pendaftaran/</p>
+          <p id="project-empty" class="project-empty">Belum ada berkas.</p>
+          <div id="project-file-list">
+            <button type="button" data-code-file="html"><span aria-hidden="true">HTML</span>index.html</button>
+            <button type="button" data-code-file="css"><span aria-hidden="true">CSS</span>styles.css</button>
+            <button type="button" data-code-file="js"><span aria-hidden="true">JS</span>app.js</button>
+          </div>
+          <p id="project-css-status" class="project-note" hidden>Stylesheet belum dibuat.</p>
+        </nav>
+        <section class="code-editor" aria-label="Kode berkas terpilih">
+          <p class="code-file-name" id="code-file-name">Belum ada berkas</p>
+          <p class="code-context" id="code-context">Kode muncul setelah AI membuat formulir.</p>
+          <div class="code-discussion"><p id="code-selection-status" class="code-selection-status" role="status">Belum ada kode ditandai.</p><div class="code-selection-actions"><button id="code-clear" type="button" disabled>Hapus tanda</button><button id="code-discuss" type="button" disabled>Bahas kode ini</button></div></div>
+          <pre class="source-code" id="source-code" tabindex="0" aria-label="Isi berkas. Klik atau blok teks kode yang ingin dibahas." aria-describedby="code-context"></pre>
+        </section>
+      </div>
+    </section>
+    <section id="apps-view" class="workspace-view apps-view" hidden aria-label="Coba formulir dan lihat response">
+      <h1 class="sr-only">Formulir dan response pendaftaran</h1>
+      <div class="apps-tools"><label for="response-topic" class="sr-only">Pengamatan dari response terakhir</label><select id="response-topic" disabled><option value="">Belum ada response</option></select><button id="response-discuss" type="button" disabled>Bahas response ini</button><button id="appearance-discuss" type="button">Bahas tampilan</button><button id="clear-response" type="button">Bersihkan response</button></div>
+      <iframe id="registration-preview" title="Formulir pendaftaran dan response backend" sandbox="allow-scripts allow-forms" width="1280" height="900"></iframe>
+      <p class="workspace-note" id="workspace-note" role="status">Mengirim formulir tidak mengakhiri percakapan. Kembali ke AI untuk menyampaikan temuan.</p>
+    </section>
+  </section>
+
+  <footer class="bottom-controls">
+    <nav id="workspace-nav" class="workspace-nav" hidden aria-label="Tampilan contoh"><button type="button" data-workspace-view="ai"><kbd>1</kbd> AI</button><button type="button" data-workspace-view="code"><kbd>2</kbd> Kode</button><button type="button" data-workspace-view="apps"><kbd>3</kbd> Apps</button></nav>
+    <div class="playback-controls"><span id="keyboard-hint"><kbd>Enter</kbd> Lanjut</span><button id="log" type="button" disabled><kbd>L</kbd> Log</button></div>
+  </footer>
+
+  <dialog id="history" aria-labelledby="history-title">
+    <header class="history-header"><h2 id="history-title">Log percakapan</h2><button id="close-history" type="button">Tutup <kbd>Esc</kbd></button></header>
+    <ol id="history-list"></ol>
+  </dialog>
+  <p id="announcer" class="sr-only" role="status" aria-atomic="true"></p>
+  <noscript><p class="script-warning">Aktifkan JavaScript untuk menjalankan prototipe dialog ini.</p></noscript>
+</body>
+</html>

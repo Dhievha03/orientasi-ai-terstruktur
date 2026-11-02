@@ -5,18 +5,20 @@ window.TEFA_CALENDAR = (() => {
   let running = null;
   let frame;
   function lightPath(fraction){
+    fraction=Math.round(fraction*1e10)/1e10;
     const radius=Math.max(.01,Math.abs(1-2*fraction)*44).toFixed(2);
     return `M50 6A44 44 0 0 1 50 94A${radius} 44 0 0 ${fraction>.5?1:0} 50 6Z`;
   }
-  function moon(fraction) {
-    return `<svg class="moon-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#454752"/><path class="moon-light" d="${lightPath(fraction)}" fill="currentColor" opacity="${fraction>0?1:0}"/></svg>`;
+  function moon(fraction,waning=false) {
+    return `<svg class="moon-svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="#454752"/><path class="moon-light" d="${lightPath(fraction)}" transform="${waning?'translate(100 0) scale(-1 1)':'matrix(1 0 0 1 0 0)'}" fill="currentColor" opacity="${fraction>0?1:0}"/></svg>`;
   }
-  function updateMoon(fraction){
+  function updateMoon(fraction,waning=false){
     const light=$('#transition-moon .moon-light');
     light.setAttribute('d',lightPath(fraction));light.setAttribute('opacity',String(fraction>0?1:0));
+    light.setAttribute('transform',waning?'translate(100 0) scale(-1 1)':'matrix(1 0 0 1 0 0)');
   }
   function initialize(chapters){
-    $('#calendar-track').innerHTML=chapters.map((chapter,index)=>`<div class="calendar-day"><div class="calendar-day-label"><span class="calendar-day-number">${pad(index+1)}</span><span class="calendar-day-caption">BAB</span></div><div class="calendar-day-moon">${moon(chapter.moon)}</div></div>`).join('');
+    $('#calendar-track').innerHTML=chapters.map((chapter,index)=>`<div class="calendar-day"><div class="calendar-day-label"><span class="calendar-day-number">${pad(index+1)}</span><span class="calendar-day-caption">BAB</span></div><div class="calendar-day-moon">${moon(chapter.moon,chapter.waning)}</div></div>`).join('');
     $('#skip-transition').addEventListener('click',finish);
     window.addEventListener('resize',layout);
   }
@@ -61,7 +63,7 @@ window.TEFA_CALENDAR = (() => {
   function start(chapters,from,to,onCommit,onFinish){
     if(running)return;
     const previous=chapters[from],chapter=chapters[to],duration=chapter.climax?4200:2400,overlay=$('#chapter-transition');
-    $('#transition-number').textContent=pad(to+1);$('#transition-title-text').textContent=chapter.name;$('#transition-moon').innerHTML=moon(previous.moon);
+    $('#transition-number').textContent=pad(to+1);$('#transition-title-text').textContent=chapter.name;$('#transition-moon').innerHTML=moon(previous.moon,previous.waning);
     overlay.classList.toggle('full-moon',Boolean(chapter.climax));overlay.classList.remove('is-landed');overlay.style.setProperty('--land-duration',`${duration*.30}ms`);
     overlay.style.clipPath='polygon(135% 0,100% 0,100% 100%,100% 100%)';overlay.hidden=false;
     running={chapters,from,to,focus:from,entry:0,onCommit,onFinish,committed:false};layout();
@@ -78,7 +80,10 @@ window.TEFA_CALENDAR = (() => {
       $('.calendar-month').style.opacity=String(entry);$('.calendar-month').style.transform=`translateY(${(1-entry)*30}px)`;$('.calendar-heading').style.opacity=String(clamp((progress-.08)/.14));
       $('#calendar-axis-line').style.strokeDashoffset=String(running.geometry.lineLength*(1-entry));$('#transition-moon').style.opacity=String(clamp((progress-.16)/.1));
       const phase=ease(clamp((progress-.18)/.46));
-      updateMoon(previous.moon+(chapter.moon-previous.moon)*phase);
+      if(Number.isFinite(previous.phaseIndex)&&Number.isFinite(chapter.phaseIndex)){
+        const position=previous.phaseIndex+(chapter.phaseIndex-previous.phaseIndex)*phase;
+        updateMoon((1-Math.cos(position*Math.PI/4))/2,position>4);
+      }else updateMoon(previous.moon+(chapter.moon-previous.moon)*phase);
       if(progress>=.64){overlay.classList.add('is-landed');if(!running.committed){running.committed=true;onCommit();}}
       if(progress>=.82)$('#app-shell').classList.add('is-revealing');
       if(progress>=1)finish();else frame=requestAnimationFrame(step);

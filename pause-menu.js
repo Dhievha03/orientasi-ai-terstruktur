@@ -2,10 +2,7 @@ window.TEFA_PAUSE = (() => {
   'use strict';
   const $=selector=>document.querySelector(selector);
   const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[char]);
-  const poses=[
-    [0,0,-18,1.15],[12,12,-12,.92],[6,22,-8,1.02],[-4,33,-5,1.03],
-    [10,43,-3,.96],[0,54,-1,1.01],[14,64,0,.94],[-7,74,0,1.05],[-4,85,2,1],[10,96,8,.95]
-  ];
+  const poses=[[0,-16],[12,-10],[5,-6],[-3,-3],[10,0],[-2,3],[8,1],[-1,7]];
   let deck,selected=0,inkFrame,settleUntil=0;
   const selectorShapes=(width,height)=>({
     white:[[0,height*.9],[width,0],[width*.89,height*.84]],
@@ -14,8 +11,8 @@ window.TEFA_PAUSE = (() => {
   function initialize(content){
     deck=content;
     $('#chapter-nav').innerHTML=`<div id="menu-cursor" class="pause-selector" aria-hidden="true"><svg preserveAspectRatio="none"><defs><mask id="pause-outside-white" maskUnits="userSpaceOnUse"><rect class="pause-mask-ground" fill="white"/><path class="pause-mask-cut" fill="black"/></mask></defs><path class="pause-selector-back"/><path class="cursor-white"/><path class="pause-selector-ribbon" mask="url(#pause-outside-white)"/></svg></div>${deck.chapters.map((chapter,index)=>{
-      const [x,y,angle,scale]=poses[index];
-      return `<button class="chapter-tab" data-chapter="${chapter.id}" aria-label="${escape(chapter.menu)} · ${escape(chapter.name)}" style="--order:${index};--pose-x:${x}%;--pose-y:${y}%;--pose-angle:${angle}deg;--word-scale:${scale}"><span class="pause-label tab-name" aria-hidden="true"><span class="pause-label-base">${escape(chapter.menu)}</span><span class="pause-label-ink">${escape(chapter.menu)}</span><span class="pause-label-flare">${escape(chapter.menu)}</span></span></button>`;
+      const [x,angle]=poses[index];
+      return `<button class="chapter-tab" data-chapter="${chapter.id}" aria-label="${escape(chapter.menu)} · ${escape(chapter.name)}" style="--order:${index};--pose-x:${x}%;--pose-angle:${angle}deg"><span class="pause-label tab-name" aria-hidden="true"><span class="pause-label-base">${escape(chapter.menu)}</span><span class="pause-label-ink">${escape(chapter.menu)}</span><span class="pause-label-flare">${escape(chapter.menu)}</span></span></button>`;
     }).join('')}`;
     $('#open-menu-selection').addEventListener('click',()=>document.querySelectorAll('.chapter-tab')[selected].click());
   }
@@ -23,7 +20,7 @@ window.TEFA_PAUSE = (() => {
     selected=index;
     document.querySelectorAll('.chapter-tab').forEach((button,at)=>{
       button.classList.toggle('is-preview',at===index);
-      button.style.setProperty('--pause-shift',`${at<index?-24:at>index?20:0}px`);
+      button.style.setProperty('--pause-shift',`${at<index?-8:at>index?8:0}px`);
     });
     const chapter=deck.chapters[index];
     $('#menu-preview-name').textContent=chapter.name;

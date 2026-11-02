@@ -5,16 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#07182d">
   <meta name="description" content="Presentasi pemateri TEFA tentang mengarahkan pekerjaan AI, menilai rencana, dan menerima hasil berdasarkan bukti.">
-  <title>Belajar Menggunakan AI untuk Membantu Coding · TEFA</title>
+  <title>Tools AI untuk AI-Assisted Development · TEFA</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="calendar.css">
   <link rel="stylesheet" href="pause-menu.css">
   <link rel="stylesheet" href="presentation.css">
+  <link rel="stylesheet" href="case-study.css">
+  <link rel="stylesheet" href="story-slides.css">
+  <script src="prototypes/p3r-dialogue/dialogue-data.js" defer></script>
+  <script src="examples/extracurricular-registration/example.js" defer></script>
+  <script src="prototypes/p3r-dialogue/observations.js" defer></script>
+  <script src="prototypes/p3r-dialogue/registration-scenario.js" defer></script>
+  <script src="prototypes/p3r-dialogue/dialogue-flow.js" defer></script>
   <script src="content.js" defer></script>
   <script src="water.js" defer></script>
   <script src="calendar.js" defer></script>
   <script src="pause-menu.js" defer></script>
+  <script src="story-slides.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -37,7 +45,7 @@
     </header>
     <main id="stage" class="stage" aria-label="Materi presentasi"><article id="slide" class="slide" tabindex="-1"></article></main>
     <footer class="slide-footer">
-      <div class="footer-location"><strong id="deck-counter">01 / 28</strong><span id="local-counter">SLIDE 1 DALAM BAB</span></div>
+      <div class="footer-location"><strong id="deck-counter">01 / 37</strong><span id="local-counter">SLIDE 1 DALAM BAB</span></div>
       <div class="footer-controls"><button id="notes-button" class="notes-toggle" aria-label="Catatan pemateri" aria-expanded="false" aria-controls="notes-panel"><svg aria-hidden="true"><use href="#i-notes"/></svg><span>Catatan <kbd>N</kbd></span></button><div class="slide-navigation"><button id="previous-button" class="nav-button" aria-label="Slide sebelumnya"><svg class="arrow-back"><use href="#i-arrow"/></svg><span>Kembali</span></button><button id="next-button" class="nav-button nav-next" aria-label="Slide berikutnya"><span>Lanjut</span><svg><use href="#i-arrow"/></svg></button></div></div>
     </footer>
     <section id="notes-panel" class="notes-panel" aria-labelledby="notes-title" hidden><div class="notes-heading"><h2 id="notes-title">Catatan pemateri</h2><button id="close-notes" class="icon-button" aria-label="Tutup catatan"><svg><use href="#i-close"/></svg></button></div><ul id="notes-content"></ul></section>
@@ -65,7 +73,7 @@
       <button id="glossary-button"><span>Daftar istilah</span><span> Buka ↗</span></button>
       <button id="home-button"><span>Kembali ke awal</span><span><kbd>Home</kbd></span></button>
     </div>
-    <p class="modal-foot">Panah kiri/kanan memindahkan slide. <kbd>B</kbd> membuka pembahasan atau respons berikutnya. Semua perpindahan dilakukan manual.</p>
+    <p class="modal-foot">Panah kiri/kanan memindahkan slide. Panah atas/bawah memilih menu materi. <kbd>B</kbd> membuka pembahasan atau respons berikutnya. Semua perpindahan dilakukan manual.</p>
   </dialog>
   <dialog id="glossary-dialog" class="modal" aria-labelledby="glossary-title"><div class="modal-head"><div><span class="small-label">PANDUAN</span><h2 id="glossary-title">Daftar istilah</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup daftar istilah"><svg><use href="#i-close"/></svg></button></div><dl id="glossary-list" class="glossary-list"></dl></dialog>
   <dialog id="prompt-dialog" class="modal prompt-modal" aria-labelledby="prompt-title"><div class="modal-head"><div><span class="small-label">CONTOH INSTRUKSI / PEMATERI</span><h2 id="prompt-title">Instruksi lengkap</h2></div><button class="icon-button" data-close-dialog aria-label="Tutup instruksi"><svg><use href="#i-close"/></svg></button></div><div id="full-prompt-content" class="full-prompt-content"></div><button id="copy-full-prompt" class="action-button">Salin instruksi <span aria-hidden="true">↗</span></button><p id="copy-status" class="copy-status" role="status"></p></dialog>
