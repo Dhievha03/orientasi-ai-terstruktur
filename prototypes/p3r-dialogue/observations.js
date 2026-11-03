@@ -1,9 +1,9 @@
 (() => {
   'use strict';
   const example=window.TEFA_REGISTRATION_EXAMPLE;
-  const logicKeys=['checkResponse','fieldErrors','keepValues'];
+  const logicKeys=['checkResponse','fieldErrors','keepValues','simplified'];
   const logicKey=state=>JSON.stringify(logicKeys.map(key=>state[key]===true));
-  const topics=['response','errors','reset','accepted','rejected-match','fields','choices','design','general'];
+  const topics=['response','errors','reset','accepted','rejected-match','fields','choices','design','structure','general'];
   const at=value=>Number.isInteger(value)&&value>=0&&value<=64?value:0;
   const cleanRange=value=>value&&Number.isInteger(value.start)&&Number.isInteger(value.end)&&value.start>=0&&value.end>=value.start&&value.end<10000?{start:value.start,end:value.end}:null;
   const codeKey=focus=>`code:${focus.file}:${focus.topic}:${focus.key}${focus.range?`:${focus.range.start}-${focus.range.end}`:''}`;
@@ -41,6 +41,7 @@
     const item=(topic)=>({kind:'response',topic,key,after:attempt.after,observationKey:`response:${topic}:${key}`,result,input:attempt.input,lost,validLost,resetCase});
     if(result.body.success)return [item('accepted')];
     const findings=[];
+    if(state.simplified)findings.push(item('structure'));
     if(!state.checkResponse)findings.push(item('response'));
     if(!state.fieldErrors)findings.push(item('errors'));
     if(!state.keepValues&&lost.length)findings.push(item('reset'));
@@ -77,7 +78,7 @@
     const saved=cleanWorkspace(value),result=[];
     const names={ai:'AI',code:'Kode',apps:'Apps'};
     const files={html:'index.html',css:'styles.css',js:'app.js'};
-    const topicNames={response:'penanganan response',errors:'pesan per isian',reset:'reset formulir',accepted:'pendaftaran diterima','rejected-match':'penolakan yang sesuai',fields:'label dan isian',choices:'pilihan kelas dan kegiatan',design:'tampilan formulir',general:'bagian kode biasa'};
+    const topicNames={response:'penanganan response',errors:'pesan per isian',reset:'reset formulir',accepted:'pendaftaran diterima','rejected-match':'penolakan yang sesuai',fields:'label dan isian',choices:'pilihan kelas dan kegiatan',design:'tampilan formulir',structure:'isian yang dihapus',general:'bagian kode biasa'};
     for(let index=0;index<=choices.length;index++){
       for(const event of saved.events.filter(item=>item.after===index)){
         let text;

@@ -13,10 +13,32 @@
     if(!['Pramuka','Paskibra','PMR','Basket','Futsal','Musik'].includes(data.ekstrakurikuler))errors.ekstrakurikuler='Pilih ekstrakurikuler yang tersedia.';
     return Object.keys(errors).length?{status:422,body:{success:false,message:'Data pendaftaran belum lengkap atau belum sesuai.',data:null,errors}}:{status:200,body:{success:true,message:'Pendaftaran berhasil.',data,errors:{}}};
   }
-  const initial=()=>({created:false,checkResponse:false,fieldErrors:false,keepValues:false,design:'plain',filesAvailable:true,dataLost:false,nuclear:false,deployed:false,resumeDesign:false,records:[]});
+  const initial=()=>({created:false,checkResponse:false,fieldErrors:false,keepValues:false,simplified:false,design:'plain',filesAvailable:true,dataLost:false,nuclear:false,deployed:false,resumeDesign:false,records:[]});
   function markup(state){
     const error=name=>state.fieldErrors?`\n    <p id="error-${name}" class="field-error" aria-live="polite"></p>`:'';
     const described=name=>state.fieldErrors?` aria-describedby="error-${name}"`:'';
+    const choices=state.simplified?'':`  <div class="field">
+    <label for="kelas">Kelas</label>
+    <select id="kelas" name="kelas"${described('kelas')}>
+      <option value="">Pilih kelas</option>
+      <option>XI A</option>
+      <option>XI B</option>
+      <option>XI C</option>
+    </select>${error('kelas')}
+  </div>
+  <div class="field">
+    <label for="ekstrakurikuler">Ekstrakurikuler</label>
+    <select id="ekstrakurikuler" name="ekstrakurikuler"${described('ekstrakurikuler')}>
+      <option value="">Pilih ekstrakurikuler</option>
+      <option>Pramuka</option>
+      <option>Paskibra</option>
+      <option>PMR</option>
+      <option>Basket</option>
+      <option>Futsal</option>
+      <option>Musik</option>
+    </select>${error('ekstrakurikuler')}
+  </div>
+`;
     return `<h1>Pendaftaran Ekstrakurikuler</h1>
 <form id="registration" novalidate>
   <div class="field">
@@ -27,45 +49,127 @@
     <label for="nis">NIS</label>
     <input id="nis" name="nis" inputmode="numeric" maxlength="120"${described('nis')}>${error('nis')}
   </div>
-  <div class="field">
-    <label for="kelas">Kelas</label>
-    <select id="kelas" name="kelas"${described('kelas')}>
-      <option value="">Pilih kelas</option>
-      <option>XI A</option><option>XI B</option><option>XI C</option>
-    </select>${error('kelas')}
-  </div>
-  <div class="field">
-    <label for="ekstrakurikuler">Ekstrakurikuler</label>
-    <select id="ekstrakurikuler" name="ekstrakurikuler"${described('ekstrakurikuler')}>
-      <option value="">Pilih ekstrakurikuler</option>
-      <option>Pramuka</option><option>Paskibra</option><option>PMR</option>
-      <option>Basket</option><option>Futsal</option><option>Musik</option>
-    </select>${error('ekstrakurikuler')}
-  </div>
+${choices}
   <button type="submit">Daftar Ekstrakurikuler</button>
   <p id="result" role="status"></p>
 </form>`;
   }
   function designSource(design){
     if(design==='plain')return '';
-    if(design==='bad')return `#registration { padding: 10px; background: #182d77; color: #fff; }
-h1 { font: 900 58px/.95 Arial, sans-serif; text-transform: uppercase; }
-.field { margin: 2px 0; }
-label { display: block; font: 12px Arial, sans-serif; }
-input, select { width: 100%; min-height: 26px; font-size: 12px; }
-button { width: 100%; margin-top: 4px; font-size: 27px; background: #2755f2; color: #fff; }
-.field-error { margin: 0; font-size: 11px; color: #ffe27c; }`;
-    return `h1 { margin: 0 0 24px; font: 700 30px/1.2 Arial, sans-serif; }
-#registration { color: #142849; font: 18px/1.5 Arial, sans-serif; }
-.field { margin-bottom: 20px; }
-label { display: block; margin-bottom: 6px; font-weight: bold; }
-input, select { width: 100%; min-height: 48px; padding: 10px; font: inherit; border: 2px solid #7087a3; }
-button { width: 100%; min-height: 50px; padding: 12px; background: #163ab6; color: #fff; border: 0; font: inherit; cursor: pointer; }
-button:hover { background: #0d286e; }
-:focus-visible { outline: 3px solid #127390; outline-offset: 3px; }
-.field-error { margin: 6px 0 0; color: #a02036; font-size: 16px; }
-.field-error:empty { display: none; }
-#result { margin-top: 20px; }`;
+    if(design==='bad')return `#registration {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  padding: 8px;
+  background: #182d77;
+  color: #fff;
+}
+
+h1 {
+  font: 900 58px/.95 Arial, sans-serif;
+  text-transform: uppercase;
+}
+
+.field {
+  min-width: 0;
+  margin: 0;
+}
+
+label {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  font: 10px Arial, sans-serif;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 20px;
+  padding: 0;
+  font-size: 10px;
+}
+
+button {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 27px;
+  background: #2755f2;
+  color: #fff;
+}
+
+.field-error {
+  margin: 0;
+  font-size: 10px;
+  color: #ffe27c;
+}
+
+#result {
+  grid-column: 1 / -1;
+}`;
+    return `h1 {
+  margin: 0 0 24px;
+  font: 700 30px/1.2 Arial, sans-serif;
+}
+
+#registration {
+  color: #142849;
+  font: 18px/1.5 Arial, sans-serif;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px;
+  font: inherit;
+  border: 2px solid #7087a3;
+}
+
+button {
+  width: 100%;
+  min-height: 50px;
+  padding: 12px;
+  background: #163ab6;
+  color: #fff;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0d286e;
+}
+
+:focus-visible {
+  outline: 3px solid #127390;
+  outline-offset: 3px;
+}
+
+.field-error {
+  margin: 6px 0 0;
+  color: #a02036;
+  font-size: 16px;
+}
+
+.field-error:empty {
+  display: none;
+}
+
+#result {
+  margin-top: 20px;
+}`;
   }
   function sources(state){
     if(!state.created)return {html:'',css:'',js:''};
@@ -74,24 +178,82 @@ button:hover { background: #0d286e; }
   pesan.dataset.state = berhasil ? "success" : "error";`:`  pesan.textContent = "Pendaftaran berhasil.";
   pesan.dataset.state = "success";`;
     const errors=state.fieldErrors?`
+function tampilkanKesalahan(errors) {
   for (const nama of ["nama", "nis", "kelas", "ekstrakurikuler"]) {
-    document.querySelector("#error-" + nama).textContent =
-      hasil.errors[nama] || "";
+    const tempat = document.querySelector("#error-" + nama);
+    if (tempat) {
+      tempat.textContent = errors[nama] || "";
+    }
   }
+}
 `:'';
-    const reset=state.keepValues?'  if (response.ok && hasil.success === true) form.reset();':'  form.reset();';
+    const reset=state.keepValues?`  if (response.ok && hasil.success === true) {
+    form.reset();
+  }`:'  form.reset();';
     const js=`const form = document.querySelector("#registration");
 const pesan = document.querySelector("#result");
+const tombol = form.querySelector('button[type="submit"]');
+const teksTombol = tombol.textContent;
+let sedangMengirim = false;
 
-form.addEventListener("submit", async event => {
-  event.preventDefault();
-  const data = Object.fromEntries(new FormData(form));
+function bacaIsian() {
+  const isian = new FormData(form);
+  return Object.fromEntries(isian);
+}
+
+function aturPengiriman(mengirim) {
+  sedangMengirim = mengirim;
+  tombol.disabled = mengirim;
+  tombol.textContent = mengirim ? "Mengirim..." : teksTombol;
+  form.setAttribute("aria-busy", String(mengirim));
+}
+
+function bersihkanPesan() {
+  delete pesan.dataset.state;
+  pesan.textContent = "";
+
+  for (const tempat of form.querySelectorAll(".field-error")) {
+    tempat.textContent = "";
+  }
+}
+
+function tampilkanHasil(response, hasil) {
+${handling}
+}
+${errors}
+function bersihkanFormulir(response, hasil) {
+${reset}
+}
+
+async function kirimIsian(data) {
   const response = await kirimPendaftaran(data);
   const hasil = await response.json();
 
-${handling}
-${errors}
-${reset}
+  return { response, hasil };
+}
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (sedangMengirim) {
+    return;
+  }
+
+  const data = bacaIsian();
+  bersihkanPesan();
+  aturPengiriman(true);
+
+  try {
+    const { response, hasil } = await kirimIsian(data);
+
+    tampilkanHasil(response, hasil);
+${state.fieldErrors?'    tampilkanKesalahan(hasil.errors);\n':''}    bersihkanFormulir(response, hasil);
+  } catch (error) {
+    pesan.textContent = "Pendaftaran belum dapat dikirim. Coba lagi.";
+    pesan.dataset.state = "error";
+  } finally {
+    aturPengiriman(false);
+  }
 });`;
     return {html:state.filesAvailable?markup(state):'',css:designSource(state.design),js};
   }
@@ -162,14 +324,14 @@ async function kirimPendaftaran(data){
     const bridge=`
 const formElement=document.querySelector("#registration");
 if(formElement){
-  for(const [nama,nilai] of Object.entries(${safeJson(normalize(values))}))formElement.elements[nama].value=nilai;
+  for(const [nama,nilai] of Object.entries(${safeJson(normalize(values))}))if(formElement.elements[nama])formElement.elements[nama].value=nilai;
   const laporkanIsian=()=>laporkanKeParent({type:"registration-input",input:Object.fromEntries(new FormData(formElement))});
   formElement.addEventListener("input",laporkanIsian);formElement.addEventListener("change",laporkanIsian);
   new MutationObserver(()=>{
-    if(!pendingRegistration||registrationFailed)return;
+    if(!pendingRegistration||registrationFailed||!['success','error'].includes(document.querySelector('#result').dataset.state))return;
     const input=pendingRegistration;pendingRegistration=null;
     const valuesAfter=Object.fromEntries(new FormData(formElement));
-    laporkanKeParent({type:"registration-result",input,valuesAfter,flags:${safeJson({checkResponse:state.checkResponse,fieldErrors:state.fieldErrors,keepValues:state.keepValues})}});
+    laporkanKeParent({type:"registration-result",input,valuesAfter,flags:${safeJson({checkResponse:state.checkResponse,fieldErrors:state.fieldErrors,keepValues:state.keepValues,simplified:state.simplified})}});
     laporkanKeParent({type:"registration-input",input:valuesAfter});
   }).observe(document.querySelector("#result"),{childList:true,subtree:true,characterData:true});
 }
@@ -185,13 +347,14 @@ laporkanKeParent({type:"registration-ready"});
   function problems(state){
     if(!state.filesAvailable)return 'missing';
     if(state.dataLost)return 'data';
+    if(state.simplified)return 'difficult';
     if(!state.checkResponse)return 'false-success';
     if(!state.fieldErrors||!state.keepValues)return 'difficult';
     if(state.design==='bad')return 'design';
     return 'ready';
   }
   function sourceKey(state,file){
-    const keys=file==='html'?['created','filesAvailable','fieldErrors']:file==='css'?['created','design']:['created','checkResponse','fieldErrors','keepValues'];
+    const keys=file==='html'?['created','filesAvailable','fieldErrors','simplified']:file==='css'?['created','design']:['created','checkResponse','fieldErrors','keepValues'];
     return JSON.stringify(keys.map(key=>state[key]));
   }
   function codeSections(state,file){
@@ -200,12 +363,12 @@ laporkanKeParent({type:"registration-ready"});
     const lines=source.split('\n');
     const section=(id,label,start,end)=>({id,label,start:Math.max(0,start),end:Math.max(start,end)});
     if(file==='css')return [section('design','Susunan dan ukuran formulir',0,lines.length-1)];
-    if(file==='html')return [section('fields','Label dan isian formulir',0,lines.length-1),section('choices','Pilihan kelas dan ekstrakurikuler',lines.findIndex(line=>line.includes('for="kelas"')),lines.map(line=>line.includes('</select>')).lastIndexOf(true))];
-    const response=lines.findIndex(line=>line.includes('const response'));
+    if(file==='html')return [section('fields','Label dan isian formulir',0,lines.length-1),...(state.simplified?[]:[section('choices','Pilihan kelas dan ekstrakurikuler',lines.findIndex(line=>line.includes('for="kelas"')),lines.map(line=>line.includes('</select>')).lastIndexOf(true))])];
+    const response=lines.findIndex(line=>line.includes('function tampilkanHasil'));
     const reset=lines.findIndex(line=>line.includes('form.reset'));
-    const list=[section('response','Penanganan hasil response',response,lines.findIndex(line=>line.includes('pesan.dataset.state'))),section('reset','Reset setelah pengiriman',reset,reset)];
+    const list=[section('response','Penanganan hasil response',response,lines.findIndex((line,index)=>index>=response&&line.includes('pesan.dataset.state'))),section('reset','Reset setelah pengiriman',reset,reset)];
     const error=lines.findIndex(line=>line.includes('for (const nama'));
-    if(error>=0)list.push(section('errors','Pesan kesalahan per isian',error,error+3));
+    if(error>=0)list.push(section('errors','Pesan kesalahan per isian',error,error+6));
     return list;
   }
   function codeSelection(state,file,start,end=start){
@@ -216,9 +379,9 @@ laporkanKeParent({type:"registration-ready"});
     const text=lines.slice(start,end+1).join('\n');
     let id='general';
     if(file==='js'){
-      if(/form\.reset\(/.test(text))id='reset';
-      else if(/hasil\.errors|#error-|for \(const nama/.test(text))id='errors';
-      else if(/const berhasil|pesan\.(textContent|dataset\.state)/.test(text))id='response';
+      if(/form\.reset\(|bersihkanFormulir\(/.test(text))id='reset';
+      else if(/hasil\.errors|#error-|tampilkanKesalahan\(|for \(const nama/.test(text))id='errors';
+      else if(/const berhasil|tampilkanHasil\(|pesan\.textContent\s*=\s*(?:"Pendaftaran berhasil\."|berhasil)|pesan\.dataset\.state\s*=\s*(?:"success"|berhasil)/.test(text))id='response';
     }else if(file==='html'){
       if(/<form\b/.test(text)&&/<\/form>/.test(text)||/class="field"/.test(text)&&/<input\b/.test(text)||/class="field-error"/.test(text))id='fields';
       else if(/<\/?select\b|<option\b/.test(text))id='choices';
@@ -227,6 +390,11 @@ laporkanKeParent({type:"registration-ready"});
   }
   function describeCode(state,item){
     const topic=item.topic;
+    if(state.simplified&&item.file==='html'&&['fields','choices'].includes(topic))return {next:'structure-discussion',parts:[
+      'Formulir ini sekarang hanya menyediakan nama dan NIS. Isian kelas dan pilihan ekstrakurikuler dihapus saat permintaan menyederhanakan tampilan.',
+      'Backend masih membutuhkan kelas dan ekstrakurikuler. Peserta tidak dapat melengkapinya melalui formulir ini.',
+      'Kedua isian perlu dikembalikan. Menyederhanakan susunan tidak berarti menghapus kebutuhan pendaftaran.'
+    ]};
     if(topic==='response')return {next:state.checkResponse?'idle':'response-discussion',parts:[
       'Bagian ini membaca response pendaftaran dan mengatur pesan yang terlihat pada formulir.',
       state.checkResponse?'Status response dan success sudah diperiksa sebelum pesan berhasil ditampilkan. Bagian ini sudah sesuai dan tidak perlu diperbaiki.':'Saat ini pesan berhasil tetap dijalankan setiap response datang, termasuk ketika backend menolak pendaftaran.',
@@ -254,6 +422,14 @@ laporkanKeParent({type:"registration-ready"});
     const range=item.range||{start:0,end:0};
     const text=source.split('\n').slice(range.start,range.end+1).join('\n');
     const descriptions=[
+      ['aturPengiriman','Fungsi ini mengatur status pengiriman, menonaktifkan tombol selama menunggu, lalu mengembalikan teks tombol setelah proses selesai.'],
+      ['bacaIsian','Fungsi ini membaca nilai formulir yang akan dikirim sebagai data pendaftaran.'],
+      ['bersihkanPesan','Fungsi ini membersihkan pesan dari percobaan sebelumnya sebelum pengiriman baru.'],
+      ['finally','Blok finally mengaktifkan kembali tombol setelah proses kirim berhasil ataupun mengalami kegagalan.'],
+      ['catch','Blok catch menampilkan pesan ketika proses pengiriman atau pembacaan response mengalami kesalahan. Status penolakan 422 tetap perlu diperiksa terpisah.'],
+      ['sedangMengirim','Status sedangMengirim mencegah pengiriman kedua ketika permintaan sebelumnya belum selesai.'],
+      ['const tombol','Kode ini mengambil tombol kirim agar status dan teksnya dapat diubah selama pengiriman.'],
+      ['teksTombol','Teks awal tombol disimpan agar dapat dikembalikan ketika proses pengiriman selesai.'],
       ['querySelector("#registration")','Kode ini mengambil elemen formulir dan menyimpannya pada variabel form untuk dipakai oleh handler pengiriman.'],
       ['querySelector("#result")','Kode ini mengambil elemen tempat pesan hasil pendaftaran ditampilkan.'],
       ['addEventListener','Kode ini memasang handler submit. Proses di dalamnya dijalankan ketika peserta mengirim formulir.'],

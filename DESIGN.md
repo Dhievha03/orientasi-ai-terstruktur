@@ -378,3 +378,63 @@ Regresi UI Micro Task lulus 18/18, termasuk asap bergerak dan reduced-motion. En
 ## Fokus selector tanpa bingkai luar
 
 Pemateri menghapus bingkai cyan yang muncul saat menekan panah atas/bawah, lalu mengoreksi warna tag khusus keyboard karena berbeda dari hover. Fokus dan navigasi panah kini memakai tampilan hover yang sama: kartu putih, tag navy dengan angka putih, serta aksen merah atas/kanan. Fokus Tab mempratinjau satu kartu sampai Enter menetapkan pilihan. Gerakan mouse mengambil alih pratinjau tanpa menambah highlight kedua. Sebanyak 28 pemeriksaan panah, hover, fokus, dan responsivitas kartu lulus, termasuk perbandingan langsung warna seluruh kartu dan tag pada 10 selector.
+
+## Border kartu asimetris
+
+Pemateri mengoreksi ketebalan aksen merah yang masih seragam. Permukaan material-card kini memakai inset 2/6/0/0 px agar garis atas tipis dan sisi kanan lebih tebal. Proporsi ini disepakati sebagai pendekatan visual, bukan hasil pengukuran referensi asli. Aturan bersama berlaku pada selector materi serta tiga kartu koneksi, termasuk keadaan aktif, hover, dan fokus keyboard pada desktop maupun ponsel.
+
+Pemeriksaan ketebalan baru terlebih dahulu gagal pada inset 3/3/0/0 px, lalu lulus setelah koreksi. Sebanyak 31 pemeriksaan browser lulus untuk padding dan alur koneksi, hover/fokus, struktur serta responsivitas seluruh 10 selector, dan navigasi panah. Kartu koneksi diperiksa pada lebar 390/768/1024/1468/1920 px. Gambar kartu koneksi desktop/ponsel dan selector desktop diperiksa langsung. Tidak ada error JavaScript pada pemeriksaan tersebut.
+
+## Instruksi rancu, source terbaca, dan reaksi nuklir
+
+Versi aktif ai-assisted-ambiguous-instructions-nuclear-150-8 mempertahankan 37 slide, delapan bab, dan 150 menit. Opsi tunda dihapus sehingga ada delapan ending aktif. Reset semua saja tersedia setelah pembahasan masalah, bukan pilihan default. Pilihan awal tetap Oke, deploy apps sekarang.
+
+Dua instruksi rancu memberi akibat yang terlihat di Apps: muat satu layar menghasilkan empat kolom kecil dan rapat, sedangkan yang penting-penting saja menghapus kelas serta ekstrakurikuler. Kesalahan dibuat pada source formulir yang sama dengan preview agar siswa dapat menghubungkan instruksi, penafsiran AI, dan hasil aktual. Pilihan koreksi mengembalikan keterbacaan atau isian yang diperlukan. Backend tetap mewajibkan data yang sama. Ending difficult menjelaskan isian yang hilang jika simplified aktif.
+
+JavaScript kini mempunyai fungsi pembacaan data, pengaturan tombol, pembersihan pesan, hasil response, reset, dan pengiriman dengan try/catch/finally. Awal cerita memakai 66 baris, versi lengkap 79 baris. Penambahan ini memberi alur nyata untuk ditelusuri. CSS memakai indentasi dua spasi dan satu deklarasi per baris agar penandaan kode dapat dibaca. Metadata percobaan memasukkan susunan formulir. Observer hasil menunggu status akhir, sehingga pembersihan pesan sebelum request tidak dianggap sebagai hasil pengiriman.
+
+Efek overheat mengikuti giliran AI, bukan satu textbox. Asap dan petir menjalankan animasi singkat satu kali, lalu menetap terlihat, dengan elemen yang sama pada textbox AI berikutnya. Efek dibersihkan ketika User berbicara atau memilih respons. Reduced-motion memakai bentuk statis. Restore membangun ulang efek sesuai giliran yang disimpan.
+
+Narasi AI menekan tombol peluncuran nuklir disusul guncangan satu kali 650 ms. Tombol Lanjut menunggu guncangan selesai, lalu perpindahan ke User tetap manual. User terkejut menanyakan tombol yang ditekan, kemudian kesal dengan ucapan MAKSUD SAYA RESET APLIKASINYA! ULANGI PEMBUATANNYA DARI AWAL. Narator menutup dengan pembatalan pendaftaran. Gerak nonaktif melewati guncangan. Pembahasan ini memperlihatkan penafsiran di luar konteks aplikasi tanpa membocorkan akibat pada label pilihan.
+
+Verifikasi lulus 28 pemeriksaan model dan 56 browser, termasuk semua delapan ending, good ending pada request 8, nuklir pada batas 12, efek yang menetap, reduced-motion, lifecycle pengiriman, pemulihan isian, source terformat, dan regresi penandaan serta layout. Gambar dialog nuklir, overheat, source CSS, serta formulir padat dan formulir tanpa kelas/ekstrakurikuler diperiksa langsung. Tidak ada error JavaScript pada pemeriksaan browser.
+
+## Koreksi efek berulang, dialog hasil, dan label kontrol
+
+Versi aktif ai-assisted-random-overheat-clear-dialogue-150-8 mengganti interpretasi efek yang menetap. Asap harus muncul, bergerak, memudar sampai hilang, lalu muncul lagi dengan bentuk, posisi, ukuran, arah, durasi, serta jeda acak. Petir memakai percikan singkat dengan jeda dan posisi berbeda. Maksimal enam slot asap serta dua petir digunakan ulang agar animasi tidak menumpuk elemen. Pergantian textbox AI meneruskan controller yang sama. Giliran User, reset, dan akhir dialog membatalkan siklus lama.
+
+Kontrol Jeda efek/Lanjutkan efek ditempatkan di footer karena posisi awal di kanan atas tertutup kontrol fokus host. Gerak host nonaktif atau reduced-motion menampilkan representasi statis. Kode, Apps, Riwayat terbuka, tab tersembunyi, dan pagehide menghentikan pengulangan yang tidak terlihat. Kembali ke AI atau mengaktifkan gerak menjalankan satu controller lagi. Tombol Ulangi pada iframe berada di kiri atas agar tidak menutup healthbar ponsel atau bertabrakan dengan kontrol fokus host.
+
+Bahas hasil percobaan menggantikan Bahas response ini. Dialog memakai isian serta errors aktual: NIS abc, NIS kosong, kelas yang belum dipilih, atau beberapa isian salah. Penolakan data yang tidak sesuai dijelaskan sebagai hasil yang benar. Pertanyaan lanjutan memakai Berarti formulirnya sudah berfungsi dengan benar? dan memberi tindakan konkret, yaitu mencoba data lengkap dan memeriksa pesan berhasil serta daftar pendaftaran. Percobaan diterima yang sudah ada diakui. Klaim selesai prematur pada cabang lain tetap menjadi bagian karakter AI dalam cerita.
+
+Label tombol diperpendek menjadi Mulai, Lanjutkan, Ulangi, Lihat hasil, dan Ke awal. Riwayat menggantikan Log, sedangkan Sembunyikan hasil menjelaskan tindakan membersihkan tampilan hasil. Gaya kontrol dan pilihan yang sudah disepakati dipakai kembali.
+
+Verifikasi lulus 35 model dan 72 browser, total 107 pemeriksaan. Efek diamati selama sebelas detik untuk membuktikan beberapa siklus nyata, perubahan bentuk/posisi, fade-out penuh, serta jumlah slot yang terbatas. Dialog NIS abc diuji dari Apps sampai percakapan lanjutan. Kontrol diuji melalui klik, termasuk pause/resume, gerak host, reduced-motion, Kode/Apps/Riwayat, restart, dan label navigasi. Gambar kontrol desktop/ponsel serta dialog hasil diperiksa langsung. Tidak ada error JavaScript pada browser.
+
+## Biaya pertanyaan kode per 15 baris
+
+Versi ai-assisted-code-budget-15-150-8 memakai biaya 1 poin per 15 baris source tidak kosong yang ditanyakan, dibulatkan ke atas dengan batas 2 poin. Rentang 1–15 baris memakai 1 poin. Rentang 16–30 maupun lebih dari 30 tetap memakai 2 poin. Aturan berlaku pada HTML/CSS/JS, bukan jumlah baris yang terbungkus di layar.
+
+Biaya dihitung saat pilihan pertanyaan kode dikirim. Menandai kode, membuka pilihan, berpindah textbox, dan restore gratis. Chat biasa memakai 1 poin dan keputusan deploy gratis. Field requests tetap dipakai sebagai total poin agar healthbar serta heat level mengikuti biaya yang sama. Total dibatasi 12. Pertanyaan yang mencapai batas ditolak sebelum diproses, dengan pengecualian reset nuklir yang sudah disepakati.
+
+Pembahasan kode terarah mempertahankan good ending pada 8 poin. Membahas seluruh HTML formulir memakai 2 poin untuk pertanyaan itu sehingga rute yang sama berakhir pada 9 poin. Perbedaan tersebut memperlihatkan manfaat memilih konteks yang relevan. Metadata pilihan menyimpan jumlah baris dan biaya hasil perhitungan source, bukan nilai yang dikirim pengguna pada jawaban.
+
+Verifikasi lulus 60 model dan 41 browser, total 101 pemeriksaan. Cakupan baru 25 model dan 6 UI untuk batas 15/16/30/31, baris kosong, maksimal 2 poin, limit 12, nuklir, multipart, serta restore. Healthbar diuji melalui penandaan dan pengiriman pertanyaan yang sebenarnya. Regresi dialog, delapan ending, percobaan Apps, serta efek overheat juga lulus.
+
+## Keselarasan contoh antarbab
+
+Pemateri mengganti contoh instruksi lengkap bab 4 agar melanjutkan kasus penghapusan database pada bab 2. Konteks, task brief, kriteria penerimaan, dan contoh panduan bab 5 kini menjelaskan target testing, pemakaian database, cadangan, persetujuan rencana, serta batas tindakan. Database production, cadangannya, dan akses website menjadi bagian yang harus dipertahankan. Seluruh rujukan pencarian katalog dalam materi aktif diganti.
+
+Sesuai arahan berikutnya, bab 7 memakai konteks micro task pendaftaran ekstrakurikuler dari bab 6. Review rencana, diff, klaim, verifikasi, dan penerimaan terhubung ke keputusan backend, errors per isian, reset, serta kelengkapan formulir. Berhasil membuka halaman dibedakan dari bukti bahwa pendaftaran telah berfungsi sesuai kebutuhan.
+
+Pemeriksaan selector lulus 7/7, mencakup 120 keadaan pilihan dan pembukaan seluruh 37 slide. Sebanyak 38 keadaan dari 11 slide terkait diperiksa pada desktop 1366 px dan ponsel 390 px. Dialog Instruksi lengkap menampilkan enam paragraf database, dapat digulir sampai tombol salin, dan dapat ditutup dengan Escape. Klaim pada bab 7 diringkas setelah pemeriksaan visual menemukan pembahasan terdorong ke bawah. Hasil akhirnya diperiksa pada 1366×900, 1366×768, serta 390×844. Tidak ada error JavaScript dan content.js lulus pemeriksaan sintaks.
+
+## Panel review, penempatan koreksi, dan border 4 px
+
+Pemateri menilai review rencana terlalu polos. Tiga bagian kini dibatasi panel bersudut dengan header navy dan isi putih agar judul serta pertanyaan dapat dibaca sebagai satu unit pemeriksaan. Nomor tetap 01/02/03 dari komponen yang sama, berwarna cyan pada header. Panel bersifat informasi statis. Desktop memakai tiga kolom sejajar, sedangkan lebar 850 px ke bawah memakai satu kolom.
+
+Penempatan pembahasan koreksi sebelumnya bergeser sekitar 93 px karena grid kutipan dan grid tombol/pembahasan menggunakan rasio berbeda. Renderer feedback sekarang menempatkan empat bagian di dalam satu grid. Kutipan rinci dan alasan berada pada kolom yang sama. Tombol berada di bawah kutipan umum. Seluruh kelompok dipusatkan sebagai satu kesatuan agar pembahasan tetap muat pada desktop pendek. Susunan ponsel mengikuti urutan teks, tombol, lalu alasan.
+
+Border atas material-card memakai inset 4 px sesuai permintaan terbaru, dengan sisi kanan 6 px. Keadaan aktif, hover, fokus, navigasi panah, dan kartu koneksi memakai aturan bersama tersebut.
+
+Verifikasi: 29 pemeriksaan regresi browser lulus, termasuk 120 keadaan selector dan pembukaan 37 slide. Kedua layout diperiksa langsung pada 390×844, 768×1024, 1024×768, 1366×768, 1534×686, dan 1920×1080. Kutipan serta alasan sejajar dan muat di area desktop. Toggle pembahasan bekerja melalui mouse dan keyboard. Gambar desktop/ponsel diperiksa langsung. Kontras tiga pasangan teks yang digunakan dihitung 11,67:1, 18,77:1, dan 13,27:1. Tidak ada error JavaScript. Sintaks app.js dan whitespace diff diperiksa.

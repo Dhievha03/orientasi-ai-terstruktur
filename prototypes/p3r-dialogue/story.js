@@ -35,12 +35,18 @@
   let reactionAnimations = [];
   let turnAnimations = [];
   let screenShake;
+  let overheatKey=null;
+  let heatEffects=[];
+  let heatGeneration=0;
+  let heatRunning=false;
+  let heatPaused=false;
+  let effectPosition=null;
   let selectingResponse=false;
   let conclusionSent=false;
   const workspace=definition.workspace?window.TEFA_REGISTRATION_WORKSPACE.create({
     answerCount:()=>answers.length,
     endingLocked:()=>frames.at(-1)?.kind==='end',
-    change:()=>publish(),
+    change:()=>{syncHeatEffects();publish();},
     refresh:()=>{
       if(mode!=='choice')return;
       frames=flow.trace(definition,answers,workspace.evidence());
@@ -67,6 +73,31 @@
     turnAnimations = [];
     screenShake?.cancel();
     screenShake = null;
+    $('#next').disabled=false;
+    delete scene.dataset.effect;
+  }
+
+  function playTurnEffect() {
+    if(mode!=='dialog'||sceneKey!=='micro'||frames[position]?.effect!=='nuclear-shake'||effectPosition===position)return;
+    effectPosition=position;
+    if(!motion())return;
+    scene.dataset.effect='nuclear-shake';
+    $('#next').disabled=true;
+    const animation=scene.animate([
+      {transform:'translate3d(0,0,0) rotate(0)'},
+      {transform:'translate3d(-7px,3px,0) rotate(-.18deg)',offset:.15},
+      {transform:'translate3d(7px,-3px,0) rotate(.18deg)',offset:.3},
+      {transform:'translate3d(-5px,2px,0) rotate(-.12deg)',offset:.48},
+      {transform:'translate3d(4px,-2px,0) rotate(.1deg)',offset:.65},
+      {transform:'translate3d(-2px,1px,0) rotate(-.05deg)',offset:.82},
+      {transform:'translate3d(0,0,0) rotate(0)'}
+    ],{duration:650,easing:'ease-out'});
+    screenShake=animation;
+    animation.finished.catch(()=>{}).then(()=>{
+      if(screenShake!==animation)return;
+      $('#next').disabled=false;
+      delete scene.dataset.effect;
+    });
   }
 
   function syncPortraits(speaker) {
@@ -124,15 +155,81 @@
     ));
   }
 
+  function stopHeatEffects() {
+    heatGeneration++;
+    heatRunning=false;
+    for(const effect of heatEffects){effect.animation?.cancel();effect.animation=null;}
+    scene.classList.remove('heat-animated');
+  }
+
+  function animateHeatCycle(effect,generation,first=false) {
+    if(!heatRunning||generation!==heatGeneration||!effect.node.isConnected)return;
+    effect.animation?.cancel();
+    const random=(min,max)=>min+Math.random()*(max-min);
+    const {node,heat,plume,index}=effect;
+    let keyframes,duration,delay;
+    if(plume){
+      const x=Math.max(2,Math.min(82,plume.x+random(-4,4)));
+      const y=Math.max(6,Math.min(44,plume.y+random(-3,3)));
+      const drift=plume.drift*random(.7,1.15),rise=random(30,55);
+      node.style.setProperty('--smoke-x',`${x}%`);
+      node.style.setProperty('--smoke-y',`${y}%`);
+      node.style.setProperty('--smoke-size',String(plume.size*random(.85,1.12)));
+      const use=node.querySelector('use'),previous=Number(use.getAttribute('href').slice(-1));
+      use.setAttribute('href',`#comic-smoke-${(previous+1+Math.floor(random(0,3)))%4}`);
+      keyframes=[
+        {opacity:0,transform:'translate(0,12px) scale(.35,.65) rotate(0deg)'},
+        {opacity:heat===4?.96:.84,transform:`translate(${drift*.2}px,0) scale(.72,.9) rotate(${random(-4,4)}deg)`,offset:.24},
+        {opacity:.68,transform:`translate(${drift*.65}px,${-rise*.45}px) scale(1.02,1.05) rotate(${random(-6,6)}deg)`,offset:.62},
+        {opacity:0,transform:`translate(${drift}px,${-rise}px) scale(1.3,1.12) rotate(${random(-9,9)}deg)`}
+      ];
+      duration=random(1800,2700)/(1+(heat-1)*.1);
+      delay=first?index*random(70,140)+random(0,140):random(180,850)/(1+(heat-1)*.15);
+    }else{
+      node.style.left=`${index?random(58,76):random(20,40)}%`;
+      node.style.top=`${random(6,22)}%`;
+      node.style.rotate=`${random(-25,25)}deg`;
+      keyframes=[{opacity:0,scale:.8},{opacity:1,scale:1,offset:.35},{opacity:0,scale:1.05}];
+      duration=random(180,320);
+      delay=first?random(200,800)+index*320:random(1200,2600);
+    }
+    const animation=node.animate(keyframes,{duration,delay,iterations:1,easing:'ease-out',fill:'both'});
+    effect.animation=animation;
+    animation.finished.then(()=>animateHeatCycle(effect,generation)).catch(()=>{});
+  }
+
+  function syncHeatEffects() {
+    const available=Boolean(overheatKey&&mode==='dialog'&&scene.dataset.speaker==='ai'&&!scene.hidden&&(!workspace||workspace.isAI()));
+    const button=$('#heat-motion');
+    button.hidden=!available;
+    button.disabled=!motion();
+    button.textContent=heatPaused?'Lanjutkan efek':'Jeda efek';
+    button.setAttribute('aria-label',heatPaused?'Lanjutkan efek overheat':'Jeda efek overheat');
+    button.setAttribute('aria-pressed',String(heatPaused));
+    const running=available&&motion()&&!heatPaused&&!document.hidden&&!$('#history').open;
+    if(!running){if(heatRunning)stopHeatEffects();return;}
+    if(heatRunning)return;
+    heatRunning=true;
+    const generation=++heatGeneration;
+    scene.classList.add('heat-animated');
+    heatEffects.forEach(effect=>animateHeatCycle(effect,generation,true));
+  }
+
   function clearEmotion() {
+    stopHeatEffects();
+    heatEffects=[];
     reactionAnimations.forEach(animation => animation.cancel());
     reactionAnimations = [];
+    overheatKey=null;
+    $('#heat-motion').hidden=true;
     document.querySelectorAll('.emotion-layer').forEach(layer => layer.replaceChildren());
     scene.dataset.emotion = 'neutral';
     delete scene.dataset.reaction;
   }
 
   function showEmotion(turn) {
+    const key=turn.emotion==='overheat'&&turn.speaker==='ai'?`${turn.heat||1}:${turn.expression||'neutral'}`:null;
+    if(key&&overheatKey===key&&$('#portrait-ai .comic-smoke')){syncHeatEffects();return;}
     clearEmotion();
     const emotion = turn.emotion || 'neutral';
     scene.dataset.emotion = emotion;
@@ -144,6 +241,7 @@
     const layers=target==='students'?[...portrait.querySelectorAll('.student > .emotion-layer')]:[portrait.querySelector(':scope > .emotion-layer')];
     const layer=layers[0];
     const smoke = emotion === 'overheat';
+    if(smoke&&target==='ai')overheatKey=key;
     const symbol = smoke ? 'smoke' : ['anger', 'fury'].includes(emotion) ? 'anger' : emotion;
     const plumes=[
       {x:4,y:8,size:.78,drift:-34,rise:34,duration:2400,delay:0},
@@ -169,15 +267,7 @@
       use.setAttribute('href', smoke?`#comic-smoke-${index%4}`:`#comic-${symbol}`);
       svg.append(use);
       (target==='students'?layers[index]:layer).append(svg);
-      if (smoke && motion()) reactionAnimations.push(svg.animate(
-        [
-          {opacity:0,transform:'translate(0,12px) scale(.35,.65) rotate(0deg)'},
-          {opacity:turn.heat === 4 ? .96 : .84,transform:`translate(${plume.drift*.2}px,0) scale(.72,.9) rotate(${index%2?3:-3}deg)`,offset:.24},
-          {opacity:.68,transform:`translate(${plume.drift*.65}px,${-plume.rise*.45}px) scale(1.02,1.05) rotate(${index%2?-4:5}deg)`,offset:.62},
-          {opacity:0,transform:`translate(${plume.drift}px,${-plume.rise}px) scale(1.3,1.12) rotate(${index%2?-7:8}deg)`}
-        ],
-        {duration:turn.heat===4?plume.duration*.7:plume.duration,delay:turn.heat===4?plume.delay*.45:plume.delay,iterations:1,easing:'cubic-bezier(.2,.55,.35,1)',fill:'both'}
-      ));
+      if(smoke)heatEffects.push({node:svg,plume,index,heat:turn.heat||1,animation:null});
     }
     if(smoke&&turn.expression&&!['neutral','silence'].includes(turn.expression)){
       const expression=document.createElementNS('http://www.w3.org/2000/svg','svg');
@@ -187,17 +277,18 @@
       const use=document.createElementNS('http://www.w3.org/2000/svg','use');
       use.setAttribute('href',`#comic-${symbol}`);expression.append(use);layer.append(expression);
     }
-    if(smoke&&turn.heat>=2){
+    if(smoke){
       for(let index=0;index<(turn.heat>=3?2:1);index++){
         const spark=document.createElementNS('http://www.w3.org/2000/svg','svg');
         spark.setAttribute('viewBox','0 0 100 100');
         spark.setAttribute('class',`comic-spark spark-${index}`);
         const use=document.createElementNS('http://www.w3.org/2000/svg','use');
         use.setAttribute('href','#comic-spark');spark.append(use);layer.append(spark);
-        if(motion())reactionAnimations.push(spark.animate([{opacity:0,scale:.8},{opacity:1,scale:1,offset:.35},{opacity:0,scale:1.05}],{duration:320,delay:index*200,easing:'ease-out',fill:'both'}));
+        heatEffects.push({node:spark,index,heat:turn.heat||1,animation:null});
       }
     }
-    if (!motion() || smoke) return;
+    if(smoke){syncHeatEffects();return;}
+    if(!motion())return;
     const frames = emotion === 'shock'
       ? [{ transform: 'translateX(0)' }, { transform: 'translateX(15px) rotate(3deg)' }, { transform: 'translateX(0)' }]
       : [{ transform: 'translateX(0)' }, { transform: 'translateX(-7px)' }, { transform: 'translateX(7px)' }, { transform: 'translateX(-3px)' }, { transform: 'translateX(0)' }];
@@ -216,6 +307,7 @@
     $('#keyboard-hint').hidden = nextMode !== 'dialog';
     $('#log').disabled = history.length === 0;
     workspace?.sync(frames[position],nextMode);
+    syncHeatEffects();
   }
 
   function renderDialogueText(element,text){
@@ -235,7 +327,8 @@
     clearInterval(typing);
     typing = null;
     renderDialogueText($('#spoken-text'),characters.join(''));
-    $('#next-label').textContent = definition.autoConclusion&&frames[position+1]?.kind==='end'?'Lihat konklusi':'Lanjut';
+    $('#next-label').textContent = definition.autoConclusion&&frames[position+1]?.kind==='end'?'Lihat hasil':'Lanjut';
+    playTurnEffect();
   }
 
   function writeText(text) {
@@ -342,6 +435,7 @@
     clearInterval(typing);
     typing=null;
     conclusionSent=false;
+    effectPosition=null;
     workspace?.reset();
     route = fixedRoute||null;
     answers=[];
@@ -359,7 +453,7 @@
   }
 
   function advance() {
-    if (mode !== 'dialog' || $('#history').open) return;
+    if (mode !== 'dialog' || $('#history').open || scene.dataset.effect==='nuclear-shake') return;
     if (typing) { completeText(); return; }
     if(!frames[position+1])return;
     position += 1;
@@ -377,7 +471,7 @@
     setMode('end');
     const impact = frames[position].impact || definition.conclusions[route].impact;
     $('#ending-title').textContent = impact;
-    $('#announcer').textContent = `${impact} Lihat konklusi untuk pembahasan.`;
+    $('#announcer').textContent = `${impact} Pilih Lihat hasil untuk membaca pembahasannya.`;
     publish();
     if(definition.autoConclusion){showConclusion();return;}
     $('#open-conclusion').focus({ preventScroll: true });
@@ -388,6 +482,7 @@
     typing = null;
     clearEmotion();
     clearTurnMotion();
+    effectPosition=null;
     workspace?.reset();
     if ($('#history').open) $('#history').close();
     route = null;
@@ -412,7 +507,7 @@
     $('#conclusion').classList.toggle('conclusion--micro',Boolean(definition.autoConclusion));
     if(definition.autoConclusion){
       const labels=content.labels;
-      $('#conclusion').innerHTML=`<div class="conclusion-heading"><h2 id="conclusion-title" tabindex="-1"></h2><p id="conclusion-outcome" class="conclusion-outcome"></p><button class="secondary-button" type="button" id="retry-choice">Ulangi percakapan</button></div><div class="conclusion-body"><div class="conclusion-tabs" role="group" aria-label="Bagian hasil">${labels.map((label,index)=>`<button type="button" data-reading="${index}" aria-pressed="${index===0}">${label}</button>`).join('')}</div><div class="conclusion-reading-viewport" tabindex="0" role="region" aria-label="${labels[0]}"><p id="conclusion-reading"></p><ol id="decision-history" class="decision-history" aria-label="Riwayat pilihan" hidden></ol></div></div>`;
+      $('#conclusion').innerHTML=`<div class="conclusion-heading"><h2 id="conclusion-title" tabindex="-1"></h2><p id="conclusion-outcome" class="conclusion-outcome"></p><button class="secondary-button" type="button" id="retry-choice">Ulangi</button></div><div class="conclusion-body"><div class="conclusion-tabs" role="group" aria-label="Bagian hasil">${labels.map((label,index)=>`<button type="button" data-reading="${index}" aria-pressed="${index===0}">${label}</button>`).join('')}</div><div class="conclusion-reading-viewport" tabindex="0" role="region" aria-label="${labels[0]}"><p id="conclusion-reading"></p><ol id="decision-history" class="decision-history" aria-label="Riwayat pilihan" hidden></ol></div></div>`;
       $('#conclusion-outcome').textContent=content.consequence;
       $('#conclusion-reading').textContent=content.reason;
       document.querySelectorAll('[data-reading]').forEach(button=>button.addEventListener('click',()=>{
@@ -425,7 +520,7 @@
          $('.conclusion-reading-viewport').scrollTop=0;
       }));
     }else{
-      $('#conclusion').innerHTML = `<div class="conclusion-heading"><p class="section-label">KONKLUSI</p><h2 id="conclusion-title" tabindex="-1"></h2><blockquote class="chosen-quote"></blockquote></div><div class="conclusion-body"><div class="verdict"></div><section><h3>Letak kesalahan</h3><p data-summary="reason"></p></section><section><h3>Akibat</h3><p data-summary="consequence"></p></section><section><h3>Prinsip kerja</h3><p data-summary="next"></p></section><ol id="decision-history" class="decision-history"></ol><div class="conclusion-actions"><button class="primary-button" type="button" id="retry-choice">${fixedRoute ? 'Ulang adegan' : 'Coba perjalanan lain'}</button><button class="secondary-button" type="button" id="restart-scene">Mulai dari awal</button></div></div>`;
+      $('#conclusion').innerHTML = `<div class="conclusion-heading"><p class="section-label">PEMBAHASAN</p><h2 id="conclusion-title" tabindex="-1"></h2><blockquote class="chosen-quote"></blockquote></div><div class="conclusion-body"><div class="verdict"></div><section><h3>Letak kesalahan</h3><p data-summary="reason"></p></section><section><h3>Akibat</h3><p data-summary="consequence"></p></section><section><h3>Prinsip kerja</h3><p data-summary="next"></p></section><ol id="decision-history" class="decision-history"></ol><div class="conclusion-actions"><button class="primary-button" type="button" id="retry-choice">${fixedRoute ? 'Ulangi' : 'Coba pilihan lain'}</button><button class="secondary-button" type="button" id="restart-scene">Ke awal</button></div></div>`;
       $('.chosen-quote').textContent=summary.quoteType==='activity'?`Aktivitas: ${summary.quote}`:`“${summary.quote}”`;
       $('.verdict').textContent=content.verdict;
       ['consequence','reason','next'].forEach(key=>$(`[data-summary="${key}"]`).textContent=content[key]);
@@ -441,7 +536,7 @@
     for(const decision of summary.decisions){const item=document.createElement('li');item.textContent=`${decision.label}: ${decision.processed===false?'Tidak dikerjakan. ':''}${definition.autoConclusion?decision.text:decision.summary}`;$('#decision-history').append(item);}
     if(!definition.autoConclusion)$('#decision-history').hidden=summary.decisions.length===0;
     setMode('conclusion');
-    $('#announcer').textContent = 'Konklusi adegan.';
+    $('#announcer').textContent = 'Pembahasan hasil.';
     $('#conclusion-title').focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -460,6 +555,7 @@
       return item;
     }));
     $('#history').showModal();
+    syncHeatEffects();
     $('#history-list').lastElementChild?.scrollIntoView({ block: 'nearest' });
   }
 
@@ -475,20 +571,20 @@
 
   async function loadAssets() {
     $('#start').disabled = true;
-    $('#start').textContent = 'Menyiapkan aset…';
+    $('#start').textContent = 'Memuat…';
     try {
       await Promise.all([...document.querySelectorAll('.portrait img')].map(image => image.decode()));
       assetReady = true;
       $('#start').disabled = false;
-      $('#start').textContent = 'Mulai adegan';
+      $('#start').textContent = 'Mulai';
       $('#asset-status').textContent = '';
       send('ready');
     } catch {
       assetReady = false;
       document.body.classList.add('is-ready');
       $('#start').disabled = false;
-      $('#start').textContent = 'Muat ulang aset';
-      $('#asset-status').textContent = 'Portrait gagal dimuat. Periksa berkas dalam folder assets, lalu coba lagi.';
+      $('#start').textContent = 'Coba lagi';
+      $('#asset-status').textContent = 'Gambar belum dapat dimuat. Periksa berkas gambar, lalu coba lagi.';
     }
   }
 
@@ -499,14 +595,20 @@
   $('#open-conclusion').addEventListener('click', showConclusion);
   $('#log').addEventListener('click', openLog);
   $('#close-history').addEventListener('click', () => $('#history').close());
-  $('#history').addEventListener('close', () => { if (logTrigger?.isConnected && !logTrigger.closest('[hidden]')) logTrigger.focus({ preventScroll: true }); });
+  $('#history').addEventListener('close', () => {syncHeatEffects();if (logTrigger?.isConnected && !logTrigger.closest('[hidden]')) logTrigger.focus({ preventScroll: true });});
+  $('#heat-motion').addEventListener('click',()=>{heatPaused=!heatPaused;syncHeatEffects();});
+  document.addEventListener('visibilitychange',syncHeatEffects);
+  window.addEventListener('pagehide',stopHeatEffects);
+  window.addEventListener('pageshow',syncHeatEffects);
   document.addEventListener('fullscreenchange', () => $('#fullscreen').setAttribute('aria-pressed', String(Boolean(document.fullscreenElement))));
   reducedMotion.addEventListener('change', () => {
-    if (!reducedMotion.matches) return;
-    if (typing) completeText();
-    reactionAnimations.forEach(animation => animation.cancel());
-    reactionAnimations = [];
-    clearTurnMotion();
+    if(reducedMotion.matches){
+      if (typing) completeText();
+      reactionAnimations.forEach(animation => animation.cancel());
+      reactionAnimations = [];
+      clearTurnMotion();
+    }
+    syncHeatEffects();
   });
   document.addEventListener('keydown', event => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.repeat || $('#history').open) return;
@@ -546,6 +648,7 @@
         reactionAnimations = [];
         clearTurnMotion();
       }
+      syncHeatEffects();
     }
     if (data.action === 'advance') { advance(); return; }
     if (data.action !== 'restore' || !assetReady) return;
@@ -556,6 +659,8 @@
       return;
     }
     route = saved.route;
+    effectPosition=null;
+    clearEmotion();
     answers=saved.answers;
     workspace?.restore(saved.workspace);
     frames=flow.trace(definition,answers,saved.workspace);

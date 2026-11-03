@@ -21,11 +21,13 @@ Siswa bebas memeriksa atau mengabaikan Kode dan Apps. Navigasi tidak menghabiska
 
 Pembuka menyebut tujuan, tenggat besok, isian, serta API yang sudah tersedia. Validasi backend tidak dibocorkan. Frontend pertama tidak mempunyai validasi dan selalu mengatakan berhasil setelah menerima response. Backend lokal sudah menolak data tidak sesuai sejak awal.
 
-Perubahan frontend meliputi pemeriksaan hasil response, errors per isian, reset hanya ketika berhasil, serta desain. Pembersihan data dan berkas dapat menjadi tindakan yang salah. Setiap perubahan diperlihatkan pada Kode dan Apps yang sama.
+Perubahan frontend meliputi pemeriksaan hasil response, errors per isian, reset hanya ketika berhasil, desain, serta isian yang dihapus akibat salah tafsir. Pembersihan data dan berkas dapat menjadi tindakan yang salah. Setiap perubahan diperlihatkan pada Kode dan Apps yang sama. JavaScript awal 66 baris dan versi lengkap 79 baris, dengan fungsi pengiriman yang benar-benar dipakai. CSS ditulis satu deklarasi per baris dengan indentasi dua spasi.
 
-Sesudah AI membuat formulir, pilihan default hanya Oke, deploy apps sekarang. Pilihan lain muncul dari pengamatan siswa atau tanggapan terhadap ucapan AI. Tidak ada popup Tandai masalah. Maksimal tiga pilihan ditampilkan, termasuk deploy.
+Sesudah AI membuat formulir, pilihan default hanya Oke, deploy apps sekarang. Pilihan lain muncul dari pengamatan siswa atau tanggapan terhadap ucapan AI. Tidak ada popup Tandai masalah. Maksimal tiga pilihan ditampilkan. Pembicaraan arah desain menawarkan dua instruksi rancu dan satu instruksi jelas. Muat satu layar memadatkan empat kolom, sedangkan yang penting-penting saja menghapus kelas dan ekstrakurikuler. Siswa dapat mengoreksi penafsiran itu setelah melihat akibatnya di Apps. Opsi tunda peluncuran dihapus.
 
-Apps menyediakan Bahas response ini sesudah percobaan, serta Bahas tampilan ketika formulir tersedia. Daftar temuan hanya memuat hal yang sesuai hasil percobaan dan keadaan penanganan response saat itu. Pengiriman baru juga menyediakan satu temuan ketika siswa kembali ke AI. Pengiriman berulang mempunyai nomor internal berbeda agar percobaan baru dapat dibahas tanpa menghidupkan kembali laporan lama.
+Apps menyediakan Bahas hasil percobaan sesudah pengiriman, serta Bahas tampilan ketika formulir tersedia. Daftar temuan hanya memuat hal yang sesuai hasil percobaan dan keadaan penanganan response saat itu. Dialog penolakan menyebut isian yang salah atau belum dipilih serta pesan backend yang sebenarnya. NIS abc dibedakan dari NIS kosong dan kelas yang belum dipilih. Pertanyaan lanjutan meminta percobaan dengan data lengkap dan pemeriksaan pesan berhasil serta daftar pendaftaran. Percobaan diterima yang sudah ada diakui, bukan disebut belum dicoba. Pengiriman berulang mempunyai identitas berbeda agar percobaan baru dapat dibahas.
+
+Label navigasi memakai Mulai, Lanjutkan, Ulangi, Lihat hasil, dan Ke awal. Riwayat menggantikan label Log. Sembunyikan hasil mengosongkan tampilan hasil tanpa menghapus bukti percobaan. Tombol Ulangi pada iframe berada di kiri atas agar tidak bertabrakan dengan kontrol fokus presentasi atau healthbar.
 
 Kode memakai penandaan melalui klik atau blok teks langsung tanpa dropdown topik. Nomor baris kembali menjadi teks, bukan tombol. Baris kode memakai jarak rapat seperti editor sebelumnya. Hapus tanda membatalkan pilihan, dan Bahas kode ini membawa rentang terpilih ke percakapan. Toolbar tetap berada di atas area kode yang bergulir, dengan nama berkas serta ringkasan baris terpilih.
 
@@ -39,9 +41,9 @@ Laporan dapat memulai debat sebelum perbaikan. User boleh mempunyai dugaan kelir
 
 Instruksi perbaikan dijawab dengan Baik, sudah saya perbaiki, diikuti bagian yang diubah. Misalnya penanganan pesan pendaftaran, pesan kesalahan per isian, kondisi reset, atau ukuran label dan jarak. Pernyataan tersebut mengikuti patch yang benar-benar dijalankan. Permintaan yang ditolak pada limit tidak mendapat klaim bahwa perbaikannya sudah selesai.
 
-Semua ucapan User setelah pembuka berasal dari pilihan. User memakai saya dan kamu. AI memakai saya dan Anda. Mereka dapat membantah, menyetujui dugaan secara keliru, atau mengakui kesalahan. Saat memilih, User netral dan textbox tetap terlihat dengan kalimat pengantar sesuai konteks. Pengantar ini bukan pesan yang dikirim dan tidak menambah request atau Log. Narator tanpa portrait atau ekspresi.
+Ucapan User sebelum keputusan akhir berasal dari pilihan. Adegan akibat dapat mempunyai reaksi User yang sudah ditentukan naskah. User memakai saya dan kamu. AI memakai saya dan Anda. Mereka dapat membantah, menyetujui dugaan secara keliru, atau mengakui kesalahan. Saat memilih, User netral dan textbox tetap terlihat dengan kalimat pengantar sesuai konteks. Pengantar ini bukan pesan yang dikirim dan tidak menambah request atau Log. Narator tanpa portrait atau ekspresi.
 
-Satu ucapan User atau respons AI dapat terdiri dari beberapa textbox berurutan. Semua bagian dibaca manual melalui Lanjut, tanpa kewajiban bergantian satu textbox User dan satu textbox AI. Batas dihitung sekali untuk satu permintaan User, bukan setiap bagian. Pilihan berikutnya muncul setelah bagian terakhir respons AI. Snapshot menyimpan posisi sehingga adegan dapat dilanjutkan dari tengah pesan multipart.
+Satu ucapan User atau respons AI dapat terdiri dari beberapa textbox berurutan. Semua bagian dibaca manual melalui Lanjut. Pertanyaan kode memakai 1 poin per 15 baris source tidak kosong, dibulatkan ke atas, minimal 1 dan maksimal 2 poin per pertanyaan. HTML, CSS, dan JS memakai aturan yang sama. Rentang berasal dari bukti pemilihan kode yang divalidasi terhadap source saat pertanyaan dikirim. Membuka pilihan dan Lanjut antartextbox tidak menambah biaya. Chat selain pertanyaan kode memakai 1 poin dan keputusan deploy gratis. Snapshot memutar ulang biaya yang sama tanpa mengurangi poin lagi saat restore.
 
 ## Dialog hening dan respons backup
 
@@ -77,13 +79,17 @@ Dialog biasa Micro Task kini berbagi aturan portrait dan textbox dengan database
 
 Lima belas pemeriksaan layout lulus pada 390/768/1024/1366/1468/1920, termasuk pembandingan User/AI dengan database serta pemeriksaan iframe presentasi. Delapan belas regresi Micro Task dan enam pemeriksaan penandaan kode juga lulus. Pemeriksaan visual mencakup dialog, pilihan, dan tiga siswa pada desktop serta ponsel. Tidak ada error JavaScript pada pengujian tersebut.
 
-Pembuka adalah penggunaan pertama, tetapi tampilan bar awal penuh. Batas sekarang 12 request dengan isi bar (12-used)/11, dibatasi 0 sampai 1. Request 8–9 mulai panas dan tersendat, 10 makin terganggu, 11 paling parah sebelum berhenti, dan 12 ditolak sebelum perubahan dijalankan. Pengiriman formulir, navigasi, deploy, Lanjut antarbagian, dan adegan akibat tidak dihitung.
+Pembuka memakai poin pertama dengan tampilan bar awal penuh. Batas 12 poin memakai isi bar (12-used)/11, dibatasi 0 sampai 1. Field requests pada frame menyimpan total poin, bukan jumlah pesan. Total 8–9 mulai panas, 10 makin terganggu, 11 paling parah, dan pertanyaan yang mencapai 12 ditolak sebelum diproses. Pertanyaan 2 poin pada total 10 atau 11 berakhir pada 12, bukan 13. Pengiriman formulir, navigasi, deploy, Lanjut antarbagian, dan adegan akibat gratis. Reset nuklir tetap diproses pada batas tersebut.
+
+Rute pembahasan tiga masalah dan desain rapi mencapai ready pada 8 poin jika tiap bagian kode dipilih terarah. Memilih seluruh HTML untuk pembahasan isian membuat rute yang sama memakai 9 poin. Metadata pilihan menyimpan requestCost serta codeLines agar biaya dapat ditelusuri dari hasil replay.
 
 Gangguan disisipkan pada kata bahasa alami di berbagai posisi, termasuk tengah kalimat dan bagian berikutnya dari respons multipart. Tingkat yang lebih tinggi menambah jeda, pengulangan suku kata, dan BZZRRT atau KRRZZT. Variasinya deterministik agar restore tetap sama. Istilah kode seperti response.ok, success, errors, dan form.reset tidak dipecah.
 
-Asap memakai empat siluet berbeda: berkelok panjang, gumpalan melebar, bercabang, dan kepulan terputus. Kontur gelap, isi abu-abu, serta sorotan putih mengikuti referensi kartun pemateri dengan bentuk yang dibuat sendiri. Sampai enam kepulan tersebar di sisi kepala dan bahu, dengan arah serta jeda berbeda. Setiap animasi selesai sebelum lima detik. Gerak mati atau reduced-motion menampilkan kepulan statis. Layer asap dibatasi agar tidak menutup healthbar.
+Asap memakai empat siluet berbeda: berkelok panjang, gumpalan melebar, bercabang, dan kepulan terputus. Kontur gelap, isi abu-abu, serta sorotan putih mengikuti referensi kartun pemateri. Sampai enam slot kepulan muncul, membesar, naik, dan memudar sampai hilang. Siklus berikutnya mengganti bentuk, ukuran, posisi, arah, durasi, dan jeda secara acak. Petir muncul singkat lalu hilang dengan waktu serta posisi yang berbeda. Pergantian textbox AI meneruskan siklus yang sedang berjalan. Giliran atau pilihan User membatalkan seluruh animasi dan mencegah siklus lama muncul kembali. Jeda efek/Lanjutkan efek tersedia di kontrol bawah. Pengaturan gerak host, reduced-motion, perpindahan Kode/Apps, Riwayat terbuka, dan tab tersembunyi menghentikan pengulangan. Gerak nonaktif memakai efek statis. Restore membangun kembali efek sesuai giliran yang disimpan.
 
 Nuklir memiliki prioritas di atas overheat. Pilihan reset pada penggunaan ke-12 tetap mendapat jawaban reset, peluncuran, reaksi User, dan penutup nuklir. Hitungan tidak direset. Tidak ada prompt tersisa yang disebutkan oleh AI.
+
+Reset semua saja muncul setelah pembahasan masalah response, isian, atau desain, bukan di pilihan default. AI menjawab bahwa semuanya akan direset. Setelah narator mengatakan AI menekan tombol peluncuran nuklir, layar bergetar satu kali selama 650 ms dan tombol Lanjut dinonaktifkan sementara. Setelah guncangan, Lanjut membuka User terkejut: Tunggu... tombol apa yang kamu tekan?! Giliran berikutnya memakai ekspresi anger dan teks MAKSUD SAYA RESET APLIKASINYA! ULANGI PEMBUATANNYA DARI AWAL. Narator menutup dengan pembatalan pendaftaran. Reduced-motion atau pengaturan gerak nonaktif melewati guncangan. Semua perpindahan dialog manual.
 
 ## Deploy dan ending
 
@@ -91,12 +97,13 @@ Deploy bukan penerbitan web sungguhan. Keputusan tersebut memilih adegan akibat 
 
 1. Halaman hilang.
 2. Data penting dihapus.
-3. Backend menolak, frontend mengatakan berhasil.
-4. Pesan errors atau reset isian belum sesuai.
-5. Fungsi benar, desain buruk.
-6. Fungsi dan desain sesuai.
+3. Isian wajib dihapus, sehingga peserta tidak bisa memenuhi permintaan backend.
+4. Backend menolak, frontend mengatakan berhasil.
+5. Pesan errors atau reset isian belum sesuai.
+6. Fungsi benar, desain buruk.
+7. Fungsi dan desain sesuai.
 
-User dapat menunda peluncuran. Penghapusan berkas, penghapusan data, nuklir, dan overheat juga dapat menutup alur tanpa deploy. Satu fungsi resolveEnding menentukan hasil dan menguncinya sebelum adegan akibat dimulai. Prioritas kejadian yang sudah terjadi adalah nuklir, halaman terhapus, lalu data terhapus. Setelah itu overheat atau keputusan lainnya dipertimbangkan. Bug fungsi tetap lebih tinggi daripada masalah desain pada deploy.
+Delapan ending aktif adalah ready, false-success, difficult, design, missing, data, nuclear, dan overheat. Isian wajib yang dihapus memakai ending difficult dengan pembahasan khusus HTML yang kehilangan kontrol. Penghapusan berkas, penghapusan data, nuklir, dan overheat juga dapat menutup alur tanpa deploy. Satu fungsi resolveEnding menentukan hasil dan menguncinya sebelum adegan akibat dimulai. Prioritas kejadian yang sudah terjadi adalah nuklir, halaman terhapus, lalu data terhapus. Setelah itu overheat atau keputusan lainnya dipertimbangkan. Bug fungsi tetap lebih tinggi daripada masalah desain pada deploy.
 
 Permintaan biasa ke-12 berhenti sebelum patch dijalankan. Memilih pembersihan berkas pada batas tersebut tidak dianggap telah menghapus berkas. Reset nuklir tetap mendapat pengecualian. Renderer menolak pilihan dari frame yang sudah lewat dan mengirim perpindahan konklusi satu kali.
 
@@ -106,9 +113,9 @@ Akibat deploy yang terjadi saat pendaftaran dibuka diawali narasi Keesokan harin
 
 Pembahasan desain mengikuti CSS yang sedang tersedia. Formulir polos menawarkan permintaan desain. CSS buruk membuka kritik terhadap label dan jarak, sedangkan CSS yang sudah dirapikan membuka pertanyaan batas perubahan. Beralih ke masalah fungsi memerlukan pengamatan atau pilihan percakapan yang sesuai. Berpindah topik tidak mengulang pembuatan formulir.
 
-Label dan isi hasil mengikuti ending. Good ending memakai Hasil, Bukti, Tindak lanjut, dan Riwayat. Ending yang masih bermasalah memakai Kesalahan, Bukti, Perbaikan, dan Riwayat. Penundaan memakai Keputusan, Bukti, Langkah berikutnya, dan Riwayat. Overheat memakai Kondisi terakhir, Bukti, Langkah berikutnya, dan Riwayat. Tidak ada judul tambahan Pembahasan percakapan.
+Label dan isi hasil mengikuti ending. Good ending memakai Hasil, Bukti, Tindak lanjut, dan Riwayat. Ending yang masih bermasalah memakai Kesalahan, Bukti, Perbaikan, dan Riwayat. Overheat memakai Kondisi terakhir, Bukti, Langkah berikutnya, dan Riwayat. Tidak ada judul tambahan Pembahasan percakapan.
 
-Good ending membahas perilaku akhir yang sudah sesuai, tanpa mengulang bug awal sebagai kegagalan. Bukti membedakan kode yang benar dari percobaan yang benar-benar dilakukan pada kode tersebut. Tindak lanjut meminta hanya pemeriksaan yang belum ada, atau pemeriksaan ulang jika kode kelak berubah. Ending bermasalah hanya meminta perbaikan yang masih diperlukan, termasuk desain buruk yang belum dirapikan pada saat overheat atau penundaan. Bukti lama tidak menjadi verifikasi halaman yang sudah hilang atau daftar yang sudah terhapus.
+Good ending membahas perilaku akhir yang sudah sesuai, tanpa mengulang bug awal sebagai kegagalan. Bukti membedakan kode yang benar dari percobaan yang benar-benar dilakukan pada kode tersebut. Tindak lanjut meminta hanya pemeriksaan yang belum ada, atau pemeriksaan ulang jika kode kelak berubah. Ending bermasalah hanya meminta perbaikan yang masih diperlukan, termasuk desain buruk yang belum dirapikan pada saat overheat. Bukti lama tidak menjadi verifikasi halaman yang sudah hilang atau daftar yang sudah terhapus.
 
 Riwayat menggabungkan pilihan chat, keputusan, pembukaan halaman, pemilihan pengamatan, dan pengiriman formulir. Penjelasan keliru atau persetujuan AI tanpa bukti dicatat sebagai Respons AI di Riwayat. Catatan itu tidak mengubah good ending menjadi penilaian kegagalan. Workspace menyimpan hingga 30 percobaan dan 80 aktivitas terakhir. Membuka halaman saja tidak dianggap sebagai pemeriksaan lengkap.
 
@@ -135,6 +142,12 @@ Pembersihan data hanya ditawarkan ketika daftar memuat pendaftaran yang diterima
 Memperbaiki satu bagian tidak otomatis memperbaiki bagian lain. Setelah patch, siswa dapat membaca bagian source yang berubah atau melakukan percobaan baru. Pemateri dapat membahas perbedaan penjelasan AI, perubahan kode, dan bukti hasil tanpa mengharuskan satu urutan jawaban.
 
 ## Aset dan status
+
+Revisi biaya pertanyaan kode lulus 60 model serta 41 browser. Batas 15/16/30/31 baris, tiga jenis source, baris kosong, pertanyaan satu file, biaya palsu pada jawaban, limit 12, nuklir, dan restore multipart diperiksa. UI memakai penandaan keyboard, pengiriman pertanyaan, pembacaan healthbar, Lanjut, serta reload. Good ending terarah 8 poin dan pembahasan seluruh HTML 9 poin lulus. Hasil berikut mencatat iterasi sebelumnya.
+
+Revisi efek acak dan dialog hasil percobaan lulus 35 pemeriksaan model dan 72 browser. Pengamatan sebelas detik membuktikan beberapa siklus asap/petir dengan bentuk/posisi berbeda, fade-out penuh, dan jumlah elemen terbatas. Jeda, resume, gerak host, reduced-motion, Kode/Apps/Riwayat, pergantian ke User, serta Ulangi diperiksa. Dialog dari Apps diuji memakai NIS abc. Kontrol pendek diuji melalui klik, termasuk Ulangi yang semula tertutup kontrol fokus dan bertabrakan dengan healthbar ponsel. Gambar desktop/ponsel diperiksa. Hasil berikut mencatat iterasi sebelumnya.
+
+Revisi instruksi rancu, source lengkap, dan nuklir lulus 28 pemeriksaan model serta 56 browser di Edge. Cakupan meliputi delapan ending, restore multipart, ucapan kapital dan anger, guncangan nuklir, pembatalan gerak saat reduced-motion berubah, efek overheat yang menetap, pengiriman ganda, kesalahan transport, bukti reset, pemulihan isian yang dihapus, penandaan kode, dan regresi layout. Gambar dialog nuklir, overheat, source CSS, serta kedua hasil Apps yang salah diperiksa langsung. Hasil berikut mencatat iterasi sebelumnya.
 
 Koreksi pemusatan vertikal lulus 10 pemeriksaan UI di Edge. Teks pendek/panjang, keempat tab, riwayat bergulir, jarak tombol ulang, titik tengah kolom, serta mode mandiri diperiksa. Lebar yang diperiksa 1534/1366/1024/390. Panel pendek tidak menyisakan tinggi internal yang tidak terpakai. Regresi 14 pemeriksaan UI lulus, termasuk seluruh 37 slide dengan judul tab tetap, penilaian sesuai ending, dan mode mandiri. Tidak ditemukan error JavaScript pada pemeriksaan tersebut. Pemeriksaan alignment garis atas/bawah pada iterasi sebelumnya tidak lagi menjadi kriteria layout aktif.
 

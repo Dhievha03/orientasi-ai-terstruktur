@@ -239,3 +239,75 @@ check-limit12-ui.cjs akhirnya lulus 18/18. Tes asap lama mempertahankan transisi
 Bingkai cyan saat navigasi panah dihapus sesuai gambar pemateri. Fokus ditandai melalui perubahan bidang tag angka. Tes panah mula-mula gagal pada empat kasus yang masih memiliki outline solid. Setelah koreksi, check-selector-arrow-keys.cjs 7/7, check-hover-boundaries.cjs 5/5, check-selector-hover.cjs 7/7, dan check-two-tier-selector.cjs 9/9 lulus. Total 28 pemeriksaan, tanpa error JavaScript.
 
 Koreksi berikutnya menghapus warna biru khusus tag keyboard karena pemateri meminta tampilan sama dengan hover. Fokus kini menyorot satu kartu dengan warna hover yang identik, termasuk isi tag navy dan angka putih. Pemeriksaan perbandingan langsung keyboard/hover mula-mula gagal, lalu lulus pada seluruh 10 selector. Keempat rangkaian di atas kembali lulus 28/28, tanpa error JavaScript.
+
+## Instruksi rancu, source lengkap, dan nuklir
+
+- [x] Pertahankan pilihan awal deploy saja dan sediakan Reset semua saja secara kontekstual.
+- [x] Hapus opsi serta ending tunda. Delapan ending aktif tetap dapat dicapai.
+- [x] Hubungkan permintaan muat satu layar ke CSS padat dan permintaan yang penting-penting saja ke HTML tanpa kelas/ekstrakurikuler.
+- [x] Sediakan koreksi kedua kesalahan dan sesuaikan bukti dengan susunan formulir terakhir.
+- [x] Perlengkap source JS dengan lifecycle pengiriman yang dipakai Apps. Beautify CSS langsung pada sumber preview.
+- [x] Pertahankan asap/petir selama giliran AI, termasuk antartextbox dan ketika menunggu Lanjut.
+- [x] Tambahkan guncangan setelah narasi peluncuran, User terkejut, lalu ucapan kapital dengan ekspresi anger sesuai redaksi final.
+- [x] Verifikasi reduced-motion, delapan ending, source/preview, bukti reset, pengiriman ganda, kegagalan transport, penandaan kode, serta layout.
+
+Keputusan pelaksanaan: guncangan nuklir berjalan satu kali 650 ms setelah teks narator lengkap. Tombol Lanjut dikunci selama guncangan dan aktif kembali setelah selesai atau gerak dinonaktifkan. Tidak ada perpindahan dialog otomatis. Efek overheat berakhir dalam keadaan terlihat, bukan mengulang animasi tanpa batas. JavaScript berisi 66–79 baris sesuai kebutuhan fungsi, tanpa penambahan baris pengisi untuk mengejar perkiraan awal 70–100.
+
+Model revisi mula-mula gagal pada sembilan kontrak baru, kemudian lulus. Pemeriksaan tambahan mereproduksi salah klasifikasi pembersihan pesan sebagai masalah response, lalu lulus setelah deteksi topik dipersempit. UI mula-mula gagal karena efek menghilang, elemen dibangun ulang antartextbox, dan guncangan belum tersedia. Restore kemudian disesuaikan agar efek diinisialisasi ulang ketika sesi dipulihkan, sedangkan perpindahan textbox AI tetap mempertahankan efek.
+
+Pemeriksaan diff oleh pelaksana menemukan dua masalah tambahan pada pemetaan kode: rentang response berhenti pada baris pembersihan pesan yang lebih awal, serta judul HTML biasa ikut ditawari perbaikan isian yang hilang. Dua pemeriksaan mereproduksi kegagalan sebelum koreksi, kemudian lulus setelah rentang response dibatasi ke fungsi hasil dan pembahasan struktur dibatasi ke topik isian/pilihan.
+
+Hasil akhir: check-dialogue-revision-model.cjs 13/13, check-discussion-contract.cjs 15/15, check-dialogue-revision-ui.cjs 17/17, check-limit12-ui.cjs 18/18, check-code-marking-border.cjs 6/6, serta check-dialogue-layout-parity.cjs 15/15. Total 84 pemeriksaan, tanpa error JavaScript pada browser. Gambar nuklir, overheat, CSS, formulir padat, dan formulir kehilangan isian diperiksa. Versi konten dinaikkan agar snapshot/rentang kode dari naskah lama tidak dipulihkan pada kontrak baru.
+
+## Efek acak dan dialog hasil yang konkret
+
+- [x] Ubah efek yang sebelumnya menetap menjadi siklus muncul, bergerak, hilang, dan muncul lagi secara acak.
+- [x] Pertahankan controller antartextbox AI, batasi slot, dan batalkan siklus lama pada User/reset/akhir dialog.
+- [x] Tambahkan Jeda efek/Lanjutkan efek serta tangani gerak host, reduced-motion, Kode/Apps/Riwayat, dan visibilitas dokumen.
+- [x] Bentuk dialog penolakan dari isian serta errors aktual, lalu sediakan langkah pemeriksaan berikutnya yang konkret.
+- [x] Ganti label panjang menjadi Mulai, Lanjutkan, Ulangi, Lihat hasil, Ke awal, Riwayat, dan Bahas hasil percobaan.
+- [x] Periksa pengulangan nyata, fungsi kontrol, dialog melalui Apps, serta komposisi desktop/ponsel.
+
+Keputusan pelaksanaan: slot SVG digunakan ulang. Setiap animasi mempunyai fade-out penuh dan completion handler yang menjadwalkan siklus berikutnya. Generation guard mencegah handler lama memulai ulang animasi setelah dibatalkan. Tidak menambahkan timer berulang yang berjalan di belakang Kode/Apps atau Riwayat. Tombol pause dipindah ke footer setelah tes membuktikan kontrol fokus host menutup posisinya di kanan atas. Ulangi diposisikan di kiri atas setelah tabrakan dengan kontrol fokus dan healthbar ponsel direproduksi.
+
+Tes dialog mula-mula gagal pada tujuh kasus karena naskah memakai frasa abstrak. Tes visual mula-mula menemukan satu siklus dengan gambar menetap, tidak ada pause, dan gerak tidak pulih setelah dinyalakan kembali. Setelah koreksi, pengamatan sebelas detik menunjukkan beberapa siklus smoke/spark, posisi dan bentuk berbeda, opacity kembali nol, serta jumlah slot terbatas. Fixture dialog melalui Apps diperpendek agar memeriksa redaksi tanpa tercampur glitch overheat yang memang aktif pada request 8.
+
+Hasil akhir sesi ini: check-response-dialogue.cjs 7/7, check-dialogue-revision-model.cjs 13/13, check-discussion-contract.cjs 15/15, check-random-overheat-ui.cjs 16/16, check-dialogue-revision-ui.cjs 17/17, check-limit12-ui.cjs 18/18, check-code-marking-border.cjs 6/6, dan check-dialogue-layout-parity.cjs 15/15. Total 107 pemeriksaan. Kasus batas posisi Ulangi/healthbar kemudian diperkuat dan lulus pada 390/1366. Tidak ada error JavaScript pada browser. Versi konten ai-assisted-random-overheat-clear-dialogue-150-8.
+
+## Biaya kode per kelipatan 15 baris
+
+- [x] Hitung baris source tidak kosong dari rentang pertanyaan yang valid.
+- [x] Terapkan ceil(baris/15), minimal 1 dan maksimal 2 poin.
+- [x] Kenakan biaya ketika pertanyaan dikirim, sekali untuk seluruh pesan multipart.
+- [x] Batasi total 12 dan pertahankan penolakan sebelum pemrosesan serta pengecualian nuklir.
+- [x] Uji batas baris pada HTML/CSS/JS, penandaan keyboard, healthbar, Lanjut, dan restore.
+- [x] Selaraskan versi, catatan pemateri, serta dokumentasi.
+
+Biaya dihitung ulang dari source saat replay. Field requestCost dan codeLines pada selection menyimpan hasil perhitungan, bukan metadata biaya yang dikirim pada jawaban. Baris kosong diabaikan. Chat lain tetap 1 poin dan deploy 0. Math.min terhadap batas 12 mencegah total 13 ketika pertanyaan 2 poin dikirim pada total 11.
+
+Tes awal mereproduksi biaya yang selalu 1 dan metadata biaya yang belum tersedia. Setelah perubahan, 25 model serta 6 UI baru lulus. Dua kontrak historis yang mengharapkan good ending 8 pada pembahasan seluruh HTML diselaraskan ke 9. Tes baru membuktikan rute dengan satu blok isian terarah tetap mencapai ready pada 8 poin.
+
+Hasil revisi: check-code-budget-15.cjs 25/25, check-code-budget-15-ui.cjs 6/6, check-dialogue-revision-model.cjs 13/13, check-discussion-contract.cjs 15/15, check-response-dialogue.cjs 7/7, check-limit12-ui.cjs 18/18, dan check-dialogue-revision-ui.cjs 17/17. Total 101 pemeriksaan, tanpa error JavaScript pada browser. Versi konten ai-assisted-code-budget-15-150-8.
+
+## Penggantian contoh instruksi dan konteks review
+
+- [x] Gunakan kasus database bab 2 pada instruksi lengkap, konteks, brief, serta kriteria penerimaan bab 4.
+- [x] Selaraskan contoh prompt/rules/skill dan batas tugas pada bab 5.
+- [x] Gunakan micro task pendaftaran ekstrakurikuler pada seluruh materi bab 7 sesuai koreksi pemateri.
+
+Instruksi database menetapkan target testing, pemeriksaan pemakaian serta cadangan, persetujuan rencana, dan batas penghapusan. Kriteria melindungi production, cadangan, serta akses website. Bab 7 membahas respons backend, errors, reset, kelengkapan formulir, serta bukti percobaan. Contoh laporan membedakan form yang dapat dibuka dari pendaftaran yang sudah diverifikasi.
+
+- [x] Perbarui README dan DESIGN serta periksa hasil di browser.
+
+Verifikasi: check-all-material-selectors.cjs 7/7, 120 keadaan pilihan, seluruh 37 slide. Pemeriksaan langsung mencakup 38 keadaan dari 11 slide pada 1366/390 px serta modal enam paragraf dengan scroll dan Escape. Pemeriksaan visual menemukan klaim panjang mendorong pembahasan ke bawah. Setelah kalimat diringkas, seluruh pembahasan muat pada desktop 1366×900 dan 1366×768. Ponsel 390×844 dapat menggulir ke pembahasan tanpa overflow horizontal. Tidak ada error JavaScript. content.js lulus node --check dan diff lolos pemeriksaan whitespace.
+
+## Perbaikan tiga komponen visual
+
+- [x] Perkuat review rencana dengan tiga panel bersudut, header navy, nomor cyan, dan isi putih.
+- [x] Satukan kutipan, tombol, dan pembahasan koreksi dalam satu grid agar kolomnya sejajar.
+- [x] Ubah inset border atas material-card dari 2 menjadi 4 px, dengan sisi kanan 6 px.
+- [x] Periksa desktop/ponsel, toggle mouse/keyboard, serta hover dan panah selector.
+
+Pengukuran awal menemukan panel review transparan dan pembahasan koreksi bergeser 93,39 px dari kutipan. Border atas masih 2 px. Setelah koreksi, kedua layout diperiksa pada enam ukuran 390/768/1024/1366/1534/1920. Panel review sejajar pada desktop. Kutipan rinci dan pembahasannya mempunyai batas kolom yang sama. Pembahasan muat di viewport desktop, termasuk tinggi 686 px, dan layar sempit dapat menggulir secara vertikal.
+
+Hasil: check-card-spacing-route.cjs 8/8, check-selector-hover.cjs 7/7, check-all-material-selectors.cjs 7/7 dengan 120 keadaan pilihan dan 37 slide, serta check-selector-arrow-keys.cjs 7/7. Total 29 pemeriksaan regresi. Pemeriksaan langsung juga mengaktifkan/menutup pembahasan melalui mouse dan keyboard. Gambar review dan koreksi desktop/ponsel serta border selector diperiksa. Kontras teks dihitung, tanpa pasangan di bawah 4,5:1. Tidak ada error JavaScript. app.js lulus node --check.
