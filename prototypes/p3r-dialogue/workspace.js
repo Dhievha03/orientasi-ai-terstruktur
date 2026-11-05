@@ -55,7 +55,7 @@
           const token=document.createElement('span');token.className=match[0].startsWith('//')?'token-comment':/^["']/.test(match[0])?'token-string':'token-keyword';token.textContent=match[0];code.append(token);start=match.index+match[0].length;
         }
         code.append(document.createTextNode(line.slice(start)||(!line?' ':'')));
-        if(selected==='js'&&(state.checkResponse&&/response\.ok|hasil\.success/.test(line)||state.fieldErrors&&/hasil\.errors/.test(line)||state.keepValues&&/form\.reset/.test(line)))row.classList.add('code-line--changed');
+        if(selected==='js'&&(state.checkResponse&&/response\.ok|result\.success/.test(line)||state.fieldErrors&&/result\.errors/.test(line)||state.keepValues&&/form\.reset/.test(line)))row.classList.add('code-line--changed');
         row.append(number,code);pre.append(row);
       }
       document.querySelectorAll('[data-code-file]').forEach(button=>{button.hidden=!available.includes(button.dataset.codeFile);if(button.dataset.codeFile===selected)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');});
@@ -92,13 +92,13 @@
       $('#workspace-nav').hidden=!active;$('#ai-health').hidden=!active;
       if(!active){$('#registration-workspace').hidden=true;$('#scene').hidden=false;document.body.dataset.workspaceView='ai';return;}
       const next=frame.labState||state;
-      const nextSignature=JSON.stringify(['created','checkResponse','fieldErrors','keepValues','simplified','design','filesAvailable','dataLost'].map(key=>next[key]));
+      const nextSignature=JSON.stringify(['created','checkResponse','fieldErrors','keepValues','simplified','slowScript','design','filesAvailable','dataLost'].map(key=>next[key]));
       state=structuredClone(next);
       if(saved.selection&&saved.selection.key!==example.sourceKey(state,saved.selection.file)){saved.selection=null;selectedCode=null;}
       if(signature!==nextSignature){
         const restoring=signature==='';signature=nextSignature;lastResponse=null;
         if(state.dataLost&&!lossApplied){saved.records=[];lossApplied=true;}
-        if(restoring){const previous=saved.attempts.findLast(item=>['checkResponse','fieldErrors','keepValues','simplified'].every(key=>item[key]===state[key]));if(previous)lastResponse=example.backend(previous.input);}
+        if(restoring){const previous=saved.attempts.findLast(item=>['checkResponse','fieldErrors','keepValues','simplified','slowScript'].every(key=>item[key]===state[key]));if(previous)lastResponse=example.backend(previous.input);}
         renderCode();renderPreview();
       }
       const used=frame.requests||1,heat=definition.heatLevel(used),condition=heat===4?'Habis':heat>=2?'Kritis':heat?'Panas':'Stabil';
@@ -162,11 +162,11 @@
       else if(message.type==='registration-shortcut'&&['1','2','3'].includes(message.key)){setView({'1':'ai','2':'code','3':'apps'}[message.key]);refresh();}
       else if(message.type==='registration-input'&&!callbacks.endingLocked()){saved.input=example.normalize(message.input);publish();}
       else if(message.type==='registration-result'&&state.filesAvailable&&!callbacks.endingLocked()){
-        if(!['checkResponse','fieldErrors','keepValues','simplified'].every(key=>message.flags?.[key]===state[key]))return;
+        if(!['checkResponse','fieldErrors','keepValues','simplified','slowScript'].every(key=>message.flags?.[key]===state[key]))return;
         const input=example.normalize(message.input);lastResponse=example.backend(input);
         if(lastResponse.body.success){saved.records.push(lastResponse.body.data);saved.records=saved.records.slice(-30);preview.contentWindow.postMessage({type:'registration-records',records:saved.records},'*');}
         saved.sequence++;
-        saved.attempts.push({input,...(message.valuesAfter&&typeof message.valuesAfter==='object'?{valuesAfter:example.normalize(message.valuesAfter)}:{}),after:after(),serial:saved.sequence,checkResponse:state.checkResponse,fieldErrors:state.fieldErrors,keepValues:state.keepValues});saved.attempts=saved.attempts.slice(-30);
+        saved.attempts.push({input,...(message.valuesAfter&&typeof message.valuesAfter==='object'?{valuesAfter:example.normalize(message.valuesAfter)}:{}),...(Number.isFinite(message.durationMs)&&message.durationMs>=0?{durationMs:message.durationMs}:{}),after:after(),serial:saved.sequence,checkResponse:state.checkResponse,fieldErrors:state.fieldErrors,keepValues:state.keepValues,simplified:state.simplified,slowScript:state.slowScript});saved.attempts=saved.attempts.slice(-30);
         remember({kind:'submit',serial:saved.sequence});
         $('#workspace-note').textContent='Percobaan dicatat. Pilih Bahas hasil percobaan untuk membicarakannya dengan AI.';
         responseTools();publish();refresh();

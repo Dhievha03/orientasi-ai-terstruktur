@@ -92,16 +92,11 @@ body:has(.workspace-nav:not([hidden])) #keyboard-hint{font-size:14px;color:#eaf8
 body:has(.workspace-nav:not([hidden])) #log{min-height:44px;padding:10px 15px;background:#14234d}
 body:has(.workspace-nav:not([hidden])) #log:hover{background:#fff;color:#163ab6}
 body[data-workspace-view]:not([data-workspace-view=ai]) .playback-controls{display:none}
-.scene[data-setting=micro]{--actor-height:min(76dvh,calc(min(35vw,560px)*1359/1111));--ai-actor-height:min(76dvh,calc(min(35vw,560px)*1337/1113));--student-drop:calc(var(--actor-height)*.16);--students-width:calc(var(--actor-height)*1.2)}
-.portrait-students{left:0;width:var(--students-width);max-width:none;height:calc(var(--actor-height) + var(--student-drop));aspect-ratio:auto;bottom:0;opacity:1;visibility:visible}
-.portrait-students .student{position:absolute;bottom:0;width:auto;height:var(--actor-height);isolation:isolate}
-.portrait-students img{display:block;position:static;width:100%;height:100%;object-fit:contain}
-.portrait-students .student-left{left:0;bottom:var(--student-drop);aspect-ratio:1111/1392;z-index:1}
-.portrait-students .student-right{right:0;bottom:var(--student-drop);aspect-ratio:1181/1346;z-index:2}
-.portrait-students .student-front{left:50%;bottom:0;aspect-ratio:944/1338;transform:translateX(-50%);z-index:3}
+.scene[data-setting=micro]{--actor-height:min(76dvh,calc(min(35vw,560px)*1359/1111));--ai-actor-height:min(76dvh,calc(min(35vw,560px)*1337/1113))}
+.portrait-students{left:0;opacity:1;visibility:visible}
+.portrait-students .student{position:absolute;inset:0;width:100%;height:100%;isolation:isolate}
 .portrait-students .emotion-layer{z-index:4}
-.portrait-students .student .comic-expression{top:11%;left:48%;width:clamp(35px,4.3vw,66px);height:clamp(35px,4.3vw,66px);transform:rotate(9deg)}
-.portrait-students .student-left .comic-expression{top:0;left:35%}
+.portrait-students .student>.emotion-layer{inset:calc(100% - var(--actor-height)) 0 0}
 .scene[data-mode=conclusion] .portrait-students{display:none}
 .scene[data-reaction-only=true] .nameplate,.scene[data-reaction-only=true] .spoken-line{display:none}
 .scene[data-reaction-only=true] .speech-shell::before,.scene[data-reaction-only=true] .speech-shell::after{display:none}
@@ -115,14 +110,12 @@ body[data-workspace-view]:not([data-workspace-view=ai]) .playback-controls{displ
 @supports selector(::-webkit-scrollbar){.source-code{scrollbar-width:auto;scrollbar-color:auto}}
 @media(min-width:761px){
  .scene[data-setting=micro] .portrait-ai .ai-health{top:calc(100% - var(--ai-actor-height) - 28px)}
- .scene[data-setting=micro][data-speaker=students] .speech-shell{left:max(25%,calc(var(--students-width) - 30px));right:7%}
- .scene[data-setting=micro][data-speaker=students] .nameplate{left:0}
  .scene[data-setting=micro][data-reaction-only=true] .speech-shell{position:fixed;inset:auto 3vw 88px auto;min-height:0;width:auto;padding:0}
 }
 @media(min-width:761px) and (max-height:650px){.scene[data-setting=micro]{--actor-height:min(74dvh,calc(min(35vw,560px)*1359/1111));--ai-actor-height:min(74dvh,calc(min(35vw,560px)*1337/1113))}}
 @media(min-width:761px) and (max-width:1100px){.scene[data-setting=micro]{--actor-height:min(68dvh,calc(38vw*1359/1111));--ai-actor-height:min(68dvh,calc(38vw*1337/1113))}}
 @media(max-width:760px){
- .scene[data-setting=micro]{--actor-height:clamp(230px,38dvh,370px);--students-width:min(calc(var(--actor-height)*1.2),90vw)}
+ .scene[data-setting=micro]{--actor-height:clamp(230px,38dvh,370px)}
  .workspace-nav{gap:6px}.workspace-nav button{font-size:13px;padding:9px 10px;gap:5px}
  .ai-health{top:-26px;width:150px;height:24px}.health-status{left:0;bottom:4px;right:3px}.health-ribbon{padding:5px 6px;gap:4px}.health-track{height:6px}.health-label{font-size:9px}
  .registration-workspace{padding:88px 4vw 88px}.workspace-heading{align-items:flex-start;flex-wrap:wrap;gap:12px}.workspace-heading h1{font-size:29px}
@@ -130,7 +123,8 @@ body[data-workspace-view]:not([data-workspace-view=ai]) .playback-controls{displ
  .code-view,.apps-view{height:calc(100dvh - 176px);min-height:300px}.source-code{font-size:13px;padding:0 0 12px}.code-context{font-size:14px;min-height:0}.code-selection-status{font-size:14px}.code-selection-actions{display:flex;flex-wrap:wrap;width:100%}.code-selection-actions button{font-size:14px;padding:8px 12px;white-space:normal}
  .apps-view iframe{min-height:160px}.workspace-note{font-size:15px}
  .workspace-nav kbd{min-width:18px;min-height:18px}
- .portrait-students{position:relative;width:var(--students-width);max-width:none;height:calc(var(--actor-height) + var(--student-drop));aspect-ratio:auto;margin:12px auto 12px;left:auto;bottom:auto}
+ .portrait-students{left:auto;margin-left:0;margin-right:auto}
+ .portrait-students .student>.emotion-layer{inset:0}
  body:has(.workspace-nav:not([hidden])) .topbar{height:72px;padding:8px 4vw;gap:8px}
  body:has(.workspace-nav:not([hidden]))>.bottom-controls{gap:12px;min-height:68px;padding:10px 4vw}
  body:has(.workspace-nav:not([hidden])) .playback-controls{gap:10px}

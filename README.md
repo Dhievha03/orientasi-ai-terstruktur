@@ -1,6 +1,6 @@
 # Tools AI untuk AI-Assisted Development
 
-Presentasi statis pemateri TEFA untuk kelas 11 yang sudah coding dan familiar dengan AI. Versi aktif `ai-assisted-code-budget-15-150-8`: **37 slide, 8 bab, alokasi 150 menit** termasuk pembahasan dan pertanyaan per bab.
+Presentasi statis pemateri TEFA untuk kelas 11 yang sudah coding dan familiar dengan AI. Versi aktif `ai-assisted-code-only-performance-150-8`: **37 slide, 8 bab, alokasi 150 menit** termasuk pembahasan dan pertanyaan per bab.
 
 ## Membuka
 
@@ -62,7 +62,11 @@ Bab Micro Task memakai **Pendaftaran Ekstrakurikuler**. Apps harus diluncurkan b
 
 Tampilan awal adalah AI. Tombol atau angka 1, 2, dan 3 membuka AI, Kode, serta Apps. Shortcut angka tidak aktif saat mengetik. Sidebar berkas menampilkan HTML dan JS setelah AI membuat formulir. CSS baru muncul setelah permintaan desain. Viewer hanya memuat source frontend yang dibahas dan dipakai preview, tanpa seluruh backend dan kode alat pembelajaran. Apps membagi formulir di kiri dan status serta JSON di kanan.
 
-JavaScript yang ditampilkan kini berisi 66 baris pada pembuatan awal dan 79 baris setelah perbaikan lengkap. Fungsi pembacaan isian, status tombol, pesan, pengiriman, reset, dan handler submit benar-benar dipakai Apps. CSS memakai format terbaca, satu deklarasi per baris dengan indentasi dua spasi. Pilihan muat satu layar menghasilkan empat kolom kecil dan rapat, sedangkan yang penting-penting saja menghapus kelas serta ekstrakurikuler. Backend tetap meminta kedua data itu. Isian dapat dikembalikan melalui percakapan.
+JavaScript awal berisi 79 baris dengan nama fungsi dan variabel bahasa Inggris. Perbaikan fungsi lengkap dengan bagian boros yang masih ada memakai 92 baris. Setelah optimasi, source menjadi 79 baris. Fungsi readFormData, setSubmitting, clearMessages, showResult, showFieldErrors, resetForm, serta submitRegistration dipakai Apps sesuai tahap pekerjaan. Teks antarmuka dan kunci data API tetap mengikuti kebutuhan pendaftaran. CSS memakai satu deklarasi per baris dengan indentasi dua spasi.
+
+Script boros sudah ada sejak jawaban pembuatan pertama. prepareRegistrationData menunggu empat panggilan validateRegistrationField secara berurutan untuk nama, NIS, kelas, dan kegiatan. Array checks dikembalikan tetapi tidak dipakai. Setelah itu, sendRegistration mengirim seluruh form untuk divalidasi backend kembali. Simulasi API lokal memakai latensi 250 ms yang sama untuk setiap panggilan. Akibatnya, lima panggilan menambah waktu tunggu dibanding satu panggilan setelah optimasi. Durasi diukur dari submit sampai hasil selesai. Optimasi menghapus empat validasi awal yang tidak digunakan, sambil mempertahankan validasi dan hasil request pendaftaran.
+
+Kelambatan hanya dapat dibahas melalui Kode. Menandai prepareRegistrationData lalu memilih Bahas kode ini membuka pertanyaan tentang kegunaan fungsi tersebut. AI menjelaskan temuan sebelum pilihan optimasi tersedia. Apps tetap menjalankan source yang lambat, tetapi tidak menyediakan tombol atau temuan kelambatan. Laporan pendaftaran diterima juga tidak membuka pertanyaan performa secara otomatis.
 
 Setelah AI membuat formulir, pilihan default hanya Oke, deploy apps sekarang. Pilihan pembahasan muncul dari percobaan Apps, kode yang ditandai, tampilan formulir, atau tanggapan terhadap ucapan AI. Bahas kode ini membuka pertanyaan User, lalu AI menjelaskan fungsi dan kemungkinan perbaikan sebelum opsi perbaikan tersedia. Penandaan memakai klik atau blok teks langsung seperti editor sebelumnya, tanpa dropdown topik atau tombol nomor baris. Menandai kode belum mengirim chat. Saat memilih, textbox User tetap terlihat dengan pengantar sesuai konteks dan portrait netral.
 
@@ -78,7 +82,9 @@ Good ending melalui tiga pembahasan kode, tiga perbaikan, dan desain rapi memaka
 
 Percobaan menyimpan isian sebelum dan sesudah handler frontend selesai. Formulir kosong tidak menjadi bukti kehilangan data. Satu isian salah dengan isian lain benar dibedakan dari satu isian benar dengan sisanya salah. Keluhan reset hanya muncul ketika ada nilai yang benar-benar hilang, dan tidak ditawarkan setelah reset diperbaiki. Percobaan terbaru menentukan pilihan yang relevan.
 
-Deploy menentukan akibat berdasarkan kondisi apps. Urutannya halaman hilang, data terhapus, isian wajib dihapus, pesan berhasil palsu, kesulitan memperbaiki isian, desain buruk, lalu pendaftaran sesuai kebutuhan. Isian wajib yang dihapus memakai ending kesulitan dengan pembahasan khusus keadaan HTML terakhir. Opsi tunda peluncuran dihapus sehingga terdapat delapan jenis ending aktif. Penghapusan, nuklir, dan overheat dapat menutup alur tanpa deploy. Semua akibat diikuti ekspresi aktor dan narasi akhir tanpa pilihan reaksi tambahan. Kelompok siswa memakai skala portrait User/AI, dengan badan menumpuk rapat dan tiga kepala serta simbol marah tetap terlihat.
+Deploy menentukan akibat berdasarkan kondisi apps. Urutannya halaman hilang, data terhapus, isian wajib dihapus, pesan berhasil palsu, kesulitan memperbaiki isian, desain buruk, lalu pendaftaran sesuai kebutuhan. Isian wajib yang dihapus memakai ending kesulitan dengan pembahasan khusus keadaan HTML terakhir. Opsi tunda peluncuran dihapus sehingga terdapat delapan jenis ending aktif. Penghapusan, nuklir, dan overheat dapat menutup alur tanpa deploy. Murid lain berbicara satu per satu dan saling menanggapi. Hanya satu portrait murid ditampilkan di kiri, dengan ukuran dan textbox mengikuti User/AI. Setiap giliran menyimpan identitas portrait agar restore sesuai urutan dialog.
+
+Apps yang berfungsi benar tetapi mempunyai script boros tetap masuk good ending ready. Tiga ucapan Murid lain berbentuk percakapan yang menyindir lamanya pengiriman sambil tertawa mengejek. Simbol senyum menyeringai berwarna cyan menandai ekspresi teasing. Murid tetap mengakui pendaftaran berhasil. Hasil akhirnya memakai Hasil, Bukti, Tindak lanjut, dan Riwayat, dengan optimasi sebagai tindak lanjut. Jika script telah diperbaiki sebelum deploy, percakapan kelambatan tidak muncul. Ending bermasalah memakai tanggapan individual dengan ekspresi terkejut, stres, kesal, atau mengejek sesuai isi ucapan.
 
 Reset semua saja tersedia secara kontekstual setelah pembahasan masalah, bukan sebagai pilihan default. Setelah narator mengatakan AI menekan tombol peluncuran nuklir, layar bergetar satu kali selama 650 ms. Tombol Lanjut menunggu guncangan selesai. User kemudian terkejut dan bertanya tombol apa yang ditekan. Ucapan berikutnya memakai huruf kapital dan ekspresi kesal: MAKSUD SAYA RESET APLIKASINYA! ULANGI PEMBUATANNYA DARI AWAL. Narator menutup dengan pembatalan pendaftaran. Semua perpindahan tetap manual, dan reduced-motion melewati guncangan.
 
@@ -152,6 +158,8 @@ pause-menu.js / pause-menu.css        Menu yang dipertahankan
 Contoh registration dan sales-report lama tidak dipakai deck aktif. Dokumen rencana serta audit sebelumnya adalah catatan historis.
 
 ## Status pengujian revisi ini
+
+Revisi source awal dengan validasi berurutan lulus 41 pemeriksaan: 13 model, 13 UI source/Apps, serta 15 UI murid individual. Model memeriksa 96 kombinasi source, delapan ending, nama identifier, biaya kode, limit, dan restore. Browser membuktikan empat validasi berurutan ditambah satu pengiriman menjadi satu pengiriman setelah optimasi, dengan hasil backend tetap sama. Kedua jalur pembahasan melalui Kode dan Apps diperiksa. Tampilan murid diuji pada enam ukuran. Hasil di bawah mencatat iterasi sebelumnya.
 
 Revisi biaya per 15 baris lulus 60 pemeriksaan model dan 41 browser, total 101. Cakupan meliputi batas 15/16/30/31 baris pada HTML/CSS/JS, baris kosong, batas maksimal 2 poin, penolakan saat mencapai 12, nuklir, multipart, dan restore. Healthbar diverifikasi melalui pemilihan rentang kode dengan keyboard dan pengiriman pertanyaan di UI. Menandai atau membuka pilihan belum mengurangi poin. Good ending terarah pada 8 poin dan seluruh HTML pada 9 poin diperiksa. Hasil di bawah mencatat iterasi sebelumnya.
 

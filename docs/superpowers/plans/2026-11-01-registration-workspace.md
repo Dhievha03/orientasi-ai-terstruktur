@@ -311,3 +311,54 @@ Verifikasi: check-all-material-selectors.cjs 7/7, 120 keadaan pilihan, seluruh 3
 Pengukuran awal menemukan panel review transparan dan pembahasan koreksi bergeser 93,39 px dari kutipan. Border atas masih 2 px. Setelah koreksi, kedua layout diperiksa pada enam ukuran 390/768/1024/1366/1534/1920. Panel review sejajar pada desktop. Kutipan rinci dan pembahasannya mempunyai batas kolom yang sama. Pembahasan muat di viewport desktop, termasuk tinggi 686 px, dan layar sempit dapat menggulir secara vertikal.
 
 Hasil: check-card-spacing-route.cjs 8/8, check-selector-hover.cjs 7/7, check-all-material-selectors.cjs 7/7 dengan 120 keadaan pilihan dan 37 slide, serta check-selector-arrow-keys.cjs 7/7. Total 29 pemeriksaan regresi. Pemeriksaan langsung juga mengaktifkan/menutup pembahasan melalui mouse dan keyboard. Gambar review dan koreksi desktop/ponsel serta border selector diperiksa. Kontras teks dihitung, tanpa pasangan di bawah 4,5:1. Tidak ada error JavaScript. app.js lulus node --check.
+
+## Murid lain, textbox lebih lebar, dan variasi script boros
+
+- [x] Perkecil kelompok menjadi 80 persen skala sebelumnya dan gunakan label Murid lain.
+- [x] Pertahankan tiga kepala serta tata letak User/AI biasa dan periksa ruang textbox.
+- [x] Tambahkan cabang pemeriksaan berlebihan yang menghasilkan source JS boros dengan hasil ringkasan tidak dipakai.
+- [x] Catat durationMs dan slowScript pada bukti percobaan serta sediakan pembahasan/perbaikan helper.
+- [x] Pertahankan ready untuk aplikasi yang benar tetapi lambat, dengan tiga ucapan netral antarmurid.
+- [x] Bandingkan hasil dan waktu kirim aktual, uji restore, limit, serta regresi layout dan ending.
+
+Koreksi pemateri menetapkan script lambat sebagai variasi good ending, bukan alasan menambah bad ending. Penilaian final menyebut fungsi sudah benar dan optimasi masih diperlukan. Keluhan tanpa marah tampil hanya jika slowScript masih aktif saat ready. Data yang ditolak, pesan isian, dan reset tetap ditentukan kontrak sebelumnya.
+
+Helper terbatas 12.000 putaran dan memberi kesempatan render per 1.000 putaran. Tidak ada timer buatan untuk meniru lambat. UI mengukur durasi dari submit sampai hasil selesai. Hasil lokal menunjukkan pengiriman dengan helper lebih lambat daripada sebelum/selepas helper, tanpa perubahan keputusan backend. Penandaan helper membuka pertanyaan, penjelasan, lalu penghapusan kode melalui opsi optimasi. Pengamatan performance memerlukan percobaan dengan metadata durasi, sedangkan bukti revisi lama tidak dipakai untuk keadaan source baru.
+
+Hasil: check-wasteful-script.cjs 9/9, check-wasteful-script-ui.cjs 9/9, check-discussion-contract.cjs 15/15, check-code-budget-15.cjs 25/25, check-response-dialogue.cjs 7/7, check-dialogue-layout-parity.cjs 15/15, check-limit12-ui.cjs 18/18, dan check-dialogue-revision-ui.cjs 17/17. Total 115 pemeriksaan. Tes ending sempat mencoba menekan Lanjut sesudah frame tersembunyi sambil menunggu pergantian slide host. Fixture diperbaiki untuk melanjutkan tepat tiga ucapan dan satu narasi, lalu menunggu judul hasil. Tidak ada perubahan produksi untuk masalah timing tes tersebut. Gambar murid desktop/ponsel diperiksa. Versi ai-assisted-script-performance-150-8.
+
+## Murid tampil bergantian dan ekspresi disesuaikan
+
+- [x] Ganti tumpukan kelompok dengan satu murid aktif per turn melalui metadata pupil.
+- [x] Gunakan ukuran serta textbox bersama User/AI dan posisi portrait kiri.
+- [x] Beri sindiran kelambatan ekspresi teasing dengan simbol senyum menyeringai cyan.
+- [x] Susun tanggapan individual pada ending desain, false-success, struktur, dan kesulitan isian.
+- [x] Sesuaikan ekspresi pertanyaan User/AI tentang performa, struktur, desain, dan pesan kesalahan.
+- [x] Periksa perpindahan aset, simbol aktor aktif, restore, Riwayat, dan regresi dialog.
+
+Ukuran kelompok 80 persen pada catatan sebelumnya digantikan arahan satu portrait berukuran normal. Slot aset left/right/front tidak lagi menyatakan posisi layar. Semua murid tampil di kiri satu per satu. Renderer membersihkan simbol pada aktor lama dan hanya memasang ekspresi pada murid yang sedang terlihat. Actor key menggabungkan speaker dan pupil sehingga perpindahan antarmurid tetap memicu animasi pergantian.
+
+Good ending lambat tetap ready. Ketiga ucapan menyindir proses kirim sambil tertawa mengejek, bukan menggunakan kemarahan. Dialog ending lain memakai ekspresi yang bervariasi sesuai tanggapan. Pertanyaan performa/struktur/desain juga dibedakan dari jawaban penjelasan biasa.
+
+Verifikasi: check-individual-pupils.cjs 15/15, check-wasteful-script.cjs 9/9, check-discussion-contract.cjs 15/15, check-code-budget-15.cjs 25/25, check-response-dialogue.cjs 7/7, check-dialogue-revision-ui.cjs 17/17, check-limit12-ui.cjs 18/18, dan check-random-overheat-ui.cjs 16/16. Total 122 pemeriksaan. Tes toggle gerak host diperbaiki agar menunggu pengiriman postMessage sebelum membaca animasi, setelah pembacaan terlalu dini sempat menghasilkan kegagalan sesaat. Tidak ada perubahan produksi untuk timing tes tersebut. Snapshot versi ai-assisted-individual-pupils-150-8. Gambar murid tunggal 390/1468 diperiksa. Tidak ada error JavaScript pada browser.
+
+## Source awal Inggris dan validasi berlebih yang masuk akal
+
+- [x] Aktifkan slowScript sejak source pertama dibuat, bukan hanya melalui pilihan tambahan.
+- [x] Gunakan nama fungsi/variabel bahasa Inggris pada source frontend dan runtime service terkait.
+- [x] Ganti loop buatan dengan empat validasi isian berurutan yang hasilnya tidak digunakan sebelum submit.
+- [x] Gunakan latensi API lokal 250 ms per panggilan untuk membandingkan alur lima panggilan dan satu panggilan.
+- [x] Sediakan pertanyaan kegunaan kode dari penandaan helper dan pertanyaan kelambatan dari Apps.
+- [x] Verifikasi optimasi menghapus empat panggilan tanpa mengubah validasi/backend, good ending, atau murid individual.
+
+Pengulangan ribuan kali pada implementasi lama dibatalkan sesuai koreksi pemateri. prepareRegistrationData sekarang mengumpulkan empat hasil validasi ke checks, tetapi pemanggil hanya menunggu tanpa memakainya. sendRegistration tetap melakukan validasi final. Service lokal mensimulasikan latensi yang sama untuk semua panggilan, sehingga tambahan waktu mengikuti jumlah request. Demo menampilkan Mengirim selama proses nyata tersebut. Optimasi tetap mempertahankan penolakan data salah, pesan errors, serta kondisi reset yang telah diperbaiki.
+
+Bahas kelambatan aktif sesudah percobaan dengan pengukuran, lalu membuka pilihan Kenapa Apps terasa lambat setelah saya menekan Daftar? Penandaan prepareRegistrationData membuka Bagian prepareRegistrationData ini untuk apa? Kedua jalur menjelaskan penyebab sebelum patch. Nama identifier dilindungi dari glitch overheat. Kunci data API dipertahankan.
+
+Pemeriksaan 96 kombinasi source menemukan pemetaan errors yang mengambil loop validasi baru karena sama-sama memakai fieldName. Deteksi dibatasi ke fungsi showFieldErrors, kemudian pemeriksaan lulus. Fixture UI good ending menggunakan urutan aktor yang eksplisit agar tidak mencoba klik pada next yang sudah tersembunyi ketika host berpindah ke hasil.
+
+Hasil akhir: check-default-english-script.cjs 13/13, check-default-english-ui.cjs 13/13, dan check-individual-pupils.cjs 15/15. Total 41 pemeriksaan. Termasuk 96 kombinasi source, delapan ending, batas biaya kode, limit, dua jalur trigger, empat validasi plus satu submit menjadi satu submit, dan restore. Pengukuran lokal terakhir sekitar 1,3 detik sebelum optimasi dan 0,26 detik sesudahnya dengan hasil response yang sama. Tidak ada error JavaScript. Versi ai-assisted-sequential-validation-150-8. Layout tetap 37 slide, delapan bab, dan 150 menit.
+
+## Jalur performa dibatasi ke Kode
+
+Sesuai koreksi terakhir, tombol dan temuan kelambatan dari Apps dihapus, termasuk pertanyaan performa setelah laporan pendaftaran diterima. Diagnosis serta optimasi hanya dibuka melalui penandaan helper di Kode. Demo tetap menjalankan validasi berurutan yang lambat. Pemeriksaan UI melakukan submit nyata, memverifikasi ketiadaan tombol/temuan/pertanyaan performa pada Apps, lalu membahas helper dan menghapusnya melalui opsi optimasi. Tanpa error JavaScript. Versi ai-assisted-code-only-performance-150-8. Hasil pengujian dua jalur di atas bersifat historis.

@@ -12,8 +12,8 @@
   const embedded = window.parent !== window && query.has('embed');
   let hostMotion = true;
   const motion = () => hostMotion && !reducedMotion.matches;
-  const speakerLabel = speaker => speaker === 'user' ? 'User' : speaker === 'narrator' ? 'Narator' : speaker==='students'?'Siswa-siswa':'AI';
-  const expressionLabel=emotion=>({shock:'terkejut',stress:'stres',silence:'hening',anger:'marah',fury:'sangat marah'}[emotion]||'tenang');
+  const speakerLabel = speaker => speaker === 'user' ? 'User' : speaker === 'narrator' ? 'Narator' : speaker==='students'?'Murid lain':'AI';
+  const expressionLabel=emotion=>({shock:'terkejut',stress:'stres',silence:'hening',anger:'marah',fury:'sangat marah',teasing:'tertawa mengejek'}[emotion]||'tenang');
   if (embedded) document.body.classList.add('embedded');
   const send = (action, extra = {}) => {
     if (embedded) window.parent.postMessage({ type: 'tefa-dialogue', scene: sceneKey, action, ...extra }, '*');
@@ -105,6 +105,10 @@
     document.querySelectorAll('.portrait').forEach(portrait => {
       portrait.hidden = speaker==='intro'?!['portrait-ai','portrait-user'].includes(portrait.id):portrait.id!==`portrait-${speaker}`;
     });
+    const pupil=speaker==='students'?frames[position]?.pupil||'left':null;
+    $('#portrait-students').querySelectorAll('[data-pupil]').forEach(node=>{node.hidden=node.dataset.pupil!==pupil;});
+    if(pupil)scene.dataset.pupil=pupil;
+    else delete scene.dataset.pupil;
   }
 
   function shakeScreen(emotion) {
@@ -135,7 +139,7 @@
   function animateTurn(previousSpeaker, instant) {
     clearTurnMotion();
     if (!motion() || instant || scene.dataset.emotion === 'silence') return;
-    const changed = previousSpeaker !== scene.dataset.speaker;
+    const changed = previousSpeaker !== `${scene.dataset.speaker}:${scene.dataset.pupil||''}`;
     turnAnimations.push($('.spoken-line').animate(
       [{ opacity: 0, transform: 'translateY(7px)' }, { opacity: 1, transform: 'translateY(0)' }],
       { duration: changed ? 260 : 190, easing: 'cubic-bezier(.16,1,.3,1)' }
@@ -238,7 +242,7 @@
     scene.dataset.reaction = target;
     const portrait = $(`#portrait-${target}`);
     if (!portrait) return;
-    const layers=target==='students'?[...portrait.querySelectorAll('.student > .emotion-layer')]:[portrait.querySelector(':scope > .emotion-layer')];
+    const layers=target==='students'?[portrait.querySelector('.student:not([hidden]) > .emotion-layer')]:[portrait.querySelector(':scope > .emotion-layer')];
     const layer=layers[0];
     const smoke = emotion === 'overheat';
     if(smoke&&target==='ai')overheatKey=key;
@@ -251,11 +255,11 @@
       {x:36,y:8,size:.6,drift:13,rise:30,duration:3200,delay:800},
       {x:42,y:42,size:.66,drift:-23,rise:50,duration:2800,delay:1000}
     ];
-    const count = target==='students'?layers.length:smoke ? Math.min(6,(turn.heat || 1)+2) : emotion === 'fury' ? 3 : 1;
+    const count = smoke ? Math.min(6,(turn.heat || 1)+2) : emotion === 'fury' ? 3 : 1;
     for (let index = 0; index < count; index += 1) {
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('viewBox', smoke?'0 0 100 120':'0 0 100 100');
-      svg.setAttribute('class', `comic-expression comic-${symbol}${target==='students'?'':` comic-position-${index}`}`);
+      svg.setAttribute('class', `comic-expression comic-${symbol} comic-position-${index}`);
       const plume=plumes[index];
       if (smoke){
         svg.style.setProperty('--smoke-x',`${plume.x}%`);
@@ -266,7 +270,7 @@
       const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
       use.setAttribute('href', smoke?`#comic-smoke-${index%4}`:`#comic-${symbol}`);
       svg.append(use);
-      (target==='students'?layers[index]:layer).append(svg);
+      layer.append(svg);
       if(smoke)heatEffects.push({node:svg,plume,index,heat:turn.heat||1,animation:null});
     }
     if(smoke&&turn.expression&&!['neutral','silence'].includes(turn.expression)){
@@ -352,7 +356,7 @@
 
   function renderTurn(instant = false) {
     const turn = frames[position];
-    const previousSpeaker = mode === 'dialog' ? scene.dataset.speaker : null;
+    const previousSpeaker = mode === 'dialog' ? `${scene.dataset.speaker}:${scene.dataset.pupil||''}` : null;
     clearTurnMotion();
     setMode('dialog');
     scene.dataset.speaker = turn.speaker;

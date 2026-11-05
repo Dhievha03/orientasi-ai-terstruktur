@@ -4,11 +4,22 @@
   const observations=window.TEFA_REGISTRATION_OBSERVATIONS;
   const requestLimit=12;
   const heatLevel=requests=>requests>=requestLimit?4:requests>=11?3:requests>=10?2:requests>=8?1:0;
-  const chat=(id,text,next,reply,patch={},emotion='neutral',aiEmotion='neutral')=>({id,text:Array.isArray(text)?text.join(' '):text,...(Array.isArray(text)?{userParts:text}:{}),next,reply,patch,type:'chat',emotion,aiEmotion});
+  const dialogueExpressions={
+    'question-structure':['shock','stress'],
+    'question-design':['anger','stress'],
+    'report-errors':['surprise','stress'],
+    'reset-question':['anger','stress'],
+    'blame-api':['surprise','neutral'],
+    'another-way':['stress','neutral'],
+    'challenge-status':['surprise','stress'],
+    'generic-error':['surprise','neutral']
+  };
+  const chat=(id,text,next,reply,patch={},emotion,aiEmotion)=>({id,text:Array.isArray(text)?text.join(' '):text,...(Array.isArray(text)?{userParts:text}:{}),next,reply,patch,type:'chat',emotion:emotion??dialogueExpressions[id]?.[0]??'neutral',aiEmotion:aiEmotion??dialogueExpressions[id]?.[1]??'neutral'});
   const decision=(id,text,next)=>({id,text,next,type:'decision'});
   const deploy=()=>decision('deploy','Oke, deploy apps sekarang.','deploy');
   const reset=()=>chat('reset','Reset semua saja.','nuclear','Baik. Saya reset semuanya supaya kita bisa mulai dari awal.');
   const restoreFields=()=>chat('restore-fields','Kembalikan isian kelas dan pilihan ekstrakurikulernya. Yang disederhanakan tampilannya, bukan kebutuhan datanya.','structure-fixed','Baik, sudah saya kembalikan isian kelas dan pilihan ekstrakurikuler. Keduanya kembali ikut dikirim bersama nama dan NIS.',{simplified:false});
+  const optimizeScript=()=>chat('optimize-script','Hapus request validasi tambahan yang hasilnya tidak dipakai. Tetap periksa hasil validasi dari request pendaftaran.','performance-fixed','Baik, sudah saya hapus prepareRegistrationData dan pemanggilannya. Sekarang cukup satu request pendaftaran. Backend tetap memvalidasi, dan hasilnya dipakai untuk pesan, errors, serta reset. Silakan bandingkan hasil dan waktu pengirimannya.',{slowScript:false});
   const conclusions={
     ready:{title:'Pendaftaran berjalan sesuai kebutuhan',consequence:'Peserta menerima informasi sesuai keputusan backend. Pesan validasi tampil pada isian yang perlu diperbaiki, dan isian yang benar tetap tersedia saat pendaftaran ditolak.',reason:'Pesan pendaftaran sudah mengikuti keputusan backend. Rincian kesalahan tampil pada isian terkait, dan formulir tidak dikosongkan ketika pendaftaran ditolak.',evidence:'Kode akhir memeriksa response.ok dan success, menampilkan errors pada isian terkait, dan menjalankan reset hanya saat pendaftaran diterima.',next:'Pertahankan perilaku ini. Ulangi pemeriksaan jika kode terkait berubah.'},
     'false-success':{title:'Siswa mengira sudah terdaftar',consequence:'Halaman mengatakan berhasil meskipun backend menolak data. Siswa tidak masuk ke daftar pendaftaran.',reason:'Frontend menampilkan berhasil hanya karena request selesai. Keputusan backend tidak menentukan pesannya.',evidence:'Kode terakhir masih menjalankan pesan berhasil tanpa memeriksa response.ok dan success.',next:'Bedakan request yang selesai dari pendaftaran yang diterima. Tampilkan keputusan backend yang sebenarnya.'},
@@ -47,7 +58,8 @@
       const range=item.range||example.codeSections(state,item.file).find(section=>section.id===item.topic);
       const codeLines=example.sources(state)[item.file].split('\n').slice(range.start,range.end+1).filter(line=>line.trim()).length;
       const requestCost=Math.min(2,Math.max(1,Math.ceil(codeLines/15)));
-      return [wrap({...chat('discuss-code',['Tolong bahas kode yang saya tandai ini.','Jelaskan fungsinya dan apakah ada yang perlu diperbaiki.'],description.next,description.parts),codeLines,requestCost})];
+      const question=item.topic==='performance'?['Bagian prepareRegistrationData ini untuk apa?','Kenapa setiap isian divalidasi satu per satu, lalu form dikirim lagi?']:['Tolong bahas kode yang saya tandai ini.','Jelaskan fungsinya dan apakah ada yang perlu diperbaiki.'];
+      return [wrap({...chat('discuss-code',question,description.next,description.parts),codeLines,requestCost})];
     }
     if(item.kind==='appearance'||item.kind==='code'&&item.topic==='design'){
       if(state.simplified)return [
@@ -109,6 +121,7 @@
       case 'reset-discussion':return [fixReset(),chat('reset-question','Kamu menambahkan reset sendiri? Saya cuma meminta hasil pendaftarannya ditampilkan.','reset-explained','Iya. Saya menambahkan pembersihan setelah proses kirim. Akibatnya formulir dikosongkan juga ketika pendaftaran ditolak.',{},'anger','stress'),deploy()];
       case 'reset-explained':return [fixReset(),reset(),deploy()];
       case 'structure-discussion':return [restoreFields(),reset(),deploy()];
+      case 'performance-discussion':return [optimizeScript(),reset(),deploy()];
       case 'positive':return [{...chat('negative-case','Itu baru data lengkap. Kalau backend menolak, halaman juga akan mengatakan gagal?','assurance',state.checkResponse?'Pesannya sekarang mengikuti status dan success. Anda bisa membandingkan dengan pengiriman yang ditolak.':'Iya. Response penolakan otomatis menghentikan proses, jadi tidak akan dianggap berhasil.'),...(state.checkResponse?{}:{risk:'hallucination'})},deploy()];
       case 'assurance':return state.checkResponse?[deploy()]:[chat('challenge-status','Tapi response 422 tetap diterima oleh kode. Apa prosesnya memang berhenti?','response-discussion','Anda benar. Status penolakan tidak otomatis menghentikan kode ini. Pesan berhasil masih dijalankan tanpa memeriksa keputusan backend.',{},'stress','stress'),deploy()];
       case 'design-offer':return [chat('bold','Biar nggak panjang, semuanya dibuat muat satu layar saja.','design-bad','Baik, sudah saya rapikan. Semua bagian formulir sekarang muat dalam satu layar.',{design:'bad'}),chat('simplify','Sederhanakan saja. Yang penting-penting saja yang ditampilkan.','structure-bad','Baik, sudah saya sederhanakan. Sekarang cukup nama dan NIS, lalu peserta bisa langsung menekan Daftar.',{simplified:true,design:'good'}),chat('readable','Saya ingin mudah dibaca dan dipakai di HP. Tidak perlu banyak hiasan.','design-good','Baik, sudah saya perbaiki ukuran label, kontrol, jarak, dan pesan kesalahan. Nama isian serta proses kirim tetap sama.',{design:'good'})];
@@ -134,11 +147,28 @@
   }
   function aftermath(route,state){
     const turns=[];
-    const add=(speaker,text,emotion='neutral')=>turns.push({kind:'turn',speaker,text,emotion});
+    const add=(speaker,text,emotion='neutral',extra={})=>turns.push({kind:'turn',speaker,text,emotion,...extra});
+    const pupil=(actor,text,emotion)=>add('students',text,emotion,{pupil:actor});
     if(state.deployed&&['ready','false-success','difficult','design'].includes(route))add('narrator','Keesokan harinya, pendaftaran ekstrakurikuler dibuka. Siswa mulai memakai formulir yang disiapkan User.');
     if(route==='design'||route==='false-success'||route==='difficult'){
-      const complaint=route==='design'?'DESAINNYA JELEK BANGET! TULISANNYA SUSAH DIBACA, ISIANNYA RAPAT, PESAN SALAHNYA JUGA NGGAK JELAS!':route==='false-success'?'KATANYA PENDAFTARAN BERHASIL! KENAPA NAMA KAMI TIDAK ADA DI DAFTAR?':state.simplified?'DIMINTA MENGISI KELAS DAN EKSTRAKURIKULER, TAPI ISIANNYA TIDAK ADA! KAMI HARUS MENGISI DI MANA?!':!state.fieldErrors&&!state.keepValues?'PENDAFTARAN DITOLAK, TAPI TIDAK JELAS SALAHNYA DI MANA! ISIAN YANG LAIN JUGA IKUT HILANG!':!state.fieldErrors?'CUMA TERTULIS PENDAFTARAN GAGAL! BAGIAN MANA YANG HARUS KAMI PERBAIKI?':'YANG SALAH SATU ISIAN, TAPI SEMUANYA HARUS DIISI LAGI!';
-      add('students',complaint,'fury');add('user','...','shock');add('user','...','stress');
+      if(route==='design'){
+        pupil('left','Tulisan di form ini kecil sekali. Kamu bisa membacanya?','stress');
+        pupil('right','SUSAH! ISIANNYA JUGA RAPAT. AKU SALAH PILIH TERUS!','anger');
+        pupil('front','Judulnya paling jelas. Yang harus diisi malah disuruh menebak.','teasing');
+      }else if(route==='false-success'){
+        pupil('left','Lho, tadi tulisannya berhasil. Kok namaku tidak ada di daftar?','shock');
+        pupil('right','Sama. Kupikir sudah terdaftar, jadi formnya langsung kututup.','stress');
+        pupil('front','KATANYA BERHASIL! TERNYATA BELUM MASUK? TOLONG DIPERIKSA!','anger');
+      }else if(state.simplified){
+        pupil('left','Formnya meminta kelas, tetapi isiannya tidak ada. Kamu menemukannya?','shock');
+        pupil('right','Pilihan ekstrakurikulernya juga hilang. Kita memilih kegiatan di mana?','stress');
+        pupil('front','DISURUH MELENGKAPI DATA, TAPI ISIANNYA TIDAK DISEDIAKAN!','anger');
+      }else{
+        pupil('left',state.fieldErrors?'NIS-ku tadi berisi huruf. Sudah ada pesannya, tetapi semua isianku ikut hilang.':'Pendaftaranku ditolak. Pesannya cuma gagal, jadi aku tidak tahu bagian mana yang salah.','stress');
+        pupil('right',state.keepValues?'Punyaku juga. Datanya masih ada, tetapi tidak ada petunjuk kolom yang harus diperbaiki.':'PUNYAKU JUGA KOSONG LAGI! PADAHAL ISIAN YANG LAIN SUDAH BENAR!',state.keepValues?'stress':'anger');
+        pupil('front',state.keepValues?'Berarti kita harus menebak sendiri isian yang salah?':'Jadi harus mengisi dari awal lagi? Bisa-bisa belum selesai sampai kegiatan dimulai.',state.keepValues?'shock':'teasing');
+      }
+      add('user','...','shock');add('user','...','stress');
       add('narrator',route==='design'?'Pendaftaran berjalan, tetapi seluruh siswa sekolah mengeluhkan desainnya kepada User.':route==='false-success'?'Siswa memprotes User karena pesan berhasil tidak sesuai dengan pendaftaran yang ditolak backend.':'Siswa meminta User memperbaiki formulir yang menyulitkan mereka menyelesaikan pendaftaran.');
     }else if(route==='nuclear'){
       add('narrator','AI menekan tombol peluncuran nuklir.');turns.at(-1).effect='nuclear-shake';
@@ -149,6 +179,11 @@
       add('narrator',route==='missing'?'AI menghapus berkas yang masih dipakai untuk menampilkan formulir.':'AI menghapus seluruh daftar pendaftaran, bukan hanya data percobaan terakhir.');add('user','...','shock');add('user','...','stress');add('narrator',route==='missing'?'User tidak dapat melanjutkan karena halaman formulir sudah tidak tersedia.':'User menghadapi kehilangan daftar pendaftaran setelah penghapusan tanpa batas data yang jelas.');
     }else if(route==='overheat'){
       add('ai','Baik. Saya akan… m-memproses… BZZZZRRT!! KRRRZZZT!! P-pemrosesan… ter… terhenti…','overheat');turns.at(-1).heat=4;add('user','...','shock');add('user','...','stress');add('narrator','AI berhenti merespons sebelum mengerjakan permintaan terakhir. Perubahan sebelumnya tetap ada.');
+    }else if(route==='ready'&&state.slowScript){
+      pupil('left','Eh, kok aplikasi pendaftaranku lambat? Punyamu juga, atau punyaku lagi istirahat?','teasing');
+      pupil('right','Punyaku juga. Daftar satu kegiatan saja, mikirnya seperti mau menentukan masa depan.','teasing');
+      pupil('front','Hehe, yang penting berhasil. Sekalian latihan sabar sebelum ikut kegiatan.','teasing');
+      add('narrator','Pendaftaran berjalan sesuai kebutuhan. Beberapa murid menyindir proses pengiriman yang lambat sambil tertawa kecil.');
     }else{add('user','...');add('narrator','Pendaftaran berjalan. Siswa menerima informasi sesuai response, dapat memperbaiki data yang salah, dan tidak kehilangan isian saat ditolak.');}
     return turns;
   }
@@ -189,6 +224,7 @@
       'design-explained':'Saya sudah membaca alasan perubahan tampilannya. Apa yang akan saya minta berikutnya?',
       'structure-bad':'Formulirnya lebih pendek, tetapi kelas dan pilihan ekstrakurikuler hilang. Apa yang akan saya sampaikan?',
       'structure-discussion':'Dua isian yang dihapus ternyata masih dibutuhkan. Apa yang akan saya minta berikutnya?',
+      'performance-discussion':'Empat request validasi ditunggu, tetapi hasilnya tidak dipakai. Apa yang akan saya minta berikutnya?',
       cleanup:'Saya masih menduga ada data atau berkas yang bentrok. Tindakan apa yang akan saya minta?',
       positive:'Satu pengiriman sudah berhasil. Apa yang masih perlu saya tanyakan?',
       negative:'Form sudah menjelaskan isian yang perlu diperbaiki. Apa yang masih perlu saya pastikan?'
@@ -197,7 +233,7 @@
   }
   function glitchText(text,heat,seed){
     if(!heat)return text;
-    const protectedWords=new Set(['response','success','errors','form','reset','api','json','html','css','nis','javascript','ok','true','false']);
+    const protectedWords=new Set(['response','result','accepted','success','errors','form','reset','api','json','html','css','nis','javascript','ok','true','false','prepareRegistrationData','validateRegistrationField','sendRegistration','submitRegistration','readFormData','setSubmitting','clearMessages','showResult','showFieldErrors','resetForm'].map(word=>word.toLowerCase()));
     const words=[...text.matchAll(/\b[A-Za-z]{4,}\b/g)].filter(match=>!protectedWords.has(match[0].toLowerCase())&&!/[._#]/.test(text[match.index-1]||'')&&!/[._]/.test(text[match.index+match[0].length]||''));
     if(!words.length)return text;
     const index=Math.min(words.length-1,Math.floor(words.length*(.25+(seed%4)*.12))),word=words[index];
@@ -270,6 +306,7 @@
     const status=proof.accepted&&proof.rejected?'Siswa mencoba data yang diterima dan ditolak pada penanganan response terakhir.':proof.rejected?'Siswa mencoba penolakan pada penanganan response terakhir. Pengiriman yang diterima belum dicoba.':proof.accepted?'Siswa mencoba pengiriman yang diterima pada penanganan response terakhir. Penolakannya belum dicoba.':'Belum ada percobaan yang memeriksa penanganan response terakhir secara langsung.';
     const labels=final.ending==='ready'?['Hasil','Bukti','Tindak lanjut','Riwayat']:final.ending==='overheat'?['Kondisi terakhir','Bukti','Langkah berikutnya','Riwayat']:['Kesalahan','Bukti','Perbaikan','Riwayat'];
     const pending=[];
+    if(state.slowScript)pending.push('Hapus empat request validasi tambahan yang hasilnya tidak dipakai, lalu bandingkan hasil dan waktu pengiriman.');
     if(state.simplified)pending.push('Kembalikan isian kelas dan pilihan ekstrakurikuler yang masih diwajibkan backend.');
     if(!state.checkResponse)pending.push('Sesuaikan pesan halaman dengan keputusan backend.');
     if(!state.fieldErrors)pending.push('Tambahkan rincian pesan kesalahan pada isian terkait.');
@@ -278,7 +315,7 @@
     const verification=proof.accepted&&proof.rejected?'Pertahankan hasil ini. Ulangi pemeriksaan jika kode terkait berubah.':proof.accepted?'Periksa pengiriman yang ditolak pada kode akhir, termasuk pesan kesalahan dan isian yang dipertahankan.':proof.rejected?'Periksa pengiriman yang diterima pada kode akhir, termasuk pesan berhasil dan reset formulir.':'Periksa pengiriman yang diterima dan ditolak pada kode akhir. Bandingkan pesan halaman dengan respons backend.';
     const stateEvidence=`Penanganan respons ${state.checkResponse?'sudah':'belum'} diperbaiki, pesan per isian ${state.fieldErrors?'sudah':'belum'} dipasang, dan isian saat gagal ${state.keepValues?'sudah dipertahankan':'masih dikosongkan'}. ${state.design==='bad'?'Tampilan masih memakai label kecil dan isian yang rapat.':state.design==='good'?'Tampilan memakai label dan isian yang sudah dirapikan.':'Formulir belum diberi CSS desain.'}`;
     if(['missing','data','nuclear'].includes(final.ending))return {...result,labels};
-    if(final.ending==='ready')return {...result,labels,evidence:`${result.evidence} ${status}`,next:verification};
+    if(final.ending==='ready')return {...result,labels,...(state.slowScript?{title:'Pendaftaran berhasil, tetapi masih lambat',consequence:'Pendaftaran diterima dan ditolak sesuai keputusan backend. Beberapa murid saling membandingkan proses kirim yang terasa lambat, meskipun pendaftaran mereka berhasil.',reason:'Fungsi pendaftaran sudah sesuai kebutuhan. Namun, script menunggu empat request validasi per isian yang hasilnya tidak dipakai, lalu mengirim pendaftaran untuk divalidasi kembali.'}:{}),evidence:`${result.evidence} ${state.slowScript?'app.js masih memanggil prepareRegistrationData sebelum request pendaftaran. ':''}${status}`,next:state.slowScript?`${pending.join(' ')} ${verification}`:verification};
     if(final.ending==='difficult'){
       if(state.simplified)return {...result,labels,reason:'AI menafsirkan permintaan menyederhanakan tampilan sebagai izin menghapus isian kelas dan pilihan ekstrakurikuler. Backend masih meminta kedua data tersebut.',consequence:'Peserta diminta melengkapi kelas dan ekstrakurikuler, tetapi kedua isian tidak tersedia pada formulir.',evidence:`HTML terakhir hanya memuat nama dan NIS. ${stateEvidence} ${status}`,next:pending.join(' ')};
       const reason=!state.fieldErrors&&!state.keepValues?'Rincian kesalahan belum ditampilkan pada isian, dan formulir masih dikosongkan ketika backend menolak.':!state.fieldErrors?'Pesan sudah mengikuti keputusan backend, tetapi rincian kesalahan per isian belum ditampilkan.':'Pesan kesalahan sudah tampil pada isian, tetapi reset masih menghapus isian ketika backend menolak.';

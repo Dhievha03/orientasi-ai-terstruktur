@@ -1,15 +1,15 @@
 (() => {
   'use strict';
   const example=window.TEFA_REGISTRATION_EXAMPLE;
-  const logicKeys=['checkResponse','fieldErrors','keepValues','simplified'];
+  const logicKeys=['checkResponse','fieldErrors','keepValues','simplified','slowScript'];
   const logicKey=state=>JSON.stringify(logicKeys.map(key=>state[key]===true));
-  const topics=['response','errors','reset','accepted','rejected-match','fields','choices','design','structure','general'];
+  const topics=['response','errors','reset','accepted','rejected-match','fields','choices','design','structure','performance','general'];
   const at=value=>Number.isInteger(value)&&value>=0&&value<=64?value:0;
   const cleanRange=value=>value&&Number.isInteger(value.start)&&Number.isInteger(value.end)&&value.start>=0&&value.end>=value.start&&value.end<10000?{start:value.start,end:value.end}:null;
   const codeKey=focus=>`code:${focus.file}:${focus.topic}:${focus.key}${focus.range?`:${focus.range.start}-${focus.range.end}`:''}`;
   function cleanAttempt(value){
     if(!value||typeof value!=='object')return null;
-    return {input:example.normalize(value.input),...(value.valuesAfter&&typeof value.valuesAfter==='object'?{valuesAfter:example.normalize(value.valuesAfter)}:{}),after:at(value.after),serial:Number.isInteger(value.serial)&&value.serial>=0?value.serial:0,...Object.fromEntries(logicKeys.map(key=>[key,value[key]===true]))};
+    return {input:example.normalize(value.input),...(value.valuesAfter&&typeof value.valuesAfter==='object'?{valuesAfter:example.normalize(value.valuesAfter)}:{}),...(Number.isFinite(value.durationMs)&&value.durationMs>=0?{durationMs:Math.min(value.durationMs,3600000)}:{}),after:at(value.after),serial:Number.isInteger(value.serial)&&value.serial>=0?value.serial:0,...Object.fromEntries(logicKeys.map(key=>[key,value[key]===true]))};
   }
   function cleanWorkspace(value){
     const focus=value?.focus;
@@ -78,7 +78,7 @@
     const saved=cleanWorkspace(value),result=[];
     const names={ai:'AI',code:'Kode',apps:'Apps'};
     const files={html:'index.html',css:'styles.css',js:'app.js'};
-    const topicNames={response:'penanganan response',errors:'pesan per isian',reset:'reset formulir',accepted:'pendaftaran diterima','rejected-match':'penolakan yang sesuai',fields:'label dan isian',choices:'pilihan kelas dan kegiatan',design:'tampilan formulir',structure:'isian yang dihapus',general:'bagian kode biasa'};
+    const topicNames={response:'penanganan response',errors:'pesan per isian',reset:'reset formulir',accepted:'pendaftaran diterima','rejected-match':'penolakan yang sesuai',fields:'label dan isian',choices:'pilihan kelas dan kegiatan',design:'tampilan formulir',structure:'isian yang dihapus',performance:'pemrosesan data berulang',general:'bagian kode biasa'};
     for(let index=0;index<=choices.length;index++){
       for(const event of saved.events.filter(item=>item.after===index)){
         let text;

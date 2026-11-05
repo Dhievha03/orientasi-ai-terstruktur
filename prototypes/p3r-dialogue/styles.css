@@ -35,6 +35,7 @@ kbd{display:inline-grid;place-items:center;min-width:24px;min-height:24px;paddin
 .emotion-layer{position:absolute;inset:0;pointer-events:none}
 .comic-expression{position:absolute;top:18%;left:59%;width:clamp(48px,6.8vw,100px);height:clamp(48px,6.8vw,100px);color:#fff;overflow:visible;filter:drop-shadow(0 2px 0 #111943) drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)}
 .comic-anger{color:#fb334a;transform:rotate(12deg)}
+.comic-teasing{color:#7ce8ff;transform:rotate(-8deg)}
 .comic-surprise,.comic-shock{top:2%;left:40%;color:#fb334a;transform:rotate(-10deg)}
 .comic-stress{top:8%;left:37%;color:#7ce8ff;width:clamp(70px,9vw,135px);height:clamp(70px,9vw,135px)}
 .comic-position-1{left:20%;top:12%;transform:rotate(-19deg) scale(.8)}

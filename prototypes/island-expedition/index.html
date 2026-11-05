@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#163b35">
+  <title>Ekspedisi Pulau · Latihan Skill dan Rules</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="guides.js" defer></script>
+  <script src="notebook.js" defer></script>
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <header class="masthead"><div><span class="edition">LATIHAN PERTAMA / SKILL DAN RULES</span><h1>Ekspedisi Pulau</h1></div><button id="help-button">Cara bermain</button></header>
+  <main class="expedition">
+    <section class="play-area" aria-label="Lapangan percobaan robot">
+      <div class="mission"><div><span>MISIMU</span><h2>Kumpulkan tepat 3 kayu.<br>Robot harus berhenti sendiri.</h2></div><p><strong id="wood-count">0</strong><span>/ 3 kayu di gudang</span></p></div>
+      <div class="map-frame"><canvas id="world" width="960" height="576" role="img" aria-label="Peta pulau dengan kayu di sebelah kiri, gudang di kanan, dan robot kuning yang mengikuti panduanmu." aria-describedby="robot-status">Robot bergerak mengikuti langkah pada buku panduan.</canvas><div id="pause-overlay" hidden>Permainan dijeda</div></div>
+      <div class="field-report" data-tone="idle"><span id="report-label">MULAI DARI BUKU DI SAMPING</span><p id="robot-status" role="status">Susun cara bekerja robot, lalu tekan Jalankan.</p><p id="cargo-status">Bawaan robot: kosong.</p></div>
+      <p class="map-note">Kayu → robot → gudang. Amati apakah langkahmu membuat kayu benar-benar tersimpan. <a href="#workbook">Ubah panduan</a></p>
+      <p class="prototype-note">Prototipe lokal dengan karakter placeholder. Setiap percobaan dimulai dari awal, panduanmu tetap tersedia.</p>
+    </section>
+    <aside id="workbook" class="workbook" aria-label="Buku panduan robot">
+      <h2>Buku panduanmu</h2>
+      <section class="skill-section" aria-labelledby="skill-heading"><h3 id="skill-heading"><span>1</span> Cara bekerja <small>Skill</small></h3><p class="section-help">Susun langkah dari atas ke bawah. Robot akan mengulang urutan ini.</p><ol id="step-editor"></ol><p id="steps-empty" class="section-help" hidden>Belum ada langkah. Tekan Tambah langkah untuk mulai.</p><button id="add-step" class="quiet-button">Tambah langkah</button><p id="step-caption">Langkah yang sedang dikerjakan akan ditandai saat robot berjalan.</p></section>
+      <section class="rule-section" aria-labelledby="rule-heading"><h3 id="rule-heading"><span>2</span> Batas pekerjaan <small>Rule</small></h3><p class="section-help">Tentukan kapan robot perlu berhenti.</p><div class="rule-sentence"><label for="rule-count">Jika kayu di gudang sudah mencapai</label><div class="rule-amount"><input id="rule-count" type="number" inputmode="numeric" min="1" max="9" step="1" placeholder="…"><span>buah,</span></div><label for="rule-effect">maka robot harus</label><select id="rule-effect"><option value="">Pilih tindakan…</option><option value="stop">Berhenti bekerja</option><option value="report">Melapor dan tetap bekerja</option></select></div><button id="clear-rule" class="quiet-button">Kosongkan aturan</button><p id="rule-note">Boleh mencoba tanpa aturan untuk melihat akibatnya.</p></section>
+      <div class="run-controls"><p id="editor-error" role="alert"></p><button id="run-button" class="primary-button">Jalankan</button><div><button id="pause-button" disabled>Jeda</button><button id="stop-button" disabled>Hentikan robot</button></div><p>Perbaiki panduan, lalu tekan Jalankan untuk mencoba lagi dari awal.</p></div>
+    </aside>
+  </main>
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-copy"><h2 id="help-title">Satu tugas sederhana.</h2><p>Bantu robot menyimpan tepat 3 kayu di gudang, lalu berhenti sendiri.</p><ol><li><strong>Skill:</strong> susun cara robot mengambil, membawa, dan menyimpan kayu.</li><li><strong>Rule:</strong> beri batas kapan pekerjaan harus berhenti.</li><li>Tekan <strong>Jalankan</strong>. Amati hasilnya dan perbaiki panduan jika perlu.</li></ol><p>Kamu tidak perlu menggerakkan karakter. Robot menjalankan panduanmu secara otomatis. Semua berjalan lokal tanpa layanan AI.</p><button id="close-help" class="primary-button">Mengerti</button></div></dialog>
+  <noscript><p>Aktifkan JavaScript untuk menjalankan percobaan robot.</p></noscript>
+</body>
+</html>
