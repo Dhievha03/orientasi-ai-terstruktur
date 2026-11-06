@@ -1,6 +1,6 @@
 # Tools AI untuk AI-Assisted Development
 
-Presentasi statis pemateri TEFA untuk kelas 11 yang sudah coding dan familiar dengan AI. Versi aktif `ai-assisted-code-only-performance-150-8`: **37 slide, 8 bab, alokasi 150 menit** termasuk pembahasan dan pertanyaan per bab.
+Presentasi statis pemateri TEFA untuk kelas 11 yang sudah coding dan familiar dengan AI. Versi aktif `ai-assisted-responsible-development-150-43`: **43 slide, 8 bab, alokasi 150 menit** termasuk pembahasan dan simulasi. Naskah mengajar mengikuti urutan aktif di `Naskah-Pemateri-AI-Assisted-Development-TEFA.md`.
 
 ## Membuka
 
@@ -12,18 +12,18 @@ Untuk hosting statis, sertakan seluruh file JS/CSS root, `assets/fonts/`, favico
 
 | Bab | Alokasi | Pembahasan |
 | --- | --- | --- |
-| Pengantar | 15 menit | Vibe Coding, AI-Assisted Development, tanggung jawab developer |
-| Risiko | 30 menit | Pengantar skenario dan pemeran, adegan database, konklusi, tiga risiko respons |
-| Tools AI | 20 menit | Aplikasi, model, tools, mode kerja, akses, koneksi |
-| Konteks | 20 menit | Relevansi, kebaruan, task brief, acceptance criteria |
-| Panduan | 20 menit | Prompt, rules, skill, cakupan, serah terima context |
-| Micro Task | 20 menit | Requirement, percakapan bercabang, unit pekerjaan, scope, feedback loop |
-| Review | 15 menit | Rencana, perubahan, klaim, verifikasi, penerimaan |
-| Penutup | 10 menit | Laporan, tindak lanjut, tanggung jawab |
+| Pengantar, 01–06 | 18 menit | Bantuan AI, pemeriksaan hasil formulir, perbandingan alur kerja, dasar penerimaan |
+| Risiko, 07–12 | 25 menit | Adegan database, asumsi, kesalahan respons, prompt injection, informasi sensitif, akses |
+| Tools AI, 13–17 | 18 menit | Model, aplikasi, tools, agent, router, MCP |
+| Konteks, 18–22 | 20 menit | Kebutuhan pendaftaran, penelusuran, rencana, prompt, acceptance criteria |
+| Panduan, 23–27 | 18 menit | Prompt, rules, skill, izin sistem, serah terima sesi |
+| Micro Task, 28–35 | 25 menit | Simulasi bercabang, empat arti berhasil, tugas terarah, feedback loop |
+| Review, 36–40 | 16 menit | Keadaan awal, diff, validasi, build dan testing, keputusan penerimaan |
+| Penutup, 41–43 | 10 menit | Efisiensi, cek pemahaman, tanggung jawab developer |
 
-Alokasi berada pada data/catatan pemateri dan dokumentasi. Tidak ada timer dalam UI. Kasus database pada bab Risiko dilanjutkan dalam contoh konteks, task brief, kriteria penerimaan, dan panduan pada bab 4–5. Bab Review memakai micro task pendaftaran ekstrakurikuler dari bab 6. Contoh login, library, serta notifikasi mendukung prinsip terkait.
+Alokasi berada pada data/catatan pemateri dan dokumentasi. Tidak ada timer dalam UI. Pendaftaran ekstrakurikuler menjadi contoh berulang dari pembuka sampai penutup. Database merupakan kasus terpisah untuk asumsi dan tindakan berisiko. Bab Review membahas perubahan dan bukti tanpa materi Git. Gunakan satu jalur simulasi utama serta beberapa keputusan pembanding sesuai waktu, tanpa harus memutar seluruh ending saat mengajar.
 
-Instruksi lengkap pada bab 4 menjelaskan target database testing, pemeriksaan pemakaian dan cadangan, persetujuan rencana, serta batas penghapusan. Kriteria hasil melindungi database production, cadangannya, dan akses website. Bab 7 menilai respons backend, errors per isian, reset, kelengkapan formulir, serta bukti percobaan yang sesuai kode terakhir.
+Instruksi lengkap pada bab 4 menjelaskan perbaikan hasil pendaftaran, penelusuran handler, rencana, batas perubahan, serta tes data valid dan tidak valid. Kriteria memeriksa pesan, errors per isian, daftar pendaftaran, dan reset. Ilustrasi diff pada bab 7 menunjukkan perbaikan pesan yang disertai penghapusan validasi, tanpa mengubah kode simulasi. Sumber pendidikan tersedia pada notes dan bagian rujukan naskah pemateri.
 
 Micro Task menyediakan kode dan apps lokal yang dapat diperiksa secara opsional. Tidak ada AI live, terminal, backend sungguhan, API key, atau data peserta yang dikirim keluar. Klaim tokoh dalam cerita tidak menjadi bukti pengujian oleh penyusun materi.
 
@@ -135,7 +135,7 @@ Dialog, ringkasan dampak, requirement, dan konklusi rata kiri. Spasi kata normal
 ## File utama
 
 ```text
-content.js                           Bab, 37 slide, notes, glossary, task brief
+content.js                           Bab, 43 slide, notes, glossary, task brief
 app.js                               Renderer, navigasi, kontrol, penyimpanan
 story-slides.js                       Integrasi adegan, snapshot, gerbang konklusi
 story-slides.css                      Layout adegan, konklusi, dan fokus manual
@@ -157,7 +157,9 @@ pause-menu.js / pause-menu.css        Menu yang dipertahankan
 
 Contoh registration dan sales-report lama tidak dipakai deck aktif. Dokumen rencana serta audit sebelumnya adalah catatan historis.
 
-## Status pengujian revisi ini
+## Riwayat pengujian sebelum revisi materi 43 slide
+
+Angka pengujian di bawah berasal dari iterasi sebelumnya dan tidak menjadi bukti pemeriksaan revisi materi 43 slide.
 
 Revisi source awal dengan validasi berurutan lulus 41 pemeriksaan: 13 model, 13 UI source/Apps, serta 15 UI murid individual. Model memeriksa 96 kombinasi source, delapan ending, nama identifier, biaya kode, limit, dan restore. Browser membuktikan empat validasi berurutan ditambah satu pengiriman menjadi satu pengiriman setelah optimasi, dengan hasil backend tetap sama. Kedua jalur pembahasan melalui Kode dan Apps diperiksa. Tampilan murid diuji pada enam ukuran. Hasil di bawah mencatat iterasi sebelumnya.
 
