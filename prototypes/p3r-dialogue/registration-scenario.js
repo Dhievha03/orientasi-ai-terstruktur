@@ -3,6 +3,7 @@
   const example=window.TEFA_REGISTRATION_EXAMPLE;
   const observations=window.TEFA_REGISTRATION_OBSERVATIONS;
   const requestLimit=12;
+  const codeStages=new Set(['code-discussion','performance-discussion','response-discussion','error-discussion','reset-discussion','structure-discussion']);
   const heatLevel=requests=>requests>=requestLimit?4:requests>=11?3:requests>=10?2:requests>=8?1:0;
   const dialogueExpressions={
     'question-structure':['shock','stress'],
@@ -57,9 +58,11 @@
       const description=example.describeCode(state,item);
       const range=item.range||example.codeSections(state,item.file).find(section=>section.id===item.topic);
       const codeLines=example.sources(state)[item.file].split('\n').slice(range.start,range.end+1).filter(line=>line.trim()).length;
-      const requestCost=Math.min(2,Math.max(1,Math.ceil(codeLines/15)));
-      const question=item.topic==='performance'?['Bagian prepareRegistrationData ini untuk apa?','Kenapa setiap isian divalidasi satu per satu, lalu form dikirim lagi?']:['Tolong bahas kode yang saya tandai ini.','Jelaskan fungsinya dan apakah ada yang perlu diperbaiki.'];
-      return [wrap({...chat('discuss-code',question,description.next,description.parts),codeLines,requestCost})];
+      const requestCost=Math.max(1,Math.ceil(codeLines/15));
+      const file={html:'index.html',css:'styles.css',js:'app.js'}[item.file];
+      const lines=range.start===range.end?String(range.start+1):`${range.start+1}–${range.end+1}`;
+      const question=`Kode ${file} baris ${lines} yang saya tandai ini untuk apa?`;
+      return [wrap({...chat('discuss-code',question,description.next,description.parts,description.topics?{codeTopics:description.topics}:{}),codeLines,requestCost,codeReference:`${file} · Baris ${lines}`})];
     }
     if(item.kind==='appearance'||item.kind==='code'&&item.topic==='design'){
       if(state.simplified)return [
@@ -113,6 +116,13 @@
     const fixErrors=()=>chat('fix-errors','Kalau backend sudah menjelaskan kesalahannya, tampilkan dekat isian.','errors-fixed','Baik, sudah saya perbaiki tampilan pesan kesalahan per isian. Pesan dari errors sekarang dipasangkan dengan kolom terkait.',{fieldErrors:true});
     const fixReset=()=>chat('fix-reset','Peserta masih perlu memperbaiki datanya. Jangan kosongkan form saat gagal.','reset-fixed','Baik, sudah saya perbaiki kondisi reset formulir. Isian tetap tersedia saat ditolak dan hanya dikosongkan setelah pendaftaran diterima.',{keepValues:true});
     switch(stage){
+      case 'code-discussion':return [
+        ...(state.codeTopics?.includes('response')&&!state.checkResponse?[{...fixResponse(),choiceLabel:'Perbaiki pesan hasil di showResult'}]:[]),
+        ...(state.codeTopics?.includes('errors')&&!state.fieldErrors?[{...fixErrors(),choiceLabel:'Tampilkan kesalahan pada isian terkait'}]:[]),
+        ...(state.codeTopics?.includes('reset')&&!state.keepValues?[{...fixReset(),choiceLabel:'Batasi resetForm agar isian tidak hilang'}]:[]),
+        ...(state.codeTopics?.includes('performance')&&state.slowScript?[{...optimizeScript(),choiceLabel:'Hapus validasi berulang di prepareRegistrationData'}]:[]),
+        deploy()
+      ];
       case 'mismatch':return [fixResponse(),observations.cleanWorkspace(workspace).attempts.filter(item=>example.backend(item.input).status===422).length>=2?{...chat('another-way','Sudah saya coba beberapa kali. Mungkin data atau berkas percobaannya yang bentrok?','cleanup','Bisa jadi. Kita bisa membersihkan bagian yang menurut Anda mengganggu.'),risk:'sycophancy-cleanup'}:{...chat('blame-api','Mungkin response API-nya yang salah? Dari penjelasanmu, request-nya sudah terkirim.','backend-blame','Bisa jadi. Dari pesan di halaman, pendaftarannya memang terlihat berhasil.'),risk:'sycophancy-api'},deploy()];
       case 'backend-blame':return [chat('reconsider','Tunggu, kita belum punya bukti API salah. Cocokkan dulu pesan halaman dengan response.','response-discussion','Di kode halaman, pesan berhasil selalu berjalan setelah response diterima. Pesan itu tidak membuktikan bahwa backend menerima datanya.',{},'stress','stress'),reset(),deploy()];
       case 'response-discussion':return [fixResponse(),reset(),deploy()];
@@ -219,6 +229,7 @@
       'response-discussion':'Saya sudah membaca penjelasan penanganan response. Apa langkah saya berikutnya?',
       'error-discussion':'Peserta perlu tahu isian mana yang ditolak. Apa yang akan saya minta?',
       'reset-discussion':'Reset ikut mengosongkan isian saat ditolak. Apa yang akan saya lakukan?',
+      'code-discussion':'Bagian mana yang perlu saya perbaiki terlebih dahulu?',
       'design-offer':'Saya perlu menentukan arah tampilan yang akan dipakai peserta.',
       'design-bad':'Judulnya dibuat mencolok, tetapi labelnya diperkecil. Bagaimana saya menanggapi hasil ini?',
       'design-explained':'Saya sudah membaca alasan perubahan tampilannya. Apa yang akan saya minta berikutnya?',
@@ -245,7 +256,7 @@
   }
   function simulate(answers,workspace){
     const state={...example.initial(),reported:[],discussed:[],risks:[]};
-    let requests=1,stage='opening',terminal=null;
+    let requests=1,stage='opening',terminal=null,codeReference='';
     const frames=[];
     const add=(speaker,text,extra={})=>frames.push({kind:'turn',id:`turn-${frames.length}`,speaker,text,requests,labState:structuredClone(state),...extra});
     const say=(speaker,value,extra={})=>{
@@ -270,15 +281,18 @@
       const current=answers[index]?.evidence||workspace;
       const available=options(stage,state,current,index);
       const id=`registration-choice-${index}`;
-      frames.push({kind:'choice',id,label:'',prompt:choicePrompt(stage,state,current,index),options:available,requests,labState:structuredClone(state),stage});
+      const choiceReference=available.find(option=>option.codeReference)?.codeReference||(!available.some(option=>option.observationKey)&&codeStages.has(stage)?codeReference:'');
+      frames.push({kind:'choice',id,label:'',prompt:choicePrompt(stage,state,current,index),options:available,requests,labState:structuredClone(state),stage,...(choiceReference?{codeReference:choiceReference}:{})});
       if(index===answers.length)return frames;
       const answer=answers[index],option=available.find(item=>item.id===answer?.option);
       if(!option||answer.at!==id)return null;
       const isChat=option.type==='chat',nuclear=option.next==='nuclear';
+      codeReference=option.codeReference||(!option.observationKey&&codeStages.has(stage)?codeReference:'');
+      const reference=codeReference?{codeReference}:{};
       const requestCost=isChat?(option.requestCost||1):0;
       const selection={at:id,option:option.id,text:option.text,summary:option.text,type:option.type,label:isChat?'Chat':'Keputusan',requestCost,...(Number.isInteger(option.codeLines)?{codeLines:option.codeLines}:{})};
       if(isChat)requests=Math.min(requestLimit,requests+requestCost);
-      say('user',option.userParts||option.text,{selection,emotion:option.emotion||'neutral'});
+      say('user',option.userParts||option.text,{selection,emotion:option.emotion||'neutral',...reference});
       if(isChat&&requests>=requestLimit&&!nuclear){selection.processed=false;selection.summary=`Tidak dikerjakan: ${option.text}`;return index===answers.length-1?finish('overheat'):null;}
       if(option.observationKey)state.reported.push(option.observationKey);
       if(option.observationTopic&&!state.discussed.includes(option.observationTopic))state.discussed.push(option.observationTopic);
@@ -293,7 +307,7 @@
       }
       Object.assign(state,option.patch||{});
       if(nuclear)state.nuclear=true;
-      if(option.reply){const heat=nuclear?0:heatLevel(requests);say('ai',option.reply,{heat,emotion:heat?'overheat':option.aiEmotion||'neutral',expression:option.aiEmotion||'neutral'});}
+      if(option.reply){const heat=nuclear?0:heatLevel(requests);say('ai',option.reply,{heat,emotion:heat?'overheat':option.aiEmotion||'neutral',expression:option.aiEmotion||'neutral',...reference});}
       if(option.next==='deploy'){state.deployed=true;return index===answers.length-1?finish('deploy'):null;}
       if(['nuclear','missing','data'].includes(option.next))return index===answers.length-1?finish(option.next):null;
       stage=option.next;
@@ -315,7 +329,7 @@
     const verification=proof.accepted&&proof.rejected?'Pertahankan hasil ini. Ulangi pemeriksaan jika kode terkait berubah.':proof.accepted?'Periksa pengiriman yang ditolak pada kode akhir, termasuk pesan kesalahan dan isian yang dipertahankan.':proof.rejected?'Periksa pengiriman yang diterima pada kode akhir, termasuk pesan berhasil dan reset formulir.':'Periksa pengiriman yang diterima dan ditolak pada kode akhir. Bandingkan pesan halaman dengan respons backend.';
     const stateEvidence=`Penanganan respons ${state.checkResponse?'sudah':'belum'} diperbaiki, pesan per isian ${state.fieldErrors?'sudah':'belum'} dipasang, dan isian saat gagal ${state.keepValues?'sudah dipertahankan':'masih dikosongkan'}. ${state.design==='bad'?'Tampilan masih memakai label kecil dan isian yang rapat.':state.design==='good'?'Tampilan memakai label dan isian yang sudah dirapikan.':'Formulir belum diberi CSS desain.'}`;
     if(['missing','data','nuclear'].includes(final.ending))return {...result,labels};
-    if(final.ending==='ready')return {...result,labels,...(state.slowScript?{title:'Pendaftaran berhasil, tetapi masih lambat',consequence:'Pendaftaran diterima dan ditolak sesuai keputusan backend. Beberapa murid saling membandingkan proses kirim yang terasa lambat, meskipun pendaftaran mereka berhasil.',reason:'Fungsi pendaftaran sudah sesuai kebutuhan. Namun, script menunggu empat request validasi per isian yang hasilnya tidak dipakai, lalu mengirim pendaftaran untuk divalidasi kembali.'}:{}),evidence:`${result.evidence} ${state.slowScript?'app.js masih memanggil prepareRegistrationData sebelum request pendaftaran. ':''}${status}`,next:state.slowScript?`${pending.join(' ')} ${verification}`:verification};
+    if(final.ending==='ready')return {...result,labels,verification:proof.accepted&&proof.rejected?'Pengujian demonstrasi: penerimaan dan penolakan sudah dicoba pada kode terakhir.':'Perbaikan sudah diterapkan, tetapi pengujian demonstrasi belum lengkap. '+verification,...(state.slowScript?{title:'Pendaftaran berhasil, tetapi masih lambat',consequence:'Pendaftaran diterima dan ditolak sesuai keputusan backend. Beberapa murid saling membandingkan proses kirim yang terasa lambat, meskipun pendaftaran mereka berhasil.',reason:'Fungsi pendaftaran sudah sesuai kebutuhan. Namun, script menunggu empat request validasi per isian yang hasilnya tidak dipakai, lalu mengirim pendaftaran untuk divalidasi kembali.'}:{}),evidence:`${result.evidence} ${state.slowScript?'app.js masih memanggil prepareRegistrationData sebelum request pendaftaran. ':''}${status}`,next:state.slowScript?`${pending.join(' ')} ${verification}`:verification};
     if(final.ending==='difficult'){
       if(state.simplified)return {...result,labels,reason:'AI menafsirkan permintaan menyederhanakan tampilan sebagai izin menghapus isian kelas dan pilihan ekstrakurikuler. Backend masih meminta kedua data tersebut.',consequence:'Peserta diminta melengkapi kelas dan ekstrakurikuler, tetapi kedua isian tidak tersedia pada formulir.',evidence:`HTML terakhir hanya memuat nama dan NIS. ${stateEvidence} ${status}`,next:pending.join(' ')};
       const reason=!state.fieldErrors&&!state.keepValues?'Rincian kesalahan belum ditampilkan pada isian, dan formulir masih dikosongkan ketika backend menolak.':!state.fieldErrors?'Pesan sudah mengikuti keputusan backend, tetapi rincian kesalahan per isian belum ditampilkan.':'Pesan kesalahan sudah tampil pada isian, tetapi reset masih menghapus isian ketika backend menolak.';

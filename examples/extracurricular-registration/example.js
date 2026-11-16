@@ -397,6 +397,14 @@ postToHost({type:"registration-ready"});
     if(performance>=0)list.push(section('performance','Pemeriksaan data berulang',performance,lines.findIndex((line,index)=>index>performance&&line==='}')));
     return list;
   }
+  function codeTopics(state,text){
+    const topics=[];
+    if(state.slowScript&&/prepareRegistrationData|validateRegistrationField|\bchecks\b|\bvalidation\b/.test(text))topics.push('performance');
+    if(/form\.reset\(|resetForm\(/.test(text))topics.push('reset');
+    if(/result\.errors|#error-|showFieldErrors\(/.test(text))topics.push('errors');
+    if(/const accepted|showResult\(|message\.textContent\s*=\s*(?:"Pendaftaran berhasil\."|accepted)|message\.dataset\.state\s*=\s*(?:"success"|accepted)/.test(text))topics.push('response');
+    return topics;
+  }
   function codeSelection(state,file,start,end=start){
     const source=sources(state)[file];
     if(!source)return null;
@@ -405,11 +413,16 @@ postToHost({type:"registration-ready"});
     const text=lines.slice(start,end+1).join('\n');
     let id='general';
     if(file==='js'){
-      const performance=state.slowScript?codeSections(state,'js').find(section=>section.id==='performance'):null;
-      if(performance&&(start>=performance.start&&end<=performance.end||/prepareRegistrationData|validateRegistrationField|\bchecks\b|\bvalidation\b/.test(text)))id='performance';
-      else if(/form\.reset\(|resetForm\(/.test(text))id='reset';
-      else if(/result\.errors|#error-|showFieldErrors\(|for \(const fieldName/.test(text))id='errors';
-      else if(/const accepted|showResult\(|message\.textContent\s*=\s*(?:"Pendaftaran berhasil\."|accepted)|message\.dataset\.state\s*=\s*(?:"success"|accepted)/.test(text))id='response';
+      const sections=codeSections(state,'js');
+      const performance=state.slowScript?sections.find(section=>section.id==='performance'):null;
+      const errors=sections.find(section=>section.id==='errors');
+      const topics=codeTopics(state,text);
+      const functions=[...text.matchAll(/^\s*(?:async\s+)?function\s+\w+\s*\(/gm)].length;
+      if(performance&&start>=performance.start&&end<=performance.end)id='performance';
+      else if(errors&&start>=errors.start&&end<=errors.end)id='errors';
+      else if(functions>1||topics.length>1)id='general';
+      else if(topics.length===1)id=topics[0];
+      else if(/for \(const fieldName/.test(text))id='errors';
     }else if(file==='html'){
       if(/<form\b/.test(text)&&/<\/form>/.test(text)||/class="field"/.test(text)&&/<input\b/.test(text)||/class="field-error"/.test(text))id='fields';
       else if(/<\/?select\b|<option\b/.test(text))id='choices';
@@ -429,12 +442,12 @@ postToHost({type:"registration-ready"});
       'Kedua isian perlu dikembalikan. Menyederhanakan susunan tidak berarti menghapus kebutuhan pendaftaran.'
     ]};
     if(topic==='response')return {next:state.checkResponse?'idle':'response-discussion',parts:[
-      'Bagian ini membaca response pendaftaran dan mengatur pesan yang terlihat pada formulir.',
+      'showResult mengatur pesan hasil pendaftaran berdasarkan response yang diterima dari API.',
       state.checkResponse?'Status response dan success sudah diperiksa sebelum pesan berhasil ditampilkan. Bagian ini sudah sesuai dan tidak perlu diperbaiki.':'Saat ini pesan berhasil tetap dijalankan setiap response datang, termasuk ketika backend menolak pendaftaran.',
       state.checkResponse?'Percobaan Apps dapat dipakai untuk membandingkan pesan dengan hasil pendaftaran.':'Bisa diperbaiki dengan membaca response.ok dan success, lalu menampilkan pesan penolakan jika pendaftaran tidak diterima.'
     ]};
     if(topic==='fields'||topic==='errors')return {next:state.fieldErrors?'idle':'error-discussion',parts:[
-      item.file==='html'?'Bagian HTML ini menyusun label, isian, dan tempat peserta memasukkan data pendaftaran.':'Bagian ini memasangkan rincian errors dari response dengan pesan pada masing-masing isian.',
+      item.file==='html'?'Elemen form beserta label dan input menyusun isian data pendaftaran di index.html.':'showFieldErrors memasangkan rincian errors dari response dengan pesan pada masing-masing isian.',
       state.fieldErrors?'Tempat pesan dan pembacaan errors sudah tersedia. Bagian ini sudah sesuai dan tidak perlu diperbaiki.':'Tempat pesan kesalahan per isian belum tersedia. Peserta belum mendapat keterangan langsung di kolom yang perlu diperbaiki.',
       state.fieldErrors?'Pesan akan mengikuti nama isian yang dikirim backend.':'Bisa diperbaiki dengan menambahkan tempat pesan di dekat isian dan memasangkan errors dari backend ke kolom terkait.'
     ]};
@@ -455,27 +468,36 @@ postToHost({type:"registration-ready"});
     const range=item.range||{start:0,end:0};
     const text=source.split('\n').slice(range.start,range.end+1).join('\n');
     const descriptions=[
-      ['setSubmitting','Fungsi ini mengatur status pengiriman, menonaktifkan tombol selama menunggu, lalu mengembalikan teks tombol setelah proses selesai.'],
-      ['readFormData','Fungsi ini membaca nilai formulir yang akan dikirim sebagai data pendaftaran.'],
-      ['clearMessages','Fungsi ini membersihkan pesan dari percobaan sebelumnya sebelum pengiriman baru.'],
+      ['prepareRegistrationData','prepareRegistrationData menunggu validasi empat isian satu per satu. Hasil checks dikembalikan, tetapi tidak dipakai sebelum data dikirim untuk divalidasi lagi oleh backend.'],
+      ['setSubmitting','setSubmitting mengatur status pengiriman, menonaktifkan tombol selama menunggu, lalu mengembalikan teks tombol setelah proses selesai.'],
+      ['readFormData','readFormData membaca nilai formulir yang akan dikirim sebagai data pendaftaran.'],
+      ['showResult',state.checkResponse?'showResult memakai status dan success untuk menentukan pesan pendaftaran.':'showResult masih menampilkan berhasil setiap response diterima, termasuk saat backend menolak pendaftaran.'],
+      ['resetForm',state.keepValues?'resetForm hanya mengosongkan formulir setelah pendaftaran diterima.':'resetForm masih mengosongkan formulir setiap pengiriman selesai, termasuk saat pendaftaran ditolak.'],
+      ['showFieldErrors','showFieldErrors memasangkan rincian kesalahan backend dengan isian yang terkait.'],
+      ['clearMessages','clearMessages membersihkan pesan dari percobaan sebelumnya sebelum pengiriman baru.'],
       ['finally','Blok finally mengaktifkan kembali tombol setelah proses kirim berhasil ataupun mengalami kegagalan.'],
       ['catch','Blok catch menampilkan pesan ketika proses pengiriman atau pembacaan response mengalami kesalahan. Status penolakan 422 tetap perlu diperiksa terpisah.'],
       ['isSubmitting','Status isSubmitting mencegah pengiriman kedua ketika permintaan sebelumnya belum selesai.'],
-      ['const submitButton','Kode ini mengambil tombol kirim agar status dan teksnya dapat diubah selama pengiriman.'],
-      ['defaultButtonText','Teks awal tombol disimpan agar dapat dikembalikan ketika proses pengiriman selesai.'],
-      ['querySelector("#registration")','Kode ini mengambil elemen formulir dan menyimpannya pada variabel form untuk dipakai oleh handler pengiriman.'],
-      ['querySelector("#result")','Kode ini mengambil elemen tempat pesan hasil pendaftaran ditampilkan.'],
-      ['addEventListener','Kode ini memasang handler submit. Proses di dalamnya dijalankan ketika peserta mengirim formulir.'],
-      ['preventDefault','Kode ini mencegah pengiriman bawaan browser agar formulir diproses oleh JavaScript tanpa membuka ulang halaman.'],
-      ['FormData','Kode ini mengumpulkan nilai isian formulir ke dalam objek data untuk dikirim ke API pendaftaran.'],
-      ['sendRegistration','Kode ini mengirim data pendaftaran dan menunggu response dari API.'],
-      ['response.json','Kode ini membaca isi response sebagai JSON agar pesan, data, dan errors dapat dipakai oleh halaman.'],
+      ['const submitButton','submitButton menyimpan tombol kirim agar status dan teksnya dapat diubah selama pengiriman.'],
+      ['defaultButtonText','defaultButtonText menyimpan teks awal tombol agar dapat dikembalikan ketika pengiriman selesai.'],
+      ['querySelector("#registration")','document.querySelector("#registration") mengambil elemen formulir dan menyimpannya pada variabel form.'],
+      ['querySelector("#result")','document.querySelector("#result") mengambil elemen tempat pesan hasil pendaftaran ditampilkan.'],
+      ['addEventListener','form.addEventListener memasang handler submit yang dijalankan ketika peserta mengirim formulir.'],
+      ['preventDefault','event.preventDefault() mencegah pengiriman bawaan browser agar formulir diproses oleh JavaScript tanpa membuka ulang halaman.'],
+      ['FormData','FormData mengumpulkan nilai isian formulir ke dalam objek data untuk dikirim ke API pendaftaran.'],
+      ['sendRegistration','sendRegistration mengirim data pendaftaran dan menunggu response dari API.'],
+      ['response.json','response.json() membaca isi response sebagai JSON agar pesan, data, dan errors dapat dipakai oleh halaman.'],
       ['<label','Label ini memberi nama pada isian dan menghubungkannya dengan kontrol melalui atribut for.'],
       ['<input','Elemen input ini menyediakan tempat peserta mengetik data. Atribut name menentukan nama kolom saat formulir dikirim.'],
       ['<h1','Elemen h1 ini menampilkan judul halaman pendaftaran.']
     ];
     const parts=descriptions.filter(([match])=>text.includes(match)).map(([,description])=>description);
     if(!parts.length)parts.push(!text.trim()?'Baris kosong ini memisahkan bagian kode supaya lebih mudah dibaca. Baris ini tidak menjalankan proses apa pun.':item.file==='css'?'Deklarasi CSS ini mengatur tampilan bagian formulir yang ditandai.':/^[\s{}();]+$/.test(text)?'Tanda ini membuka atau menutup blok kode agar susunan handler tetap lengkap.':'Bagian ini mengatur struktur dasar kode yang dipakai formulir.');
+    const topics=item.file==='js'?codeTopics(state,text):[];
+    if(topics.length){
+      parts.push('Rentang ini mencakup beberapa bagian pekerjaan. Pilih satu perubahan yang ingin dikerjakan terlebih dahulu, lalu uji hasilnya.');
+      return {next:'code-discussion',parts,topics};
+    }
     parts.push('Tidak ada yang salah dengan bagian kode ini. Bagian yang Anda tandai bisa tetap dipakai.');
     return {next:'idle',parts};
   }

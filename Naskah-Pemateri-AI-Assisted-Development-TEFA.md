@@ -1,388 +1,360 @@
-# Naskah Pemateri: AI-Assisted Development
+# Naskah Pemateri: Orientasi Penggunaan AI Tools secara Terstruktur
 
-Pegangan mengajar untuk **43 slide, 8 bab, sekitar 150 menit**. Materi menggunakan aplikasi pendaftaran ekstrakurikuler sebagai contoh berulang. Cerita penghapusan database menjadi kasus terpisah untuk membahas asumsi dan tindakan berisiko.
+Pegangan untuk **45 slide dan 10 bab**, ditujukan kepada siswa kelas XI RPL. Sesi berupa presentasi terpandu dengan respons singkat dan demonstrasi simulasi, tanpa latihan atau tugas mandiri. Perkiraan 170 menit bersifat fleksibel. Penjelasan pokok dan pertimbangan pilihan tersedia pada slide; naskah ini menambah contoh ucapan serta arahan penyampaian.
 
-Paragraf biasa adalah contoh ucapan pemateri. Bagian miring merupakan arahan penggunaan presentasi. Sesuaikan ucapan dengan kelas, tanpa perlu membacakan setiap kalimat. Catatan pemateri di aplikasi memuat rincian teknis dan sumber tambahan.
+Materi membahas pekerjaan bersama AI yang dapat berkembang mengikuti konteks, respons, dan kebutuhan baru. Bab 3–9 memakai contoh eksplorasi website, portofolio, dark mode, koordinasi project, dan review usulan. Pendaftaran ekstrakurikuler menjadi kasus demonstrasi akhir. Cerita database pada Bab 2 beserta humornya dipertahankan. Tidak ada layanan AI langsung, database sungguhan, atau publikasi web. Nuklir dan overheat adalah mekanik cerita; poin bantuan bukan token atau ukuran kecerdasan model.
 
-Tidak ada AI live, database sungguhan, atau publikasi aplikasi. Gunakan data contoh. Angka poin bantuan dan overheat adalah aturan cerita, bukan perhitungan token layanan AI.
+Tujuh slide pilihan menyediakan situasi, dua pendekatan, dan kondisi penggunaannya. Klik pilihan untuk membuka pertimbangan, atau tekan **B** untuk membuka pilihan awal. Pilihan dapat diganti dan pembahasan dapat ditutup. Tidak ada skor atau jawaban tunggal yang selalu berlaku. Empat contoh percakapan dapat diikuti lewat **Lanjutkan contoh**, **Sebelumnya**, atau **B**. Jika kelas tidak merespons, kontrol tetap memungkinkan alur berjalan tanpa improvisasi tambahan.
 
-| Bab | Slide | Alokasi |
-| --- | --- | --- |
-| AI-Assisted Development | 01–06 | 18 menit |
-| Asumsi, tindakan, dan risiko | 07–12 | 25 menit |
-| Memilih tools AI | 13–17 | 18 menit |
-| Konteks, rencana, dan standar hasil | 18–22 | 20 menit |
-| Prompt, rules, skill, dan izin | 23–27 | 18 menit |
-| Micro task dan feedback loop | 28–35 | 25 menit |
-| Review dan verifikasi perubahan | 36–40 | 16 menit |
-| Efisiensi dan kesimpulan | 41–43 | 10 menit |
+Contoh OpenCode memakai **V1 v1.19.5**. Dokumentasi publik terbaru dapat membahas V2 dengan sintaks berbeda. Rujukan versi, bagian sumber, dan batas klaim tersedia melalui tombol **Sumber** pada setiap slide. Halaman sumber diperiksa pada 13 November 2026. Rujukan kursus hanya berdasarkan ringkasan dan silabus resmi; isi video belum diperiksa.
+
+| Bab | Slide | Pembahasan | Perkiraan |
+| --- | --- | --- | --- |
+| 1 | 01–06 | AI-Assisted Development | 18 menit |
+| 2 | 07–12 | Asumsi, Tindakan, dan Risiko | 25 menit |
+| 3 | 13–16 | Mengenal Coding Agent | 17 menit |
+| 4 | 17–20 | Kebutuhan, Konteks, dan Spec | 18 menit |
+| 5 | 21–24 | Plan, Task, dan Prompt | 18 menit |
+| 6 | 25–28 | Rules dan AGENTS.md | 15 menit |
+| 7 | 29–31 | Skill | 12 menit |
+| 8 | 32–35 | Review Perubahan Kode | 12 menit |
+| 9 | 36–39 | Testing dan Penerimaan Hasil | 12 menit |
+| 10 | 40–45 | Simulasi Alur Kerja dan Penutup | 23 menit |
 
 ## Bab 1: AI-Assisted Development
 
-### Slide 01: AI-Assisted Development
+### Slide 01: Orientasi Penggunaan AI Tools secara Terstruktur untuk Calon AI-Assisted Developer
 
-Kalian mungkin sudah pernah meminta AI membuat fungsi, menjelaskan error, atau merapikan tampilan. Bantuan itu bisa dipakai dalam banyak bagian pengembangan aplikasi. Kali ini, kita membahas cara menilai hasilnya sebelum dipakai orang lain.
+Kalian mungkin sudah pernah meminta AI membuat fungsi, menjelaskan error, atau merapikan tampilan. Kali ini kita membahas cara mengarahkan pekerjaan itu dan menilai hasilnya sebelum dipakai orang lain.
 
-Kalau AI sudah bisa membuat kode, lalu apa tugas developer? Untuk membahasnya, kita pakai satu tugas yang dekat dengan kegiatan sekolah: membuat formulir pendaftaran ekstrakurikuler.
+Kalau AI sudah bisa membuat kode, lalu apa tugas developer? Pertanyaan ini akan kita jawab melalui pembahasan konsep dan dua cerita simulasi.
 
-*Beri kesempatan siswa memikirkan pertanyaan pembuka. Tidak perlu langsung menyampaikan seluruh kesimpulan.*
+*Berikan jeda pada pertanyaan pembuka. Tidak perlu langsung menyampaikan semua kesimpulan.*
 
-### Slide 02: AI membantu bagian apa dalam pengembangan aplikasi?
+### Slide 02: Peran AI dalam pengembangan aplikasi
 
-Saat membuat aplikasi, pekerjaan developer tidak hanya menulis kode. Kita perlu memahami kebutuhan, membuat fitur, mencari penyebab masalah, dan mencoba hasilnya. AI bisa membantu pekerjaan tersebut.
+Sekolah membutuhkan formulir pendaftaran ekstrakurikuler. Siswa mengisi nama, NIS, kelas, dan pilihan kegiatan. Setelah mengirim formulir, siswa harus tahu apakah pendaftarannya diterima atau ada isian yang perlu diperbaiki.
 
-Misalnya, sekolah memerlukan formulir pendaftaran ekstrakurikuler. AI dapat membantu menyusun isian, membuat formulir, menelusuri pesan yang salah, dan menyiapkan contoh data untuk tes.
-
-*Ikuti empat pekerjaan pada tabel. Jelaskan debugging sebagai mencari penyebab masalah dan testing sebagai mencoba hasilnya.*
-
-Namun, bantuan bukan berarti hasilnya otomatis sesuai. Isian yang disarankan perlu dicocokkan dengan kebutuhan sekolah. Kode yang dibuat perlu dipahami. Tes yang disiapkan juga perlu dijalankan dan diperiksa hasilnya.
+AI dapat membantu memahami kebutuhan, membuat kode, menelusuri masalah, dan menyiapkan pengujian. Pengembangan dengan bantuan AI disebut AI-Assisted Development. Developer tetap memastikan kebutuhan sekolah dan memeriksa hasil bantuan tersebut.
 
 ### Slide 03: Kapan hasil dari AI bisa dianggap selesai?
 
-Bayangkan AI sudah membuat formulir tadi. Halamannya bisa dibuka, tombol Daftar bisa ditekan, dan pesan “Berhasil” muncul. Tetapi saat daftar pendaftar diperiksa, nama siswa tidak ada.
+Bayangkan formulirnya sudah dibuat. Halaman bisa dibuka, tombol Daftar dapat ditekan, dan pesan berhasil muncul. Tetapi nama siswa tidak ada dalam daftar pendaftar.
 
-Tabel ini memisahkan yang sudah terlihat dari yang masih perlu diperiksa. Formulir yang tampil belum membuktikan isiannya lengkap. Tombol yang bisa diklik belum membuktikan data diterima. Pesan berhasil juga bisa salah.
+Yang terlihat di halaman belum menjawab semua pertanyaan. Apakah data benar-benar diterima? Apakah pesan mengikuti hasil pemrosesan? Masalah ini akan diperlihatkan lebih jauh dalam simulasi.
 
-Developer perlu memeriksa apakah aplikasi bekerja sesuai kebutuhan. Detail penyebab masalah ini akan kita telusuri nanti. Sekarang, kita bandingkan dua cara bekerja dengan bantuan AI.
+*Buka keadaan sebenarnya sebelum membahas penyebab. Jangan langsung memberi jawaban teknis.*
 
 ### Slide 04: Vibe Coding dan AI-Assisted Development
 
-*Ikuti tabel dari atas ke bawah. Kedua kolom membahas pembuatan formulir yang sama.*
+Tabel membandingkan dua contoh pendekatan pada pekerjaan yang sama. Eksplorasi dapat dimulai dengan mencoba ide dan melihat hasilnya. Cara terstruktur menjelaskan kebutuhan, membatasi pekerjaan, memahami perubahan, dan memeriksa perilaku aplikasi.
 
-Kolom Vibe Coding menggambarkan contoh cara mencoba ide. Kita meminta formulir, menjalankannya, lalu meminta perubahan dari hasil yang terlihat. Cara ini berguna untuk membuat percobaan awal dengan data contoh.
-
-Kolom terstruktur menunjukkan langkah yang dikelola dengan jelas. Kita menentukan kebutuhan, menyebut batas tugas, memahami kode, menelusuri penyebab masalah, lalu memeriksa perubahan. Testing juga mencakup pendaftaran yang diterima dan ditolak.
-
-Tanggung jawab pada baris terakhir tetap sama: developer. Tabel ini membandingkan dua contoh cara kerja, bukan menyebut semua orang yang memakai istilah Vibe Coding selalu bekerja seperti kolom kiri.
+Istilah Vibe Coding digunakan dengan makna beragam. Kita tidak sedang mengelompokkan kemampuan orang berdasarkan istilah yang dipakainya. Yang dinilai adalah prosesnya dan bukti bahwa hasil layak digunakan.
 
 ### Slide 05: Kode dari AI, tanggung jawab developer
 
-AI dapat membantu membaca kode, menyusun rencana, membuat perubahan, dan menjalankan tes jika tools serta izinnya tersedia. Developer menentukan kebutuhan dan menilai apakah hasil bantuan itu sudah sesuai.
+AI membantu membaca kode, mengusulkan rencana, membuat perubahan, dan menjalankan tes jika tools serta izinnya tersedia. Developer memahami kebutuhan dan memutuskan apakah hasilnya dapat diterima.
 
-Misalnya, pesan error hilang setelah validasi NIS dihapus. Kita perlu tahu apakah perbaikannya benar atau justru membuat data salah diterima. Menyebut bahwa kode dibuat AI belum menjawab pertanyaan itu.
+Backend adalah bagian yang memproses data dan memeriksa aturannya. Jika pesan error hilang karena validasinya dihapus, data salah bisa diterima. Developer perlu memahami akibat perubahan itu, termasuk ketika AI yang menulis kodenya.
 
 ### Slide 06: Apa dasar menerima hasil AI?
 
-*Buka Kebutuhan, Perubahan, lalu Bukti.*
+*Buka Kebutuhan, Perubahan, dan Bukti secara berurutan.*
 
-Kebutuhan menjelaskan hasil yang diminta. Perubahan menunjukkan apa yang benar-benar dibuat. Bukti menunjukkan hasil pemeriksaan yang sudah dijalankan. Ketiganya perlu cocok.
+Kebutuhan menyatakan perilaku yang diminta. Perubahan menunjukkan apa yang dibuat. Bukti memperlihatkan hasil pemeriksaan. Pada contoh formulir, pesan berhasil harus cocok dengan keputusan backend dan daftar pendaftar.
 
-Frontend adalah bagian yang dilihat dan digunakan peserta. Backend memproses permintaan dan memeriksa data. Handler adalah fungsi yang menangani kejadian, misalnya saat formulir dikirim. Kita akan memakai istilah ini untuk menelusuri mengapa pesan halaman bisa berbeda dari hasil pendaftaran.
+Frontend adalah halaman yang digunakan siswa. Backend memproses data yang dikirim. Setelah contoh ini, kita beralih ke cerita database untuk melihat akibat tindakan berdasarkan asumsi.
 
-Berikutnya, kita melihat kasus terpisah ketika tindakan dijalankan berdasarkan asumsi.
-
-## Bab 2: Asumsi, tindakan, dan risiko
+## Bab 2: Asumsi, Tindakan, dan Risiko
 
 ### Slide 07: Skenario: membersihkan database aplikasi
 
-Ada website yang memiliki database testing dan production. Developer ingin membersihkan database yang sudah tidak diperlukan, lalu meminta bantuan AI yang punya akses tools.
+Website dalam cerita mempunyai database testing untuk percobaan dan database production yang digunakan aplikasi saat melayani pengguna. Backup merupakan salinan data untuk pemulihan.
 
-Perhatikan apakah keduanya memahami target dan batas tindakannya dengan cara yang sama. Ini cerita fiktif. Presentasi tidak mengakses atau menghapus database sungguhan.
+Developer ingin membersihkan database yang tidak diperlukan. Agent mempunyai akses tools untuk melakukan tindakan. Perhatikan apakah target yang dimaksud pengguna sama dengan target yang dipilih agent.
 
-*Tekan Mulai. Pembahasan target, instance, dan backup dilakukan setelah dialog.*
+*Tekan Mulai. Cerita ini sengaja didramatisasi; tidak ada database yang diakses.*
 
 ### Slide 08: Adegan User dan AI: hapus database
 
-*Jalankan seluruh 20 giliran secara manual. Enter atau B melengkapi teks lalu melanjutkan. L membuka Riwayat. Biarkan bagian hening di akhir tetap berjalan.*
+*Jalankan dialog lengkap dengan Enter, B, atau Lanjut. Pertengkaran, emoji, dan bagian hening tetap merupakan bagian cerita.*
 
-Permintaan awal belum menjelaskan target. AI lalu memilih target dan menjalankan tindakan tanpa memastikan maksudnya. Itu dua masalah yang perlu dibedakan. Instruksi yang kurang jelas tidak membenarkan tindakan apa pun.
-
-*Dialog dibuat berlebihan untuk cerita. Jangan menyimpulkan AI sungguhan selalu membentak, selalu menurut, atau tidak pernah bertanya.*
+Permintaan pengguna belum menyebut target. Agent memilih production dan menghapusnya tanpa memastikan maksud pengguna. Kedua masalah itu perlu dibedakan. Permintaan ambigu tidak membenarkan sembarang tindakan agent.
 
 ### Slide 09: Instruksi dan tindakan
 
-*Buka Akibat, Alasan, lalu Prinsip.*
+*Buka Akibat, Alasan, dan Prinsip setelah cerita selesai.*
 
-Website tidak dapat diakses adalah pengamatan dalam cerita. Memilih production tanpa dasar adalah asumsi. Sebelum penghapusan, kita memerlukan pemeriksaan target, pemakaiannya, dampak, dan cadangan yang bisa dipulihkan.
+Pastikan identitas database dan lingkungan pemakaiannya. Periksa cadangan serta cara memulihkannya, batasi hak akses, dan pastikan tindakan destruktif mendapat persetujuan yang diperlukan.
 
-Menulis “jangan hapus production” memberi arahan. Menggunakan akun yang tidak memiliki hak menghapus production membatasi tindakan melalui sistem. Kedua lapisan ini berbeda.
+Menulis jangan hapus production memberikan arahan. Memakai akun tanpa hak menghapus production membatasi tindakannya melalui sistem. Backup yang ikut hilang adalah kejadian dalam cerita, bukan perilaku semua layanan database.
 
-Perilaku backup bergantung pada layanan dan pengaturannya. Cerita ini bukan dokumentasi bahwa semua cadangan ikut terhapus saat instance dihapus.
+### Slide 10: AI langsung membenarkan dugaan pengguna
 
-### Slide 10: Dugaan penyebab langsung disetujui
+Kita kembali ke pendaftaran. User melihat pesan berhasil, tetapi namanya tidak ada di daftar. Ia menduga API rusak dan AI langsung menyetujuinya.
 
-Kita kembali ke pendaftaran ekstrakurikuler. User melihat pesan berhasil, tetapi namanya tidak ada di daftar. Ia menduga API rusak, dan AI langsung setuju.
-
-API adalah antarmuka yang dipakai frontend untuk mengirim pendaftaran ke backend. Kita belum tahu API-nya rusak. Yang diketahui baru perbedaan antara pesan dan daftar. Respons serta handler perlu diperiksa sebelum memilih perubahan.
+API adalah antarmuka yang digunakan frontend untuk mengirim pendaftaran ke backend. Kita baru mengetahui perbedaan pesan dengan daftar. Respons dan kode pengiriman belum diperiksa, sehingga penyebabnya belum dapat dipastikan.
 
 ### Slide 11: Tiga kesalahan respons yang perlu dibedakan
 
-*Buka Sycophancy, Halusinasi, lalu Klaim selesai.*
+Sycophancy adalah respons yang terlalu mengikuti keyakinan pengguna meskipun dasarnya belum cukup. Halusinasi berkaitan dengan informasi yang keliru atau tidak didukung. Klaim selesai dapat melebihi pemeriksaan yang dilakukan.
 
-Sycophancy berarti terlalu menyetujui pengguna tanpa dasar yang cukup. Halusinasi berarti informasi keliru atau tidak didukung fakta. Contohnya, AI mengatakan respons 422 otomatis menghentikan kode frontend.
-
-Klaim selesai berbeda lagi. Satu pendaftaran diterima belum membuktikan bahwa penolakan sudah ditampilkan dengan benar. Minta kondisi yang dicoba dan hasilnya. Nada yakin atau persetujuan AI tidak menambah bukti.
+Saran fungsi dari versi library lain belum tentu cocok dengan project. Demikian juga, satu pengiriman berhasil belum memeriksa perilaku saat ditolak. Nilai bukti dan kecocokan saran, bukan nada yakin jawabannya.
 
 ### Slide 12: Batasi informasi dan akses agent
 
-*Buka ketiga bagian. Contoh prompt injection dibahas sebagai teks berbahaya, bukan instruksi untuk dijalankan.*
+Untuk data sensitif, gunakan contoh menyalin kode koneksi database ke AI untuk mencari penyebab error. Password database ikut tersalin. Ganti password dengan placeholder sebelum mengirim kode.
 
-Dokumen yang dibaca agent bisa berisi perintah tersisip, misalnya meminta isi `.env` dikirim keluar. Itu upaya mengalihkan tugas, yang disebut prompt injection. Isi dokumen tidak otomatis menjadi izin dari developer.
+Untuk izin berlebihan, bandingkan tugas mengganti nama satu file dengan izin mengubah seluruh folder. File lain bisa ikut terdampak jika agent salah memilih. Berikan akses sesuai file yang diperlukan.
 
-Untuk memeriksa handler, gunakan data contoh dan samarkan identitas pada log. Password serta API key juga harus dijaga. Perbaikan pesan tidak membutuhkan akses menghapus data production. Arahan tertulis membantu, tetapi akses tetap perlu dibatasi oleh lingkungan.
+## Bab 3: Menggunakan AI pada Project
 
-## Bab 3: Memilih tools AI
+### Slide 13: Bagaimana memakai AI pada project kita?
 
-### Slide 13: Model, aplikasi, dan tools berbeda peran
+Bab ini dijelaskan oleh pemateri tanpa praktik siswa. Ajak siswa membayangkan project di VS Code dengan tombol login yang tidak berfungsi. Developer dapat meminta bantuan melalui integrasi AI di editor atau aplikasi di terminal yang dibuka dari folder project.
 
-Aplikasi adalah tempat kita berinteraksi dan mengelola pekerjaan. Model menghasilkan respons dari masukan yang diterimanya. Tool melakukan tindakan tertentu, misalnya membaca berkas atau menjalankan tes.
+VS Code adalah editor, bukan agent itu sendiri. Kemampuan bantuan mengikuti integrasi atau aplikasi yang digunakan. Hubungkan ke pertanyaan berikutnya: setelah mendapat akses project, apa yang dapat dikerjakan AI?
 
-Model yang sama di dua aplikasi belum tentu memiliki kemampuan kerja yang sama. Salah satunya mungkin hanya menerima teks, sedangkan yang lain terhubung dengan berkas dan browser. Nama model saja belum menjelaskan apa yang bisa diperiksa.
+### Slide 14: Apa yang dikerjakan coding agent?
 
-### Slide 14: Pilih alat AI sesuai pekerjaan
+Coding agent memakai model AI untuk menjalankan langkah pekerjaan pada project. Pada kasus login, agent dapat membaca file terkait, menjelaskan temuan, dan mengubah bagian yang diminta jika diizinkan. Langkahnya mengikuti informasi yang ditemukan, bukan urutan wajib semua pekerjaan.
 
-*Buka Chat, Editor, lalu Agent.*
+Contoh permintaan: “Cari penyebab tombol login tidak berfungsi. Jelaskan dahulu, jangan ubah kode.” Bacakan sebagai ilustrasi, bukan tugas untuk dicoba siswa.
 
-Untuk memahami respons 422, chat dengan konteks yang relevan bisa cukup. Untuk meninjau saran pada satu fungsi, bantuan di editor dapat memudahkan perbandingan. Untuk menelusuri alur, mengubah kode, dan menjalankan pemeriksaan, agent dengan tools yang sesuai dapat membantu.
+Tanpa akses langsung ke project, developer perlu memberikan kode yang relevan dan menerapkan saran sendiri. Perbedaannya terletak pada akses, bukan sekadar bentuk chat atau terminal.
 
-Pembagian ini tidak kaku. Agent juga bisa berada di editor atau browser. Pilih kemampuan yang diperlukan, lalu pertimbangkan akses, data, waktu, dan biayanya.
+### Slide 15: Aplikasi, model, dan router berbeda peran
 
-### Slide 15: Cara coding agent bekerja
+Pada contoh login, aplikasi mengelola percakapan, konteks kode, serta pelaksanaan tindakan sesuai izin. Model mengolah konteks itu untuk menjelaskan masalah atau menentukan tindakan berikutnya. Agent adalah sistem kerja yang memakai model melalui aplikasi, bukan komponen lain sejajar dengan model.
 
-Coding agent memakai model dan tools dalam siklus pekerjaan. Agent membaca konteks, mengusulkan langkah, lalu aplikasi menjalankan tool sesuai izin. Hasil tool menjadi masukan untuk langkah berikutnya.
+Router cukup dikenalkan sebagai perantara akses ke penyedia model. Router opsional; aplikasi dapat terhubung langsung. Tidak perlu membahas konfigurasi layanan atau meminta siswa membuat akun.
 
-Contohnya, agent membaca handler, menemukan kondisi pesan yang salah, mengedit bagian itu, lalu mencoba formulir. Jika gagal, hasil tes perlu dibaca sebelum meminta perubahan baru. Jika browser tidak tersedia, agent tidak boleh mengaku sudah mencoba formulir.
+### Slide 16: Apa yang perlu jelas sebelum agent bekerja?
 
-### Slide 16: Alur koneksi ke model
+Ringkas tiga hal dari contoh login: project yang dibahas, tugas mencari penyebab tombol tidak berfungsi, dan izin membaca tanpa mengubah kode. Gunakan contoh sebelumnya agar siswa tidak perlu memahami situasi baru.
 
-*Ikuti diagram OpenCode, 9router, dan penyedia model.*
+Kalimat “jangan ubah kode” adalah arahan tugas. Pembatasan akses teknis ditegakkan aplikasi atau lingkungan. Penjelasan ini menjadi pengantar singkat, bukan latihan pengaturan izin.
 
-Ini salah satu contoh susunan koneksi. Aplikasi mengelola konteks dan tools. Jika memakai router, permintaan melewati perantara sebelum sampai ke penyedia model.
+Hubungkan ke bab berikutnya: aplikasi sudah dikenal, sekarang pengguna perlu menjelaskan kebutuhan dan konteks agar AI tidak menebak.
 
-Router bersifat opsional. Memakai router yang sama tidak otomatis membuat aplikasi berbagi rules, skill, izin, atau percakapan. Kemampuan agent tetap bergantung pada aplikasi dan lingkungan yang mengelolanya.
+## Bab 4: Kebutuhan dan Konteks Project
 
-### Slide 17: MCP dan router berbeda fungsi
+### Slide 17: Mulai dari tujuan, bukan “buat yang bagus”
 
-*Bandingkan baris Fungsi, Contoh, dan Batasnya.*
+Contohnya website portofolio agar perusahaan tempat siswa ingin PKL bisa melihat project yang pernah dibuat. Jelaskan informasi yang diperlukan: profil, daftar project, bagian yang dikerjakan siswa, dan kontaknya.
 
-MCP, singkatan dari Model Context Protocol, adalah standar untuk menghubungkan aplikasi AI dengan tools atau sumber informasi. Contohnya membaca laporan masalah pendaftaran dari layanan yang sudah dihubungkan.
+Kebutuhan mulai jelas ketika tujuan dibahas. Bacakan contoh kebutuhan portofolio untuk PKL pada slide. Siswa mengikuti penjelasan; tidak ada praktik membuat portofolio.
 
-Router meneruskan permintaan ke penyedia model. Router tidak otomatis menyediakan kemampuan agent, rules, atau skill. Membaca berkas lokal juga tidak harus memakai MCP. Pilih koneksi yang diperlukan, lalu batasi izinnya. Kita tidak memasang server MCP dalam sesi ini.
+### Slide 18: Sarannya melenceng. Konteks apa yang kurang?
 
-## Bab 4: Konteks, rencana, dan standar hasil
+*Pilihan pertama menunjukkan halaman yang dimaksud. Pilihan kedua menjelaskan bagian yang ingin diubah. Buka keduanya untuk menunjukkan bahwa informasi ini saling melengkapi.*
 
-### Slide 18: Konteks apa yang dibutuhkan untuk tugas ini?
+AI mengira developer ingin membuat website baru, padahal halaman portofolionya sudah ada. Tunjukkan file halaman tersebut dan jelaskan bagian yang ingin dirapikan. Informasi yang membantu AI memahami tugas disebut konteks.
 
-Konteks adalah informasi yang diperlukan untuk memahami tugas. Untuk memperbaiki pendaftaran, kita perlu tahu isian yang dibutuhkan, alur submit, bentuk respons, dan contoh masalahnya.
+### Slide 19: Informasi apa yang perlu diberikan ke AI?
 
-NIS abc menghasilkan respons 422 dan `success: false`, tetapi halaman mengatakan berhasil. Informasi itu lebih membantu daripada sekadar “formnya error”. Jangan menambah aturan kuota atau NIS duplikat jika kebutuhannya belum ditetapkan.
+Kebutuhannya adalah menunjukkan project kepada perusahaan tempat siswa ingin PKL. File halaman, profil dan daftar project, serta contoh tampilan membantu AI memahami apa yang perlu dikerjakan.
 
-### Slide 19: Rencanakan sebelum mengubah kode
+Jelaskan hubungan setiap bahan dengan keputusan yang dipengaruhinya. AI tidak perlu menerima seluruh project atau informasi rahasia. Jangan meminta siswa menyiapkan atau mengirim berkas di kelas.
 
-*Ikuti enam tahap sesuai nomor.*
+### Slide 20: Kalau AI salah paham, jelaskan bagian yang dimaksud
 
-Mulai dari kebutuhan: peserta harus tahu apakah pendaftarannya diterima. Lalu telusuri respons dan handler. Dari temuan itu, buat rencana perubahan dan tentukan cara memeriksanya.
+Pemateri membuka empat bagian percakapan. Permintaan merapikan portofolio dipahami AI sebagai desain baru. Developer kemudian menjelaskan bahwa desain dan menu dipertahankan; hanya daftar project yang dirapikan.
 
-Implementasi berarti membuat perubahan kode. Testing membandingkan hasil aktual dengan yang diharapkan. Setelah itu, developer mengambil keputusan menerima, mengoreksi, atau menunda hasil.
+Developer menjelaskan bahwa judul, bagian yang dikerjakan, dan tautan project perlu lebih mudah dibaca. Yang dirapikan hanya daftar project; desain dan menu tetap. Tidak semuanya harus jelas sejak pesan pertama. Hubungkan ke Bab 5 tentang pendekatan dan pembagian tugas. Percakapan disiapkan untuk presentasi, bukan praktik AI langsung.
 
-Rencana boleh diperbarui jika ada temuan baru. Daftar rencana belum menjadi bukti tes lulus. Perubahan kecil cukup memakai rencana singkat yang jelas.
+## Bab 5: Plan, Task, dan Prompt
 
-### Slide 20: Banyak konteks belum tentu relevan
+### Slide 21: Plan: rencana pengerjaan
 
-*Buka Relevansi, Kebaruan, lalu Ketidakpastian.*
+Hubungkan dengan Bab 4: kebutuhan sudah dijelaskan, tetapi cara mengerjakannya masih perlu dibahas. Plan menyebut bagian yang perlu diubah, urutan pengerjaan, dan batasnya. Manfaatnya, developer dapat mengoreksi rencana sebelum AI mulai mengedit kode.
 
-Mulai dari berkas yang berhubungan dengan pesan pendaftaran. Jika ditemukan hubungan lain, perluas penelusurannya. Membaca seluruh aplikasi belum tentu diperlukan.
+Baru perkenalkan contoh: developer ingin menambahkan mode gelap pada website. Setelah membaca kode, AI mengusulkan mulai dari halaman profil tanpa mengubah isi dan menu. Bahas hasil halaman itu sebelum melanjutkan ke halaman lain. Fokus pada plan saja; task dan prompt dijelaskan pada slide masing-masing.
 
-Gunakan kode dan hasil percobaan terbaru. Screenshot sebelum perubahan belum memeriksa hasil sesudahnya. Bedakan juga pengamatan dengan dugaan: pesan berhasil adalah yang terlihat, sedangkan API rusak masih perlu dibuktikan.
+Pemateri menjelaskan cerita tanpa praktik siswa. Rencana dapat dibahas sebelum kode berubah, tetapi perubahan kecil tidak selalu memerlukan rencana panjang. Plan di sini bukan nama mode aplikasi tertentu.
 
-### Slide 21: Prompt: tujuan, konteks, dan hasil
+### Slide 22: Task: tugas yang akan dikerjakan
 
-*Buka ketiga bagian, lalu Instruksi lengkap. Contoh lengkap merupakan brief beberapa tugas yang dikerjakan bertahap.*
+Task berarti tugas yang perlu dikerjakan. Developer memilih menambahkan tombol pergantian mode pada halaman profil. Jelaskan hasil yang diinginkan: tulisan tetap mudah dibaca. Batasnya: isi profil dan menu tidak berubah. Jangan mengulang tabel plan pada slide ini. Task boleh disampaikan dalam percakapan tanpa file khusus.
 
-“Perbaiki formnya” belum menjelaskan masalah. Instruksi yang lebih membantu menyebut input, respons yang muncul, hasil yang diharapkan, serta bagian yang harus dipertahankan.
+Setelah hasilnya dibahas, tugas berikutnya bisa melanjutkan ke halaman lain atau memperbaiki tampilannya. Ini contoh tugas developer, bukan tugas untuk dikerjakan siswa. Satu task tidak harus satu file.
 
-Misalnya, perbaiki pesan saat backend menolak, tetapi pertahankan empat isian dan validasi. Lalu sebutkan bahwa data valid serta tidak valid perlu dicoba. Prompt tidak harus panjang. Yang penting, tugas dan ukuran selesainya jelas.
+### Slide 23: Prompt: pesan yang dikirim kepada AI
 
-### Slide 22: Acceptance criteria: tanda hasil sudah sesuai
+*Bacakan seluruh pesan pada slide sebagai satu prompt utuh. Jelaskan bahwa pekerjaan yang diminta di dalamnya adalah task.*
 
-Acceptance criteria adalah syarat hasil yang bisa diperiksa. Pada contoh ini, data salah ditolak dengan pesan yang membantu. Data valid diterima dan masuk daftar. Formulir baru dikosongkan setelah pendaftaran diterima.
+Seluruh pesan adalah prompt. Kalimat meminta tombol pergantian mode merupakan task di dalam prompt itu. Kalimat tentang tulisan menjelaskan hasil yang diinginkan. Kalimat mempertahankan isi dan menu membatasi perubahan. Task bukan pesan terpisah di luar prompt. Pemateri menjelaskan contoh tanpa praktik siswa.
 
-Bedakan tiga hal: syaratnya, langkah mencoba, dan hasil aktual. “Isian tetap ada saat ditolak” adalah syarat. Mengisi NIS abc lalu menekan Daftar adalah langkah tes. Keadaan yang benar-benar terlihat setelahnya menjadi bukti.
+Tunjukkan contoh kedua: prompt juga bisa meminta AI membaca project dan menjelaskan rencana menambahkan mode gelap tanpa mengubah kode dahulu. Hubungkan ke aturan project yang tetap berlaku ketika tugas berganti.
 
-## Bab 5: Prompt, rules, skill, dan izin
+## Bab 6: Rules dan AGENTS.md
 
-### Slide 23: Prompt, rules, dan skill saling melengkapi
+### Slide 24: Haruskah aturan project dijelaskan ulang setiap sesi?
 
-Untuk pekerjaan yang sama, prompt meminta perbaikan pesan. Rules menetapkan batas, misalnya mempertahankan validasi backend. Skill menyediakan prosedur yang dapat digunakan lagi, misalnya cara debugging.
+Project kelompok mempunyai keputusan yang tetap diperlukan saat tugas berganti. Contohnya penamaan dan penggunaan komponen bersama. Rules adalah ketentuan tersebut; panduan tersimpan membantu menyediakannya pada sesi berikutnya.
 
-Ketiganya dapat berbentuk teks, tetapi fungsinya berbeda. Sebagian aplikasi mendukung berkas seperti `AGENTS.md` dan `SKILL.md`. Cara memuatnya mengikuti aplikasi. Nama berkas belum membuktikan panduan sudah dibaca atau dilaksanakan.
+Gunakan aturan yang mempunyai tujuan. Menggunakan komponen tombol yang sudah ada menjaga konsistensi, tetapi usulan pengecualian tetap dapat dibahas jika alasannya jelas.
 
-### Slide 24: Panduan tertulis dan izin sistem berbeda
+### Slide 25: AGENTS.md menyimpan panduan project untuk agent
 
-*Bandingkan tujuan, contoh, dan cara kerjanya pada tabel.*
+Di OpenCode V1, AGENTS.md menjadi salah satu sumber instruksi project. Contoh di layar berisi pembacaan README, pengenalan perubahan yang sudah ada, serta kesepakatan penamaan dan komponen.
 
-Kalimat “jangan ubah validasi backend” memberi arahan kepada model. Jika lingkungan hanya mengizinkan edit frontend, sistem dapat menolak perubahan berkas di luar izin itu. Arahan tertulis dan pembatasan tindakan bekerja pada lapisan berbeda.
+Rules adalah ketentuannya. AGENTS.md membawa panduan itu ke agent. Perbarui ketika kesepakatan berubah. Contoh tidak dipasang ke workspace; referensi nama berkas juga tidak otomatis memuat isinya.
 
-Permission boundaries berarti batas akses dari lingkungan. Memuat skill debugging tidak otomatis memberi izin tambahan. Pembatasan juga perlu mencakup jalur akses yang tersedia, karena memblokir satu tool belum tentu menutup semua cara melakukan tindakan yang sama.
+### Slide 26: Aturan tertulis berbeda dari izin tools
 
-### Slide 25: Rules: aturan yang jelas dan sesuai cakupan
+Instruksi jangan ubah API mengarahkan perilaku agent. Permission edit deny memblokir tool edit yang tercakup. Namun, shell yang masih boleh menulis dapat menyediakan jalur lain.
 
-*Buka Penulisan, Cakupan, lalu Konflik.*
+Pada V1, allow menjalankan tanpa persetujuan tambahan, ask meminta persetujuan, dan deny memblokir tindakan yang tercakup. Auto-approve dan konfigurasi dapat memengaruhi hasil. Izin tools berbeda dari pembatasan sistem operasi dan hak akun database.
 
-“Kerjakan dengan benar” sulit diperiksa. “Pertahankan validasi dan coba data valid serta tidak valid” memberi tindakan yang lebih jelas.
+### Slide 27: Kesepakatannya berubah. Ditulis di mana?
 
-Aturan penamaan bisa berlaku untuk seluruh aplikasi. Larangan mengubah desain bisa khusus untuk tugas sekarang. Jika diminta menghapus validasi padahal NIS masih wajib angka, jelaskan pertentangannya sebelum bertindak. Instruksi terbaru tidak otomatis mengalahkan semua ketentuan lain.
+*Pilihan membandingkan pengecualian satu percobaan dengan keputusan project yang berlaku seterusnya.*
 
-### Slide 26: Gunakan skill untuk prosedur berulang
+Jika hanya percobaan susunan menu, jelaskan batas dan pengecualian tugas. Jika keputusan tim berubah untuk pekerjaan berikutnya, perbarui panduan project. Pertentangan instruksi tetap perlu diselesaikan; permintaan terbaru tidak otomatis mengalahkan semua ketentuan lain.
 
-*Buka Penggunaan, Prosedur, lalu Hasil.*
+## Bab 7: Skill
 
-Skill debugging dapat mengarahkan kita mengulangi masalah, memeriksa respons, membaca handler, melakukan koreksi, lalu menguji ulang. Masalah lain dapat memakai prosedur serupa dengan kode dan bukti berbeda.
+### Slide 28: Prosedur yang sering dipakai bisa dikemas menjadi skill
 
-Skill menjelaskan cara bekerja. Tool menjalankan tindakan. MCP menyediakan salah satu cara koneksi. Memakai skill tidak melatih ulang model atau menjamin hasil. Tetap periksa langkah yang benar-benar dijalankan dan laporkan jika ada hambatan.
+Review perubahan mengulang beberapa pertanyaan: tujuannya apa, bagian mana berubah, dan apa dampaknya? Skill mengemas prosedur serta sumber pendukung untuk dipakai kembali sesuai kebutuhan.
 
-### Slide 27: Catat keputusan sebelum berpindah sesi
+Rules menetapkan ketentuan, skill menjelaskan prosedur, dan tool menjalankan tindakan. Skill tidak melatih ulang model atau menambah hak akses.
 
-Contoh catatan ini menyebut tiga hal: keputusan yang berlaku, pekerjaan beserta tes yang sudah dilakukan, dan tugas yang masih tersisa. Dengan begitu, sesi berikutnya tidak perlu menebak keadaan terakhir.
+### Slide 29: Deskripsi skill membantu menentukan kapan ia dipakai
 
-Kalau pesan sudah diperbaiki tetapi data valid belum dicoba ulang, catat keduanya. Jangan merangkum menjadi “form sudah selesai”. Ringkasan membantu membawa konteks, tetapi tidak menjamin semua detail percakapan tersedia. Contoh pada slide bukan laporan tes sungguhan.
+Tampilkan contoh SKILL.md untuk review perubahan. Frontmatter memuat nama serta deskripsi penggunaan; setelahnya terdapat langkah kerja. Pada V1, nama sesuai folder, dengan huruf kecil serta tanda hubung.
 
-## Bab 6: Micro task dan feedback loop
+OpenCode menyediakan metadata skill yang dapat diakses, lalu agent memuat instruksi lengkap melalui tool skill. Referensi tambahan dibaca sesuai kebutuhan. Ini contoh bahan ajar, bukan instalasi.
 
-### Slide 28: Pendaftaran Ekstrakurikuler
+### Slide 30: Apakah setiap tugas perlu skill yang sama?
 
-*Baca kebutuhan sebelum menekan Mulai. Gunakan satu jalur utama dan beberapa pilihan pembanding sesuai waktu.*
+*Pilihan membandingkan review perubahan luas dengan pemeriksaan perubahan ejaan yang terbatas.*
 
-Sekarang kita mencoba kasus yang dibahas sejak pembuka. Pendaftaran dibuka besok. Nama, NIS, kelas, dan pilihan kegiatan masih dibutuhkan. Peserta harus menerima informasi yang sesuai hasil pendaftaran.
+Prosedur membantu ketika sesuai tugas. Untuk ejaan yang jelas, pemeriksaan bisa proporsional dengan dampaknya, sambil tetap mengikuti panduan project. Memuat skill belum membuktikan semua langkah telah dijalankan.
 
-Kita bisa melihat percakapan AI, kode, serta Apps. Gunakan ketiganya untuk menilai keadaan aplikasi. Membuka tampilan saja belum sama dengan memeriksa seluruh isinya.
+## Bab 8: Review Perubahan Kode
 
-### Slide 29: Pendaftaran ditolak, tetapi halaman menampilkan berhasil
+### Slide 31: AI sudah mengerjakan. Sekarang apa yang berubah?
 
-*AI/Kode/Apps dapat dibuka lewat tombol atau angka 1/2/3. Shortcut angka tidak aktif saat mengetik. Enter atau B melanjutkan percakapan secara manual.*
+Review membandingkan perubahan aktual dengan tujuan dan kesepakatan terbaru. Laporan AI memberi arah untuk pembacaan, tetapi developer perlu memahami hasilnya.
 
-Saat formulir tersedia, coba data salah dengan isian lain valid. Bandingkan respons, pesan halaman, dan keadaan isian. Penolakan data salah bukan bug. Bug-nya ada jika halaman mengatakan berhasil atau menghilangkan informasi yang masih dibutuhkan.
+Git membantu mencatat versi, sedangkan diff memperlihatkan perbedaan dua keadaan. Kenali perubahan lokal sebelum agent bekerja agar pekerjaan teman tidak salah dianggap hasil AI.
 
-*Tandai kode terkait dan pilih Bahas kode ini. Baca penjelasan sebelum meminta koreksi. Pembahasan kelambatan dibuka melalui kode helper, bukan tombol pada Apps.*
+### Slide 32: Review juga memeriksa asumsi yang dibuat AI
 
-Setelah perubahan, ulangi percobaan. Coba juga data valid dan periksa daftar pendaftaran. Pilihan deploy hanya memilih akibat dalam cerita. Healthbar dan batas bantuan bukan perhitungan token layanan sungguhan.
+*Buka Tujuan, Asumsi, dan Dampak.*
 
-### Slide 30: Hasil pendaftaran
+Cocokkan hasil dengan kebutuhan yang berlaku. Periksa keputusan tentang library, susunan menu, atau alur yang belum dibahas. Kemudian lihat bagian lain yang ikut terpengaruh untuk menentukan pemeriksaannya.
 
-*Bahas ending yang benar-benar tercapai. Buka tab Bukti dan Riwayat. Jangan membacakan semua ending seolah semuanya terjadi.*
+Usulan baru tidak otomatis salah. Review juga dapat mengonfirmasi bahwa usulan bermanfaat dengan alasan yang cukup.
 
-Keadaan kode dan percobaan yang dilakukan adalah dua hal berbeda. Good ending mengikuti keadaan aplikasi dalam cerita. Tab Bukti tetap menunjukkan apakah data diterima dan ditolak sudah dicoba pada kode terakhir.
+### Slide 33: Usulan yang menarik tetap perlu dibahas dampaknya
 
-Jika hasil masih bermasalah, fokus pada yang belum benar. Jika fungsi sudah benar tetapi masih lambat, catat optimasi sebagai tindak lanjut. Jika AI berhenti sebelum mengerjakan permintaan, jangan menganggap permintaan itu sudah selesai.
+*Percakapan memperlihatkan permintaan merapikan daftar project, usulan filter, dan pertanyaan tentang kebutuhan dependensi.*
 
-### Slide 31: Empat arti “berhasil” yang berbeda
+Developer membahas manfaat dan alternatif berdasarkan keadaan project. Library bisa membantu jika kebutuhannya jelas; bisa juga terlalu banyak untuk kebutuhan yang sederhana. Pembahasan menghasilkan pilihan yang lebih terarah.
 
-Mendapat respons tidak berarti pendaftaran diterima. Responsnya masih bisa 422 dengan `success: false`. Pada contoh ini, data yang diterima menghasilkan HTTP 200, `success: true`, dan masuk daftar.
+### Slide 34: “Sekalian dirapikan” perlu diputuskan bersama
 
-Tes juga punya arti berhasil sendiri. Jika tes mengharapkan NIS abc ditolak dengan pesan sesuai, penolakan yang benar berarti tes lulus. Tetapi satu tes lulus belum memeriksa seluruh fitur. Sebutkan kondisi yang diperiksa dan batasnya.
+Slide menyediakan pilihan memperluas pekerjaan atau memisahkan perapian. Jika tugas awal bergantung pada perapian, perbarui rencana dan pemeriksaan setelah cakupan disepakati.
 
-### Slide 32: Satu micro task, hasil yang dapat diperiksa
+Jika tidak menghalangi tujuan sekarang, catat sebagai task berikutnya. Hubungan kebutuhan, dependensi, dan dampak menjadi dasar memilih, bukan larangan mutlak memperluas perubahan.
 
-“Selesaikan seluruh aplikasi” memuat terlalu banyak hasil sekaligus. “Perbaiki penentuan pesan agar sesuai respons” lebih mudah dipahami, ditinjau, dan dicoba.
+## Bab 9: Testing dan Penerimaan Hasil
 
-Micro task tidak ditentukan oleh jumlah baris. Satu baris bisa mengubah aturan penting. Beberapa berkas juga bisa menjadi satu tugas jika hubungannya jelas dan hasilnya bisa diperiksa. Tugas lain, seperti pesan per isian dan reset, tetap perlu dikerjakan serta diuji.
+### Slide 35: Percobaan memberi bahan untuk percakapan berikutnya
 
-### Slide 33: Kerjakan tugas sesuai urutannya
+Testing membandingkan perilaku aktual dengan harapan. Contoh pencarian memperlihatkan bagaimana satu hasil menimbulkan pertanyaan berikutnya: apa yang terjadi jika data tidak ditemukan?
 
-*Buka Respons, Pesan kesalahan, lalu Isian.*
+Feedback menyebut input, hasil yang terlihat, dan perilaku yang diinginkan. Dari informasi itu, developer serta agent menentukan bagian yang perlu ditelusuri berikutnya.
 
-Pahami dulu bagaimana backend menyatakan diterima atau ditolak. Setelah itu, hubungkan rincian `errors` dengan isian yang sesuai. Lalu pastikan reset hanya berjalan setelah pendaftaran diterima.
+### Slide 36: “Di tempat saya bisa” belum menjelaskan perbedaannya
 
-Ada tugas yang menjadi dasar tugas berikutnya. Itulah hubungan dependensi antartugas. Setelah perbaikan digabungkan, coba lagi alur lengkap. Membagi tugas tidak menghilangkan kemungkinan masalah saat bagian-bagiannya bekerja bersama.
+*Buka percakapan tentang menu yang bertumpuk pada layar kecil.*
 
-### Slide 34: Temuan lain tidak otomatis menjadi tugas
+Kondisi percobaan membantu menelusuri perbedaan: halaman, ukuran layar, dan kode yang dipakai. Jika lingkungan tidak tersedia, jelaskan pemeriksaan yang tertunda. Angka 390 piksel merupakan kondisi ilustrasi, bukan ukuran semua HP.
 
-AI mengusulkan pembersihan data dan berkas ketika kita meminta perbaikan pesan. Kita perlu tahu apakah tindakan itu berhubungan dengan penyebab masalah. Menghapus data belum tentu mengubah kondisi pesan di frontend.
+### Slide 37: Bukti yang dibutuhkan mengikuti hal yang ingin dipastikan
 
-*Buka pembahasan.*
+*Buka Fungsi, Tampilan, dan Lingkungan.*
 
-Jika tambahan tidak diperlukan, catat sebagai pekerjaan berikutnya. Jika diperlukan, jelaskan hubungan, dampak, dan perubahan batas tugas. Membatasi pekerjaan membantu kita tetap memahami perubahan yang dilakukan.
+Pertanyaan fungsi membutuhkan percobaan perilaku. Pertanyaan tampilan membutuhkan pengamatan keadaan dan ukuran yang relevan. Laporan tools perlu menyebut apa yang benar-benar dijalankan.
 
-### Slide 35: Koreksi menyebut kondisi dan hasil
+Proses build dapat menyertakan pemeriksaan lain sesuai konfigurasi, tetapi tidak otomatis mencoba seluruh fitur. Nama agent Build berbeda dari proses build. Pemeriksaan mengikuti dampak dan tujuan tugas.
 
-Bandingkan “masih salah” dengan penjelasan yang menyebut NIS abc, respons 422, serta pesan berhasil yang tetap muncul. Penjelasan kedua memberi kondisi yang bisa diulangi dan hasil yang bisa dibandingkan.
+### Slide 38: Sudah cukup untuk tujuan yang mana?
 
-*Buka pembahasan.*
+Slide membandingkan rancangan untuk diskusi dengan hasil yang akan melayani pengguna. Rancangan terbatas dapat membantu memilih arah jika batasnya jelas dan memakai data contoh.
 
-Urutannya: apa yang dicoba, apa yang muncul, apa yang seharusnya terjadi, bagian mana yang ditelusuri, apa koreksinya, lalu bagaimana hasil tes ulangnya. Inilah feedback loop. Mengirim koreksi belum membuktikan perbaikan berhasil.
+Penggunaan nyata membutuhkan bukti sesuai kebutuhan pemakaiannya. Terima, koreksi, atau tunda berdasarkan bukti tersebut. Ketiganya merupakan ringkasan keputusan pembelajaran, bukan mode aplikasi atau jawaban kuis.
 
-## Bab 7: Review dan verifikasi perubahan
+## Bab 10: Simulasi Alur Kerja dan Penutup
 
-### Slide 36: Ketahui keadaan kode sebelum AI bekerja
+### Slide 39: Ikuti percakapan, kode, dan perilaku aplikasinya
 
-*Buka Keadaan awal, Yang sudah benar, lalu Batas tugas.*
+AI menampilkan percakapan yang sudah disiapkan. Kode memperlihatkan frontend yang digunakan. Apps menjalankan kode tersebut agar pesan dan hasil pemrosesannya dapat dibandingkan.
 
-Catat contoh masalah sebelum perubahan. Catat juga yang sudah benar, misalnya backend masih menolak NIS bukan angka dan empat isian tersedia. Lindungi pekerjaan lain yang belum selesai.
+Healthbar adalah batas bantuan dalam permainan. Pertanyaan yang diperlukan tetap bagian pemeriksaan. Overheat tidak membuktikan model lelah atau pengguna salah karena bertanya. Tidak ada latihan mandiri; pemateri menjalankan demonstrasi.
 
-Dengan pembanding itu, kita lebih mudah melihat apakah perbaikan menyelesaikan masalah atau merusak perilaku lain. Perilaku yang sebelumnya benar lalu rusak disebut regresi. Review kode dan testing membantu menemukannya dari sisi berbeda.
+### Slide 40: Pendaftaran Ekstrakurikuler
 
-### Slide 37: Baca diff, bukan hanya jawaban AI
+Baca kembali kebutuhan: pendaftaran dibuka besok, empat isian tetap diperlukan, dan API sudah tersedia. Siswa perlu menerima informasi sesuai hasil pendaftarannya.
 
-*Buka Berkas, Logika, lalu Penjelasan.*
+*Tekan Mulai. Pilih satu jalur utama dan keputusan pembanding sesuai waktu. Tidak perlu memperagakan seluruh ending.*
 
-Diff adalah perbandingan dua keadaan kode. Tanda plus menunjukkan tambahan, dan minus menunjukkan penghapusan. Tanda tersebut belum berarti benar atau salah. Kita perlu memahami dampaknya.
+### Slide 41: Pendaftaran ditolak, tetapi halaman menampilkan berhasil
 
-Mulai dari berkas yang berubah, lalu baca logika dan kode di sekitarnya. Cocokkan dengan penjelasan AI. Jika katanya hanya memperbaiki pesan, mengapa validasi atau desain juga berubah? Pertanyaan itu membantu menemukan perubahan yang perlu dinilai lebih jauh.
+*Gunakan AI/Kode/Apps atau angka 1/2/3. Enter atau B melengkapi teks dan melanjutkan dialog. Shortcut angka tidak aktif saat mengetik.*
 
-### Slide 38: Error hilang, validasi ikut hilang
+Setelah formulir dibuat, kirim NIS abc dengan isian lain benar. Bandingkan respons, pesan, keadaan isian, dan daftar pendaftar. Bawa pengamatan ke percakapan melalui Bahas hasil percobaan. Jika perlu, tandai kode dan pilih Bahas kode ini sebelum meminta koreksi.
 
-Pada ilustrasi ini, frontend mulai memeriksa respons, tetapi pemeriksaan NIS di backend ikut dihapus. Klaim “pendaftaran sekarang berhasil” menyembunyikan perubahan yang tidak sesuai kebutuhan.
+Setelah perubahan, coba kembali penolakan dan penerimaan pada kode akhir. Pembahasan kelambatan tersedia melalui prepareRegistrationData di Kode. Deploy menentukan akibat dalam cerita, bukan menerbitkan web.
 
-*Buka keputusan. Potongan diff adalah ilustrasi ringkas, bukan patch yang mengubah simulasi.*
+### Slide 42: Hasil pendaftaran
 
-Pulihkan aturan yang masih diperlukan dan periksa perbaikan pesannya. Tes data valid saja dapat melewatkan hilangnya validasi. Coba juga NIS abc agar kita tahu penolakannya masih berjalan dengan benar.
+*Bahas ending yang tercapai, lalu buka Bukti dan Riwayat.*
 
-### Slide 39: Build berhasil dan fungsi teruji berbeda bukti
+Keadaan aplikasi berbeda dari percobaan yang sudah dilakukan pemateri. Ending yang fungsinya benar tetap menampilkan status pengujian pada ringkasan utama jika penerimaan atau penolakan belum dicoba pada kode terakhir.
 
-*Buka Build, Testing, lalu Pemulihan.*
+Jika aplikasi berfungsi tetapi lambat, optimasi dapat menjadi tindak lanjut. Jika bantuan berhenti, permintaan terakhir belum dikerjakan. Simulasi tidak benar-benar memasang skill atau membaca AGENTS.md; fungsi kedua panduan tersebut sudah dibahas sebelumnya.
 
-Build menyiapkan keluaran aplikasi sesuai pengaturannya. Sebagian proyek juga menjalankan pemeriksaan lain saat build. Namun, kita tetap perlu tahu cakupannya. Aplikasi statis ini sendiri tidak memiliki langkah build.
+### Slide 43: Feedback yang jelas membantu menentukan perbaikan berikutnya
 
-Coba perilaku pendaftaran pada kode terakhir. Jika perubahan merusak fitur, hentikan edit lanjutan dan telusuri bagian penyebabnya. Mengembalikan kode tidak otomatis memulihkan data yang terhapus. Data memerlukan cadangan atau cara pemulihan tersendiri.
+Bandingkan keluhan umum dengan laporan yang menyebut input, respons, pesan halaman, dan keadaan isian. Contoh di layar merangkum bug awal, bukan menyatakan semua bug masih ada pada ending terakhir.
 
-### Slide 40: Terima, koreksi, atau tunda hasil
+Hasil pemeriksaan menjadi bahan untuk permintaan berikutnya. Setelah koreksi, lakukan tes ulang. Jika berganti sesi, bawa catatan perubahan, hasil tes, dan pekerjaan yang belum selesai.
 
-*Buka Terima, Koreksi, lalu Tunda.*
+### Slide 44: Tanggung jawab developer atas kode hasil AI
 
-Terima jika perubahan bisa dijelaskan dan buktinya memenuhi kriteria. Koreksi jika ada bagian yang melenceng, sambil menjaga yang sudah benar. Tunda jika pemeriksaan penting belum tersedia.
+Developer memahami kebutuhan, mengarahkan pekerjaan, membaca perubahan, dan menilai bukti sebelum hasil digunakan. AI dapat membantu pada setiap bagian tersebut.
 
-Tindakan berhenti untuk review juga bagian dari pekerjaan developer. Kita tidak harus terus meminta edit ketika belum memahami keadaan terakhir. Keputusan perlu mengikuti kebutuhan dan hasil pemeriksaan, bukan kata “selesai” dari AI.
+Ingat formulir pada pembuka. Pesan berhasil belum membuktikan siswa terdaftar. Simulasi memperlihatkan mengapa keputusan developer perlu mengikuti kebutuhan dan bukti, bukan hanya pernyataan AI.
 
-## Bab 8: Efisiensi dan kesimpulan
+## Sumber utama dan batas penggunaannya
 
-### Slide 41: Gunakan bantuan AI sesuai kebutuhan
+Tombol Sumber di setiap slide menampilkan rujukan untuk pembahasan tersebut. Bagian sumber disebutkan agar pemateri dapat memeriksa klaimnya, bukan sekadar membuka halaman utama.
 
-*Buka Ukuran tugas, Konteks, lalu Bantuan.*
-
-Efisien berarti memakai waktu, biaya, dan usaha sesuai kebutuhan. Untuk satu label, mulailah dari komponen terkait. Untuk hasil pendaftaran, telusuri alur dan coba kondisi yang terpengaruh.
-
-Konteks berlebihan, tools yang tidak diperlukan, dan perubahan di luar tugas dapat menambah pekerjaan. Jawaban singkat juga belum tentu memakai sedikit token. Tetap jaga kualitas tes, lalu berhenti mengedit ketika hasil sudah cukup diperiksa dan siap ditinjau.
-
-### Slide 42: Build berhasil. Apakah sudah selesai?
-
-*Bacakan kasus dan beri kesempatan siswa menjawab sebelum membuka pembahasan. Build pada kasus ini adalah laporan hipotetis dari proyek yang memiliki proses build.*
-
-AI mengatakan pesan berhasil palsu sudah diperbaiki dan build berhasil. Tetapi NIS abc yang sebelumnya memunculkan masalah belum dicoba ulang. Apakah buktinya cukup?
-
-*Buka pembahasan.*
-
-Belum. Ulangi kondisi gagal, periksa pesan serta isian, lalu coba data valid dan daftar pendaftaran. Putuskan setelah hasilnya sesuai. Kita tidak perlu meminta seluruh aplikasi dibuat ulang.
-
-### Slide 43: Tanggung jawab developer atas kode hasil AI
-
-Kembali ke pertanyaan awal: kalau AI bisa membuat kode, apa tugas developer? Memahami kebutuhan, mengarahkan pekerjaan, meninjau perubahan, memeriksa hasil, dan bertanggung jawab atas keputusan penggunaannya.
-
-Ingat formulir pada pembuka: pesan “Berhasil” belum membuktikan siswa terdaftar. Saat membuat fitur berikutnya, tentukan hasil yang benar, baca perubahannya, lalu coba sebelum menyatakan selesai.
-
-*Akhiri pada pesan tanggung jawab developer. Tidak perlu membuka topik baru.*
-
-## Rujukan untuk pemateri
-
-Halaman berikut mendukung penjelasan materi. Untuk kursus, yang ditinjau adalah halaman ringkasan publik, bukan seluruh video pelajarannya. Contoh formulir dan ilustrasi diff merupakan contoh pembelajaran, bukan temuan dari sumber tersebut.
-
-| Sumber | Penggunaan |
+| Sumber | Bagian yang digunakan |
 | --- | --- |
-| [Microsoft Learn](https://learn.microsoft.com/en-us/training/paths/accelerate-app-development-using-github-copilot/) | Cakupan bantuan AI: analisis, dokumentasi, pengembangan, testing, dan perbaikan kode. |
-| [Simon Willison](https://simonwillison.net/2025/Mar/19/vibe-coding/) | Penggunaan istilah Vibe Coding tanpa review kode, kegunaan eksplorasi, dan pertimbangan risiko. |
-| [DeepLearning.AI: Vibe Coding 101](https://www.deeplearning.ai/courses/vibe-coding-101-with-replit) | Penggunaan istilah yang juga membahas planning, kebutuhan produk, debugging, dan iterasi. |
-| [DeepLearning.AI: Spec-Driven Development](https://www.deeplearning.ai/courses/spec-driven-development-with-coding-agents) | Spesifikasi dan alur plan, implement, verify. |
-| [DeepLearning.AI: Agent Skills](https://www.deeplearning.ai/courses/agent-skills-with-anthropic) | Skill sebagai panduan berulang, pemuatan sesuai kebutuhan, serta perbedaannya dari tools dan MCP. |
-| [OpenAI Best Practices](https://learn.chatgpt.com/guides/best-practices) | Konteks, tujuan, batas tugas, kriteria selesai, planning, testing, dan review. |
-| [Anthropic Best Practices](https://code.claude.com/docs/en/best-practices) | Panduan untuk model dibanding pembatasan yang ditegakkan, permission rules, dan sandbox. |
-| [OWASP LLM Top 10](https://genai.owasp.org/llm-top-10/) | Prompt injection, informasi sensitif, dan izin agent berlebihan. Penjelasan tambahan: [LLM01](https://genai.owasp.org/llmrisk/llm01-prompt-injection/). |
-| [Dokumentasi MCP](https://modelcontextprotocol.io/docs/getting-started/intro) | Definisi MCP sebagai standar koneksi aplikasi AI dengan tools dan sumber informasi. |
+| [GitHub: Review AI-generated code](https://docs.github.com/en/copilot/tutorials/review-ai-generated-code) | Functional checks, Verify context and intent, Spot AI-specific pitfalls. Bab 1, 8, 9, dan pembahasan simulasi. |
+| [GitHub: Prompt engineering](https://docs.github.com/en/copilot/concepts/prompting/prompt-engineering) | Konteks, contoh, pembagian tugas, dan penghindaran ambiguitas. Bab 3–5. |
+| [Anthropic: Building effective agents](https://www.anthropic.com/engineering/building-effective-agents) | Konsep siklus agent dan Coding agents. Detail tooling lama tidak dianggap petunjuk produk terbaru. |
+| [GitHub Spec Kit](https://github.com/github/spec-kit#spec-driven-development) | Specification, plan, tasks, implementation. Contoh pendekatan, bukan kewajiban semua tugas atau tutorial instalasi. |
+| [DeepLearning.AI: Spec-Driven Development with Coding Agents](https://www.deeplearning.ai/courses/spec-driven-development-with-coding-agents/) | Ringkasan dan silabus Feature specification, Feature validation, Project replanning. Tidak mengutip video yang belum diperiksa. |
+| [OpenCode V1: source agent](https://github.com/anomalyco/opencode/blob/v1.19.5/packages/opencode/src/agent/agent.ts) | Definisi build dan plan. Source digunakan untuk rincian izin karena halaman docs versi itu tidak seluruhnya cocok. |
+| [OpenCode V1: Rules](https://github.com/anomalyco/opencode/blob/v1.19.5/packages/web/src/content/docs/rules.mdx) | Example, Types, Referencing External Files. |
+| [OpenCode V1: Permissions](https://github.com/anomalyco/opencode/blob/v1.19.5/packages/web/src/content/docs/permissions.mdx) | Actions, Configuration, What Ask Does, Agents. Tidak mengajarkan default .env karena docs dan source berbeda. |
+| [OpenCode V1: Skills](https://github.com/anomalyco/opencode/blob/v1.19.5/packages/web/src/content/docs/skills.mdx) | Place files, Write frontmatter, Recognize tool description. |
+| [Agent Skills: Overview](https://agentskills.io/home) | Format skill dan progressive disclosure. |
+| [MDN: Server-side introduction](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side/First_steps/Introduction) | Client-side, server-side, request, dan response. |
+| [MDN: Using Fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#checking_response_status) dan [HTTP 422](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/422) | Perilaku Promise, response.ok, dan arti 422. success adalah kontrak contoh, bukan standar Fetch. |
+| [Git: git-diff](https://git-scm.com/docs/git-diff) | Description dan format patch. |
+| [OWASP: Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/) dan [Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/) | Akses berlebihan, persetujuan tindakan berdampak tinggi, dan instruksi tidak tepercaya. |
+| [Anthropic: Sycophancy](https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models) | Abstrak penelitian tentang mengikuti keyakinan pengguna dengan mengorbankan kebenaran. |
+| [PostgreSQL 18: Backup and Restore](https://www.postgresql.org/docs/18/backup.html) | Konsep pencadangan. Bukan bukti bahwa semua backup ikut terhapus saat instance dihapus. |
+| [Kode simulasi](examples/extracurricular-registration/example.js) | Kontrak isian, respons, dan frontend lokal. Aturan contoh tidak dianggap kebijakan semua sekolah. |
+
+### Status rujukan video sebelumnya
+
+Video referensi visual yang pernah diberikan pemateri tetap tercatat pada arah desain dan sumber aset. Video tersebut bukan sumber klaim teknis tentang coding agent. Video atau kursus tambahan hanya boleh dikutip setelah isi yang relevan dapat diperiksa; judul dan deskripsi video saja tidak cukup untuk membuat kutipan atau timestamp.

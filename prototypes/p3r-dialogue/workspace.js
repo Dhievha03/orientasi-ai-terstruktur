@@ -118,10 +118,21 @@
     const editor=$('#source-code');
     function captureSelection(event){
       const selection=window.getSelection();
-      const rowFor=node=>(node?.nodeType===Node.ELEMENT_NODE?node:node?.parentElement)?.closest('.code-line');
-      const anchor=rowFor(selection?.anchorNode),focus=rowFor(selection?.focusNode);
-      if(selection&&!selection.isCollapsed&&anchor&&focus&&editor.contains(anchor)&&editor.contains(focus)){
-        selectionAnchor=Number(anchor.dataset.line);selectionCursor=Number(focus.dataset.line);
+      if(selection&&!selection.isCollapsed){
+        if(!selection.rangeCount||!editor.contains(selection.anchorNode)&&!editor.contains(selection.focusNode))return;
+        const range=selection.getRangeAt(0);
+        const rows=[...editor.querySelectorAll('.code-line')].filter(row=>{
+          const code=row.querySelector('code');if(!range.intersectsNode(code))return false;
+          const line=document.createRange();line.selectNodeContents(code);
+          const overlap=range.cloneRange();
+          if(overlap.compareBoundaryPoints(Range.START_TO_START,line)<0)overlap.setStart(line.startContainer,line.startOffset);
+          if(overlap.compareBoundaryPoints(Range.END_TO_END,line)>0)overlap.setEnd(line.endContainer,line.endOffset);
+          return overlap.toString().length>0;
+        });
+        if(!rows.length)return;
+        const backward=selection.anchorNode===selection.focusNode?selection.anchorOffset>selection.focusOffset:(()=>{const direction=document.createRange();direction.setStart(selection.anchorNode,selection.anchorOffset);direction.setEnd(selection.focusNode,selection.focusOffset);return direction.collapsed;})();
+        selectionAnchor=Number(rows[backward?rows.length-1:0].dataset.line);
+        selectionCursor=Number(rows[backward?0:rows.length-1].dataset.line);
       }else{
         const row=event?.target.closest('.code-line');if(!row)return;
         const line=Number(row.dataset.line);
@@ -133,6 +144,11 @@
     editor.addEventListener('pointerup',captureSelection,events);
     document.addEventListener('selectionchange',()=>{if(saved.view==='code'&&!window.getSelection()?.isCollapsed)captureSelection();},events);
     $('#source-code').addEventListener('keydown',event=>{
+      if((event.ctrlKey||event.metaKey)&&!event.altKey&&event.key.toLowerCase()==='a'){
+        event.preventDefault();event.stopPropagation();
+        if(!editor.querySelector('.code-line'))return;
+        window.getSelection()?.selectAllChildren(editor);captureSelection();return;
+      }
       if(event.altKey||event.ctrlKey||event.metaKey)return;
       if(event.key==='Enter'){
         event.preventDefault();event.stopPropagation();
@@ -142,6 +158,7 @@
         event.preventDefault();event.stopPropagation();
         const last=source.split('\n').length-1;
         const next=event.key==='Home'?0:event.key==='End'?last:selectedCode?Math.max(0,Math.min(last,selectionCursor+(event.key==='ArrowDown'?1:-1))):0;
+        window.getSelection()?.removeAllRanges();
         if(!event.shiftKey||!selectedCode)selectionAnchor=next;
         selectionCursor=next;if(saved.focus?.kind==='code')saved.focus=null;selectRange(selectionAnchor,next);publish();
         editor.querySelector(`[data-line="${next}"]`)?.scrollIntoView({block:'nearest',inline:'nearest'});

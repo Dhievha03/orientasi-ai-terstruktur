@@ -14,7 +14,7 @@
   let busy=false,menuClosing=false,preview=0,noticeHandle,menuFocus;
   let storageAvailable=true;
   try {
-    const saved=JSON.parse(localStorage.getItem(key));
+    const saved=JSON.parse(sessionStorage.getItem(key));
     if(saved&&typeof saved==='object'){
       for(const name of ['notes','clean','transitions','waterMotion'])if(typeof saved[name]==='boolean')state[name]=saved[name];
       const index=deck.slides.findIndex(slide=>slide.id===saved.slideId);
@@ -28,7 +28,7 @@
   const opened=slide=>Boolean(state.reveals[slide.id]);
   const stepOf=slide=>state.steps[slide.id]||0;
 
-  function save(){try{localStorage.setItem(key,JSON.stringify({...state,slideId:current().id,deckVersion:deck.version}));}catch{storageAvailable=false;}}
+  function save(){try{sessionStorage.setItem(key,JSON.stringify({...state,slideId:current().id,deckVersion:deck.version}));}catch{storageAvailable=false;}}
   function notice(text){clearTimeout(noticeHandle);$('#notice').textContent=text;$('#notice').hidden=false;noticeHandle=setTimeout(()=>{$('#notice').hidden=true;},4000);}
   function header(slide,hideTitle=false){const chapter=deck.chapters.find(item=>item.id===slide.chapter);return `<span class="submenu-section" aria-hidden="true">${escape(chapter.menu)}</span><div class="slide-heading"><p class="eyebrow">${escape(slide.eyebrow)}</p>${hideTitle?'':`<h1 id="slide-title">${escape(slide.title)}</h1>`}</div>`;}
   function revealButton(slide,label='Tampilkan pembahasan'){return `<button id="reveal-button" class="action-button" data-reveal aria-expanded="${opened(slide)}" aria-controls="reveal-content"><span>${opened(slide)?'Tutup pembahasan':escape(label)}</span>${icon('arrow')}</button>`;}
@@ -38,32 +38,62 @@
   function proofImage(proof){return `<figure class="demo-proof"><img src="${escape(proof.src)}" width="504" height="210" alt="${escape(proof.alt)}" decoding="sync"><figcaption>${escape(proof.caption)}</figcaption></figure>`;}
   const money=value=>`Rp${new Intl.NumberFormat('id-ID').format(value)}`;
   function viewButtons(slide,selected){return materialSelector(slide.views,selected,'view-selector','view','Pilih bagian pembahasan');}
-  function itemNumber(index,roman=false){return `<span class="item-number" aria-hidden="true">${roman?['I','II','III'][index]:pad(index+1)}</span>`;}
+  function itemNumber(index,roman=false){return `<span class="item-number" aria-hidden="true">${roman?(['I','II','III','IV','V','VI'][index]||pad(index+1)):pad(index+1)}</span>`;}
   function numberedLabel(index,text){return `${itemNumber(index)}<span class="item-label">${escape(text)}</span>`;}
   function materialSelector(items,selected,className,attribute,label){return `<div class="${className} material-selector" role="group" aria-label="${escape(label)}">${items.map((item,index)=>`<button class="material-card numbered-heading" data-${attribute}="${index}" aria-label="${escape(item.label)}. ${escape(item.caption||item.title||'')}" aria-pressed="${selected===index}">${itemNumber(index,true)}<span class="item-label"><span class="material-selector-title">${escape(item.label)}</span><span class="material-selector-caption">${escape(item.caption||item.title||'')}</span></span></button>`).join('')}</div>`;}
 
   const renderers={
-    cover(slide){return `<div class="cover-composition"><div class="cover-type"><p class="eyebrow">${escape(slide.eyebrow)}</p><h1 id="slide-title" aria-label="${escape(slide.title)}"><span class="cover-intro">${escape(slide.intro)}</span><span class="cover-word">${escape(slide.headline)}</span></h1><p class="cover-subtitle">${escape(slide.subtitle)}</p></div><aside class="cover-device" aria-label="Alur kerja bersama AI"><span class="cover-side-word" aria-hidden="true">BELAJAR<br>PAKAI AI.</span><div class="cover-keywords">${slide.keywords.map(word=>`<span>${escape(word)}</span>`).join('')}</div></aside></div>`;},
-    roles(slide){return `${header(slide)}<div class="roles-layout"><section class="role-human"><span class="small-label">ARAH + KEPUTUSAN</span><h2>${escape(slide.human.title)}</h2><ul>${slide.human.items.map(text=>`<li>${escape(text)}</li>`).join('')}</ul></section><span class="role-cross" aria-hidden="true">×</span><section class="role-ai"><span class="small-label">BANTUAN + PELAKSANAAN</span><h2>${escape(slide.ai.title)}</h2><ul>${slide.ai.items.map(text=>`<li>${escape(text)}</li>`).join('')}</ul></section></div>${note(slide.conclusion)}`;},
-    comparison(slide){return `${header(slide)}<div class="comparison-content">${slide.introduction?`<p class="comparison-introduction">${escape(slide.introduction)}</p>`:''}<table class="comparison-table" data-columns="${slide.columns.length}"><caption class="sr-only">${escape(slide.title)}</caption><thead><tr>${slide.columns.map(column=>`<th scope="col">${escape(column)}</th>`).join('')}</tr></thead><tbody>${slide.rows.map(row=>`<tr><th scope="row">${escape(row[0])}</th>${row.slice(1).map(cell=>`<td>${escape(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${note(slide.footnote)}`;},
+    codeReview(slide){const signs={removed:'−',added:'+',context:' '};return `${header(slide)}<div class="review-code-layout"><div class="review-code-explanation">${slide.paragraphs.map(text=>`<p>${escape(text)}</p>`).join('')}</div><figure class="review-diff"><figcaption>${escape(slide.filename)}</figcaption><pre><code>${slide.lines.map(([kind,text])=>`<span class="review-diff-line review-diff-line--${kind}">${kind==='label'?`<span>${escape(text)}</span>`:`<b aria-hidden="true">${signs[kind]}</b><span class="sr-only">${kind==='removed'?'Baris dihapus: ':kind==='added'?'Baris ditambahkan: ':''}</span><span>${escape(text)}</span>`}</span>`).join('')}</code></pre></figure></div>${note(slide.note)}`;},
+    discussion(slide){
+      const selected=stepOf(slide),view=slide.views[selected],visible=opened(slide);
+      return `${header(slide)}<div class="discussion-layout"><section class="discussion-situation"><span class="small-label">SITUASI</span><p>${escape(slide.context)}</p><blockquote>${escape(slide.quote)}</blockquote><p class="discussion-prompt">${escape(slide.question)}</p>${revealButton(slide,'Buka pertimbangan')}</section><section class="discussion-options" aria-label="Pendekatan yang dapat dibahas"><div class="discussion-choices">${slide.views.map((choice,index)=>`<button class="discussion-choice" data-view="${index}" aria-pressed="${visible&&index===selected}" aria-controls="reveal-content">${itemNumber(index)}<span>${escape(choice.label)}</span></button>`).join('')}</div><div id="reveal-content" class="discussion-reading"${visible?'':' hidden'}><span class="small-label">${escape(view.caption)}</span><h2>${escape(view.title)}</h2><p>${escape(view.text)}</p><p class="discussion-condition">${escape(view.condition)}</p></div><p class="discussion-invitation"${visible?' hidden':''}>Pilih pendekatan untuk melihat pertimbangannya.</p></section></div>`;
+    },
+    concept(slide){return `${header(slide)}<div class="concept-layout"><div class="concept-explanation">${slide.paragraphs.map(text=>`<p>${escape(text)}</p>`).join('')}</div><section class="concept-example"><span class="small-label">${escape(slide.example.label)}</span><p>${escape(slide.example.text)}</p></section></div>${note(slide.note)}`;},
+    document(slide){return `${header(slide)}<p class="document-introduction">${escape(slide.introduction)}</p><div class="document-layout"><figure class="document-example"><figcaption>${escape(slide.filename)}</figcaption><pre><code>${escape(slide.code)}</code></pre></figure><p class="document-explanation">${escape(slide.explanation)}</p></div>`;},
+    cover(slide){return `<div class="cover-composition"><div class="cover-type"><p class="eyebrow">${escape(slide.eyebrow)}</p><h1 id="slide-title" class="cover-title" aria-label="${escape(slide.title)}">${slide.headline.split('\n').map(line=>`<span>${escape(line)}</span>`).join('')}</h1><p class="cover-subtitle">${escape(slide.subtitle)}</p></div><aside class="cover-device" aria-label="Alur kerja bersama AI"><span class="cover-side-word" aria-hidden="true">BELAJAR<br>PAKAI AI.</span><div class="cover-keywords">${slide.keywords.map(word=>`<span>${escape(word)}</span>`).join('')}</div></aside></div>`;},
+    roles(slide){return `${header(slide)}<div class="roles-layout"><section class="role-human"><span class="small-label">ARAH + KEPUTUSAN</span><h2>${escape(slide.human.title)}</h2><ul>${slide.human.items.map(text=>`<li>${escape(text)}</li>`).join('')}</ul></section>${slide.chapter==='dasar'?'':`<span class="role-cross" aria-hidden="true">×</span>`}<section class="role-ai"><span class="small-label">BANTUAN + PELAKSANAAN</span><h2>${escape(slide.ai.title)}</h2><ul>${slide.ai.items.map(text=>`<li>${escape(text)}</li>`).join('')}</ul></section></div>${note(slide.conclusion)}`;},
+    comparison(slide){
+      let introduction=slide.introduction?`<p class="comparison-introduction">${escape(slide.introduction)}</p>`:'';
+      if(slide.id==='makna-vibe-coding'){
+        const [context,result]=slide.introduction.split('“Berhasil”.');
+        introduction=`<div class="registration-contrast"><p>${escape(context.trim())}</p><p class="registration-claim">“Berhasil”</p><div class="registration-reality"><span class="small-label">HASIL SEBENARNYA</span><p>${escape(result.trim())}</p></div></div>`;
+      }
+      if(slide.id==='contoh-plan')return `${header(slide)}<div class="plan-reading"><div class="plan-explanation"><p class="plan-introduction">${escape(slide.introduction)}</p><p>${escape(slide.planExplanation)}</p></div><section class="plan-example"><h2>Contoh rencana</h2><p class="plan-scenario">${escape(slide.planScenario)}</p><ol class="plan-steps">${slide.rows.map(([number,text])=>`<li><span class="plan-step-number" aria-hidden="true">${escape(number)}</span><p>${escape(text)}</p></li>`).join('')}</ol></section>${note(slide.footnote)}</div>`;
+      if(slide.id==='micro-task')return `${header(slide)}<div class="plan-reading"><div class="plan-explanation"><p class="plan-introduction">${escape(slide.introduction)}</p><p>${escape(slide.taskExplanation)}</p></div><section class="plan-example task-example"><h2>Contoh task</h2><p class="task-statement">${escape(slide.taskTitle)}</p><dl>${slide.rows.map(([label,text])=>`<div><dt>${escape(label)}</dt><dd>${escape(text)}</dd></div>`).join('')}</dl></section>${note(slide.footnote)}</div>`;
+      const workflow=slide.id==='satu-model-workflow';
+      const kinds=['Cara penggunaan','Agent','Agent','Tindakan','Prosedur','Koneksi'];
+      const groups=workflow?[slide.rows.slice(0,3),slide.rows.slice(3)]:[slide.rows];
+      const rows=groups.map((group,groupIndex)=>`<tbody${workflow?` aria-label="${groupIndex?'Kemampuan pendukung':'Penggunaan dan agent'}"`:''}>${group.map((row,index)=>`<tr><th scope="row">${escape(row[0])}${workflow?`<small class="workflow-kind">${kinds[groupIndex*3+index]}</small>`:''}</th>${row.slice(1).map(cell=>`<td>${escape(cell)}</td>`).join('')}</tr>`).join('')}</tbody>`).join('');
+      return `${header(slide)}<div class="comparison-content">${introduction}<table class="comparison-table" data-columns="${slide.columns.length}"><caption class="sr-only">${escape(slide.title)}</caption><thead><tr>${slide.columns.map(column=>`<th scope="col">${escape(column)}</th>`).join('')}</tr></thead>${rows}</table></div>${note(slide.footnote)}`;
+    },
     situation(slide){return `${header(slide)}<div class="situation-layout">${slide.proof?proofImage(slide.proof):formIllustration(slide.input,slide.actual,'success')}<div class="situation-reading"><span class="small-label">KONDISI AWAL</span><p class="large-reading">${escape(slide.caption)}</p>${revealButton(slide,'Lihat hasil yang diharapkan')}<div id="reveal-content"${opened(slide)?'':' hidden'}>${finding(slide.reveal)}</div></div></div>`;},
     brief(slide){return `${header(slide)}<dl class="brief-layout">${slide.rows.map(([label,text],index)=>`<div><dt class="numbered-heading">${numberedLabel(index,label)}</dt><dd>${escape(text)}</dd></div>`).join('')}</dl>${note(slide.annotation)}`;},
-    ecosystem(slide){return `${header(slide)}<div class="ecosystem-layout">${slide.nodes.map((node,index)=>`<section><span class="small-label numbered-heading">${numberedLabel(index,index===0?'KENDALI KERJA':index===1?'RESPONS AI':'AKSES PROYEK')}</span><h2>${escape(node.title)}</h2><p>${escape(node.text)}</p><div class="ecosystem-examples">${escape(node.examples)}</div></section>`).join('')}<span class="ecosystem-link link-one" aria-hidden="true">↔</span><span class="ecosystem-link link-two" aria-hidden="true">↔</span></div>${note(slide.conclusion)}`;},
-    route(slide){return `${header(slide)}<div class="route-layout">${slide.steps.map(([label,text],index)=>`${index?'<span class="route-connector" aria-hidden="true">→</span>':''}<section class="route-card material-card numbered-heading">${itemNumber(index,true)}<div class="item-label"><h2 class="material-selector-title">${escape(label)}</h2><p class="material-selector-caption">${escape(text)}</p></div></section>`).join('')}</div>${note(slide.note)}`;},
+    ecosystem(slide){
+      if(slide.id==='peta-tools'){
+        return `${header(slide)}<div class="tools-map">${slide.nodes.map((node,index)=>`${index?`<div class="tools-map-link tools-map-link--${index}"><span><span class="tools-map-endpoints">Aplikasi / ${escape(node.title)}</span>${index===1?'Mengirim konteks':'Akses sesuai izin'}</span><span class="tools-map-arrow" aria-hidden="true">→</span></div>`:''}<section class="tools-map-node tools-map-node--${index}"><span class="small-label">${index===0?'PENGELOLA PEKERJAAN':index===1?'PEMROSES KONTEKS':'BAHAN DAN HASIL KERJA'}</span><h2>${escape(node.title)}</h2><p>${escape(node.text)}</p><div class="tools-map-example">${escape(node.examples)}</div></section>`).join('')}</div>${note(slide.conclusion)}`;
+      }
+      return `${header(slide)}<div class="ecosystem-layout">${slide.nodes.map((node,index)=>`<section><span class="small-label numbered-heading">${numberedLabel(index,index===0?'KENDALI KERJA':index===1?'RESPONS AI':'AKSES PROYEK')}</span><h2>${escape(node.title)}</h2><p>${escape(node.text)}</p><div class="ecosystem-examples">${escape(node.examples)}</div></section>`).join('')}<span class="ecosystem-link link-one" aria-hidden="true">↔</span><span class="ecosystem-link link-two" aria-hidden="true">↔</span></div>${note(slide.conclusion)}`;
+    },
+    route(slide){
+      if(slide.id==='koneksi-tools'){
+        return `${header(slide)}<div class="model-route"><div class="model-route-main">${slide.steps.map(([label,text],index)=>`${index?`<span class="model-route-arrow" aria-hidden="true">${icon('arrow')}</span>`:''}<section class="model-route-node${index===1?' model-route-node--optional':''}"><span class="small-label">${index===0?'APLIKASI':index===1?'OPSIONAL':'PEMROSES PERMINTAAN'}</span><h2>${escape(label)}</h2><p>${escape(text)}</p></section>`).join('')}</div><div class="model-route-direct"><span class="small-label">TANPA ROUTER</span><p><span>${escape(slide.steps[0][0])}</span><span class="model-route-arrow" aria-hidden="true">${icon('arrow')}</span><span>${escape(slide.steps[2][0])}</span></p></div></div>${note(slide.note)}`;
+      }
+      return `${header(slide)}<div class="route-layout">${slide.steps.map(([label,text],index)=>`${index?'<span class="route-connector" aria-hidden="true">→</span>':''}<section class="route-card material-card numbered-heading">${itemNumber(index,true)}<div class="item-label"><h2 class="material-selector-title">${escape(label)}</h2><p class="material-selector-caption">${escape(text)}</p></div></section>`).join('')}</div>${note(slide.note)}`;
+    },
     prompt(slide){const selected=stepOf(slide);return `${header(slide)}<div class="prompt-layout">${materialSelector(slide.fragments,selected,'prompt-selector','fragment','Bagian instruksi')}<div class="prompt-reading"><span class="small-label">CONTOH / ${escape(slide.fragments[selected].label)}</span><blockquote>${escape(slide.fragments[selected].text)}</blockquote><button class="text-button" data-open-prompt>Instruksi lengkap ${icon('arrow')}</button></div></div>${note(slide.note)}`;},
     context(slide){return `${header(slide)}<div class="context-layout"><div class="context-core"><span class="small-label">KONTEKS</span><h2>${escape(slide.center)}</h2><span class="context-mark" aria-hidden="true">↗</span></div><dl>${slide.items.map(([label,text])=>`<div><dt>${escape(label)}</dt><dd>${escape(text)}</dd></div>`).join('')}</dl></div>${note(slide.conclusion)}`;},
     criteria(slide){return `${header(slide)}<div class="criteria-layout">${slide.checks.map(([label,text],index)=>`<section>${itemNumber(index)}<div><h2>${escape(label)}</h2><p>${escape(text)}</p></div>${icon('check')}</section>`).join('')}</div>${note(slide.note)}`;},
     instructionLayers(slide){return `${header(slide)}<div class="layers-layout">${slide.layers.map((layer,index)=>`<section><div class="layer-top"><span class="small-label numbered-heading">${numberedLabel(index,layer.tag)}</span></div><h2>${escape(layer.heading)}</h2><p>${escape(layer.example)}</p></section>`).join('')}</div>`;},
     checkpoints(slide){return `${header(slide)}<ol class="checkpoints-layout">${slide.steps.map(([label,text],index)=>`<li><h2 class="numbered-heading">${numberedLabel(index,label)}</h2><p>${escape(text)}</p></li>`).join('')}</ol>`;},
     feedback(slide){return `${header(slide)}<div class="feedback-layout"><div class="feedback-vague"><span class="small-label">TERLALU UMUM</span><p>${escape(slide.vague)}</p></div><div class="feedback-specific"><span class="small-label">BERDASARKAN KEJADIAN</span><blockquote>${escape(slide.specific)}</blockquote></div><div class="feedback-actions">${revealButton(slide,'Mengapa lebih membantu?')}</div><div id="reveal-content"${opened(slide)?'':' hidden'}>${finding(slide.reveal)}</div></div>`;},
-    boundaries(slide){return `${header(slide)}<div class="boundaries-layout"><p class="boundary-statement">${escape(slide.main)}</p><dl>${slide.items.map(([label,text])=>`<div><dt>${escape(label)}</dt><dd>${escape(text)}</dd></div>`).join('')}</dl></div>`;},
+    boundaries(slide){return `${header(slide)}<div class="agent-flow"><ol class="agent-steps">${slide.steps.map(([label,text],index)=>`<li><span class="agent-step-number">0${index+1}</span><h2>${escape(label)}</h2><p>${escape(text)}</p></li>`).join('')}</ol><section class="agent-outcomes" aria-label="Hasil evaluasi"><span class="small-label">HASIL EVALUASI</span>${slide.outcomes.map(([label,text])=>`<div><strong>${escape(label)}</strong><p>${escape(text)}</p></div>`).join('')}</section></div>`;},
     assignment(slide){return `${header(slide)}<div class="assignment-layout"><div><span class="small-label">PEKERJAAN YANG DIMINTA</span><h2>${escape(slide.task)}</h2></div><div><ul>${slide.scope.map(text=>`<li>${escape(text)}</li>`).join('')}</ul><p class="assignment-aside">${escape(slide.aside)}</p></div></div>${note(slide.note)}`;},
     workflow(slide){return `${header(slide)}<ol class="workflow-layout">${slide.stages.map((stage,index)=>`<li><h2 class="numbered-heading">${numberedLabel(index,stage)}</h2></li>`).join('')}</ol>${note(slide.note)}`;},
     mission(slide){return `<div class="mission-layout"><p class="eyebrow">${escape(slide.eyebrow)}</p><h1 id="slide-title" aria-label="${escape(slide.title)}">${escape(slide.headline).replace(/\n/g,'<br>')}</h1><div class="mission-bottom"><p>${escape(slide.subtitle)}</p><span>${escape(slide.note)}</span></div><div class="mission-moon" aria-hidden="true">${calendar.moon(1)}</div></div>`;},
-    conversation(slide){const at=stepOf(slide);return `${header(slide)}<div class="conversation-layout"><aside><span class="small-label">SIMULASI PERCAKAPAN</span><div class="conversation-count"><strong>${pad(at+1)}</strong><span>/ ${pad(slide.turns.length)}</span></div><p>Penugasan<br>Rencana AI<br>Penilaian</p></aside><section class="conversation-stage"><span class="speaker-label${at===1?' speaker-ai':''}">${escape(slide.turns[at].role)}</span><blockquote>${escape(slide.turns[at].text)}</blockquote><div class="conversation-actions"><button class="text-button" data-turn-back${at===0?' disabled':''}>Sebelumnya</button><button id="reveal-button" class="action-button" data-turn-next${at===slide.turns.length-1?' disabled':''}>${at===0?'Lihat rencana AI':at===1?'Lihat penilaian':'Pembahasan selesai'}${icon('arrow')}</button></div></section></div>`;},
+    conversation(slide){const at=stepOf(slide);return `${header(slide)}<div class="conversation-layout"><aside><div class="conversation-count"><strong>${pad(at+1)}</strong><span>/ ${pad(slide.turns.length)}</span></div><p>${(slide.labels||['Penugasan','Rencana AI','Penilaian']).map(escape).join('<br>')}</p></aside><section class="conversation-stage"><span class="speaker-label${at===1?' speaker-ai':''}">${escape(slide.turns[at].role)}</span><blockquote>${escape(slide.turns[at].text)}</blockquote><div class="conversation-actions"><button class="text-button" data-turn-back${at===0?' disabled':''}>Sebelumnya</button><button id="reveal-button" class="action-button" data-turn-next${at===slide.turns.length-1?' disabled':''}>${at<slide.turns.length-1?'Lanjutkan contoh':'Contoh selesai'}${icon('arrow')}</button></div></section></div>${note(slide.note)}`;},
     scopeCase(slide){return `${header(slide)}<div class="scope-layout"><span class="small-label">${escape(slide.proposalLabel||'USULAN AI / SIMULASI')}</span><blockquote>${escape(slide.proposal)}</blockquote><p>${escape(slide.question)}</p>${revealButton(slide)}<div id="reveal-content"${opened(slide)?'':' hidden'}>${finding(slide.reveal)}</div></div>`;},
     outcome(slide){const at=opened(slide),shown=at?slide.after:slide.before;return `${header(slide)}<div class="outcome-layout"><div><span class="small-label outcome-label">${escape(shown.label)}</span>${shown.proof?proofImage(shown.proof):formIllustration(shown.input,shown.message,at?'error':'success')}</div><div class="outcome-explanation"><h2>${escape(shown.explanation)}</h2><button id="reveal-button" class="action-button" data-reveal aria-expanded="${at}">${escape(at?slide.hideLabel||'Lihat sebelum perbaikan':slide.showLabel||'Lihat hasil perbaikan')}${icon('arrow')}</button></div></div>${note(slide.note)}`;},
-    evidence(slide){return `${header(slide)}<div class="evidence-layout"><div class="claim"><span class="small-label">${escape(slide.claimLabel||'KLAIM AI')}</span><blockquote>${escape(slide.claim)}</blockquote></div><div class="evidence-facts">${slide.facts.map((fact,index)=>`<section class="fact fact-${index}"><h2 class="small-label numbered-heading">${numberedLabel(index,fact.status)}</h2><p>${escape(fact.text)}</p>${fact.code?`<pre><code>${escape(fact.code)}</code></pre>`:''}</section>`).join('')}</div><div class="evidence-actions">${revealButton(slide,'Lihat keputusan')}</div><div id="reveal-content"${opened(slide)?'':' hidden'}>${finding(slide.reveal)}</div></div>${note(slide.note)}`;},
+    evidence(slide){return `${header(slide)}<div class="evidence-layout"><div class="claim"><span class="small-label">${escape(slide.claimLabel||'KLAIM AI')}</span><blockquote>${escape(slide.claim)}</blockquote></div><div class="evidence-facts"${opened(slide)?' hidden':''}>${slide.facts.map((fact,index)=>`<section class="fact fact-${index}"><h2 class="small-label numbered-heading">${numberedLabel(index,fact.status)}</h2><p>${escape(fact.text)}</p>${fact.code?`<pre><code>${escape(fact.code)}</code></pre>`:''}</section>`).join('')}</div><div class="evidence-actions">${revealButton(slide,'Lihat keputusan')}</div><div id="reveal-content"${opened(slide)?'':' hidden'}>${finding(slide.reveal)}</div></div>${note(slide.note)}`;},
     request(slide){return `${header(slide)}<div class="request-layout"><blockquote>${escape(slide.quote)}</blockquote><div>${slide.highlights.map((label,index)=>`<span><b>${pad(index+1)}</b>${escape(label)}</span>`).join('')}</div></div>`;},
     decision(slide){return `${header(slide)}<div class="decision-layout"><ol>${slide.conditions.map((text,index)=>`<li class="numbered-heading">${numberedLabel(index,text)}</li>`).join('')}</ol><div class="decision-conclusion"><span class="small-label">${escape(slide.resultLabel||'DASAR PENERIMAAN')}</span><h2>${escape(slide.conclusion)}</h2>${slide.proof?proofImage(slide.proof):''}</div></div>${note(slide.note)}`;},
     report(slide){return `${header(slide)}<div class="report-layout">${slide.sections.map((section,index)=>`<section><h2 class="numbered-heading">${numberedLabel(index,section.label)}</h2><p>${escape(section.text)}</p></section>`).join('')}</div>${note(slide.note)}`;},
@@ -72,7 +102,7 @@
     storyScene(slide){return story.renderScene(slide);},
     sceneBrief(slide){return `${header(slide)}${story.renderBrief(slide)}`;},
     storyConclusion(slide){const complete=story.isComplete(state.dialogues[slide.sceneId],slide.sceneKey);return `${header(slide,slide.hideHeading&&complete)}${story.renderConclusion(slide,state.dialogues[slide.sceneId],stepOf(slide))}`;},
-    explorer(slide){const selected=stepOf(slide),view=slide.views[selected];return `${header(slide)}<div class="explorer-layout${slide.variant==='flow'?' explorer-layout--flow':''}">${viewButtons(slide,selected)}<section class="explorer-panel" aria-label="Bagian pembahasan terpilih"><h2>${escape(view.title)}</h2><p>${escape(view.text)}</p><ul>${view.items.map(item=>`<li>${escape(item)}</li>`).join('')}</ul></section></div>${note(slide.note)}`;},
+    explorer(slide){const selected=stepOf(slide),view=slide.views[selected];return `${header(slide)}<div class="explorer-layout${slide.variant==='flow'?' explorer-layout--flow':''}">${viewButtons(slide,selected)}<section class="explorer-panel" aria-label="Bagian pembahasan terpilih"><h2>${escape(view.title)}</h2>${view.example?`<dl class="explorer-example">${view.example.map(([label,text])=>`<div><dt>${escape(label)}</dt><dd>${escape(text)}</dd></div>`).join('')}</dl>`:''}<p>${escape(view.text)}</p><ul>${view.items.map(item=>`<li>${escape(item)}</li>`).join('')}</ul></section></div>${note(slide.note)}`;},
     caseProblem(slide){return `${header(slide)}<div class="case-problem-layout"><p class="case-problem-context">${escape(slide.context)}</p><div class="case-metrics">${slide.statements.map(([label,value],index)=>`<section><span class="small-label">${escape(label)}</span><strong class="${index===0?'case-reported':'case-reference'}">${escape(value)}</strong></section>`).join('')}</div><h2>${escape(slide.question)}</h2><span class="case-data-caption">${escape(deck.caseStudy.label)}</span></div>`;},
     caseAnalysis(slide){const selected=stepOf(slide),view=slide.views[selected],rows=deck.caseStudy.transactions;
       const all=rows.reduce((sum,row)=>sum+row.amount,0),eligible=rows.filter(row=>row.status==='completed').reduce((sum,row)=>sum+row.amount,0);
@@ -88,8 +118,14 @@
     const scroll=$('#stage').scrollTop;
     article.className=`slide slide--${slide.type}${chapter.moon>=1?' is-full-moon':''}`;
     article.dataset.slideId=slide.id;article.setAttribute('aria-labelledby','slide-title');article.innerHTML=renderers[slide.type](slide);
+    if(slide.type!=='cover'&&slide.type!=='storyScene'){
+      const content=document.createElement('div');
+      content.className='slide-content';
+      [...article.children].filter(child=>!child.matches('.submenu-section,.slide-heading')).forEach(child=>content.append(child));
+      article.append(content);
+    }
     story.mount(slide);
-    document.body.dataset.slideType=slide.type;document.body.classList.toggle('full-moon-material',chapter.moon>=1);
+    document.body.dataset.slideType=slide.type;document.body.dataset.chapter=slide.chapter;document.body.classList.toggle('full-moon-material',chapter.moon>=1);
     $('#chapter-label').textContent=pad(chapterIndex()+1);$('#chapter-name').textContent=chapter.name;
     $('#phase-moon').innerHTML=calendar.moon(chapter.moon,chapter.waning);
     const local=deck.slides.filter(item=>item.chapter===chapter.id);$('#local-counter').textContent=`SLIDE ${local.findIndex(item=>item.id===slide.id)+1} DALAM BAB`;
@@ -112,12 +148,13 @@
   }
   function reveal(){
     if(current().type==='conversation'){changeStep(1);return;}
-    if(!current().reveal&&current().type!=='outcome')return;
+    if(!current().reveal&&current().type!=='outcome'&&current().type!=='discussion')return;
     state.reveals[current().id]=!opened(current());refreshAction('#reveal-button');
     $('#announcer').textContent=opened(current())?'Pembahasan ditampilkan.':'Pembahasan disembunyikan.';
   }
   function changeStep(delta){
     if(current().type==='storyScene'){story.send({action:'advance'});return;}
+    if(current().type==='discussion'&&!opened(current())){reveal();return;}
     const count=current().turns?.length||current().fragments?.length||current().views?.length||0;
     const next=Math.max(0,Math.min(count-1,stepOf(current())+delta));
     if(next===stepOf(current()))return;
@@ -155,7 +192,7 @@
   function previewMenu(index){
     preview=index;window.TEFA_PAUSE.select(index);
   }
-  function applyWater(){window.TEFA_WATER?.setFullMoon(false);window.TEFA_WATER?.setMotion(state.waterMotion&&!reduced.matches&&$('#chapter-menu').open&&!menuClosing);}
+  function applyWater(){window.TEFA_WATER?.setFullMoon(false);window.TEFA_WATER?.setMotion(state.waterMotion&&!reduced.matches&&$('#chapter-menu').open&&!menuClosing);window.TEFA_PAUSE?.setMotion(motion()&&!menuClosing);}
   function openMenu(){
     if(busy||calendar.isRunning()||$('#chapter-menu').open)return;
     closeAllDialogs();menuFocus=document.activeElement;
@@ -214,13 +251,13 @@
     if(selector&&!selector.contains(event.relatedTarget))selector.querySelector('.is-hovered')?.classList.remove('is-hovered');
   });
   $('#slide').addEventListener('click',event=>{
-    if(event.target.closest('[data-start-scene]'))navigate(state.index+1);
+    if(event.target.closest('[data-start-scene]'))navigate(deck.slides.findIndex(slide=>slide.type==='storyScene'&&slide.sceneKey===current().sceneKey));
     else if(event.target.closest('[data-return-story],[data-repeat-story]')){const id=current().sceneId;if(event.target.closest('[data-repeat-story]')){state.dialogues[id]=story.restartSnapshot(current().sceneKey);state.steps[current().id]=0;}navigate(deck.slides.findIndex(slide=>slide.id===id));}
     else if(event.target.closest('[data-reveal]'))reveal();
     else if(event.target.closest('[data-turn-next]'))changeStep(1);
     else if(event.target.closest('[data-turn-back]'))changeStep(-1);
     else if(event.target.closest('[data-open-prompt]'))openDialog('#prompt-dialog');
-    else {const view=event.target.closest('[data-view]');if(view){state.steps[current().id]=Number(view.dataset.view);refreshAction(`[data-view="${view.dataset.view}"]`);$('#announcer').textContent=current().views[Number(view.dataset.view)].title;return;}const button=event.target.closest('[data-fragment]');if(button){state.steps[current().id]=Number(button.dataset.fragment);refreshAction(`[data-fragment="${button.dataset.fragment}"]`);const fragment=current().fragments[Number(button.dataset.fragment)];$('#announcer').textContent=fragment.title||fragment.text;}}
+    else {const view=event.target.closest('[data-view]');if(view){state.steps[current().id]=Number(view.dataset.view);if(current().type==='discussion')state.reveals[current().id]=true;refreshAction(`[data-view="${view.dataset.view}"]`);$('#announcer').textContent=current().views[Number(view.dataset.view)].title;return;}const button=event.target.closest('[data-fragment]');if(button){state.steps[current().id]=Number(button.dataset.fragment);refreshAction(`[data-fragment="${button.dataset.fragment}"]`);const fragment=current().fragments[Number(button.dataset.fragment)];$('#announcer').textContent=fragment.title||fragment.text;}}
   });
   $('#menu-button').addEventListener('click',openMenu);$('#close-menu').addEventListener('click',()=>closeMenu());
   $('#chapter-menu').addEventListener('cancel',event=>{event.preventDefault();closeMenu();});
@@ -262,7 +299,7 @@
     }
     if(document.querySelector('dialog[open]'))return;
     const key=event.key.toLowerCase();
-    if(['arrowup','arrowdown'].includes(key)&&$('#slide .material-selector')){
+    if(['arrowup','arrowdown'].includes(key)&&$('#slide .material-selector,#slide .discussion-choices')){
       event.preventDefault();
       if(!event.repeat)changeStep(key==='arrowdown'?1:-1);
       return;

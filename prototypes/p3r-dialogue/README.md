@@ -43,7 +43,7 @@ Instruksi perbaikan dijawab dengan Baik, sudah saya perbaiki, diikuti bagian yan
 
 Ucapan User sebelum keputusan akhir berasal dari pilihan. Adegan akibat dapat mempunyai reaksi User yang sudah ditentukan naskah. User memakai saya dan kamu. AI memakai saya dan Anda. Mereka dapat membantah, menyetujui dugaan secara keliru, atau mengakui kesalahan. Saat memilih, User netral dan textbox tetap terlihat dengan kalimat pengantar sesuai konteks. Pengantar ini bukan pesan yang dikirim dan tidak menambah request atau Log. Narator tanpa portrait atau ekspresi.
 
-Satu ucapan User atau respons AI dapat terdiri dari beberapa textbox berurutan. Semua bagian dibaca manual melalui Lanjut. Pertanyaan kode memakai 1 poin per 15 baris source tidak kosong, dibulatkan ke atas, minimal 1 dan maksimal 2 poin per pertanyaan. HTML, CSS, dan JS memakai aturan yang sama. Rentang berasal dari bukti pemilihan kode yang divalidasi terhadap source saat pertanyaan dikirim. Membuka pilihan dan Lanjut antartextbox tidak menambah biaya. Chat selain pertanyaan kode memakai 1 poin dan keputusan deploy gratis. Snapshot memutar ulang biaya yang sama tanpa mengurangi poin lagi saat restore.
+Satu ucapan User atau respons AI dapat terdiri dari beberapa textbox berurutan. Semua bagian dibaca manual melalui Lanjut. Pertanyaan kode memakai 1 poin per 15 baris source tidak kosong, dibulatkan ke atas, minimal 1 poin per pertanyaan. Biaya tidak lagi dibatasi 2 poin. HTML, CSS, dan JS memakai aturan yang sama. Rentang berasal dari bukti pemilihan kode yang divalidasi terhadap source saat pertanyaan dikirim. Membuka pilihan dan Lanjut antartextbox tidak menambah biaya. Chat selain pertanyaan kode memakai 1 poin dan keputusan deploy gratis. Snapshot memutar ulang biaya dari rentang yang tersimpan tanpa mengurangi poin lagi saat restore.
 
 ## Dialog hening dan respons backup
 
@@ -81,7 +81,7 @@ Lima belas pemeriksaan layout lulus pada 390/768/1024/1366/1468/1920, termasuk p
 
 Pembuka memakai poin pertama dengan tampilan bar awal penuh. Batas 12 poin memakai isi bar (12-used)/11, dibatasi 0 sampai 1. Field requests pada frame menyimpan total poin, bukan jumlah pesan. Total 8–9 mulai panas, 10 makin terganggu, 11 paling parah, dan pertanyaan yang mencapai 12 ditolak sebelum diproses. Pertanyaan 2 poin pada total 10 atau 11 berakhir pada 12, bukan 13. Pengiriman formulir, navigasi, deploy, Lanjut antarbagian, dan adegan akibat gratis. Reset nuklir tetap diproses pada batas tersebut.
 
-Rute pembahasan tiga masalah dan desain rapi mencapai ready pada 8 poin jika tiap bagian kode dipilih terarah. Memilih seluruh HTML untuk pembahasan isian membuat rute yang sama memakai 9 poin. Metadata pilihan menyimpan requestCost serta codeLines agar biaya dapat ditelusuri dari hasil replay.
+Rute pembahasan tiga masalah dan desain rapi mencapai ready pada 8 poin jika tiap bagian kode dipilih terarah. Memilih rentang lebih luas menambah biaya sesuai jumlah baris tidak kosong. Metadata pilihan menyimpan requestCost serta codeLines agar biaya dapat ditelusuri dari hasil replay.
 
 Gangguan disisipkan pada kata bahasa alami di berbagai posisi, termasuk tengah kalimat dan bagian berikutnya dari respons multipart. Tingkat yang lebih tinggi menambah jeda, pengulangan suku kata, dan BZZRRT atau KRRZZT. Variasinya deterministik agar restore tetap sama. Istilah kode seperti response.ok, success, errors, dan form.reset tidak dipecah.
 

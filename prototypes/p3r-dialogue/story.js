@@ -359,6 +359,8 @@
     const previousSpeaker = mode === 'dialog' ? `${scene.dataset.speaker}:${scene.dataset.pupil||''}` : null;
     clearTurnMotion();
     setMode('dialog');
+    $('#code-reference').textContent=turn.codeReference||'';
+    $('#code-reference').hidden=!turn.codeReference;
     scene.dataset.speaker = turn.speaker;
     scene.dataset.reactionOnly=String(Boolean(turn.visualOnly));
     scene.dataset.silentLine=String(/^(?:\.{3}|…)$/.test(turn.text.trim()));
@@ -387,6 +389,8 @@
     writeText(frame.prompt||previous?.text||'');
     completeText();
     setMode('choice');
+    $('#code-reference').textContent=frame.codeReference||'';
+    $('#code-reference').hidden=!frame.codeReference;
     scene.dataset.reactionOnly='false';
     scene.dataset.silentLine='false';
     scene.dataset.speaker = 'user';
@@ -399,7 +403,8 @@
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.choice = response.id;
-      button.textContent = response.text;
+      button.textContent = response.choiceLabel||response.text;
+      if(response.choiceLabel)button.title=response.text;
       button.addEventListener('click', () => selectResponse(response));
       button.addEventListener('focus', () => highlightChoice(button));
       button.addEventListener('pointermove',event=>{
@@ -511,8 +516,10 @@
     $('#conclusion').classList.toggle('conclusion--micro',Boolean(definition.autoConclusion));
     if(definition.autoConclusion){
       const labels=content.labels;
-      $('#conclusion').innerHTML=`<div class="conclusion-heading"><h2 id="conclusion-title" tabindex="-1"></h2><p id="conclusion-outcome" class="conclusion-outcome"></p><button class="secondary-button" type="button" id="retry-choice">Ulangi</button></div><div class="conclusion-body"><div class="conclusion-tabs" role="group" aria-label="Bagian hasil">${labels.map((label,index)=>`<button type="button" data-reading="${index}" aria-pressed="${index===0}">${label}</button>`).join('')}</div><div class="conclusion-reading-viewport" tabindex="0" role="region" aria-label="${labels[0]}"><p id="conclusion-reading"></p><ol id="decision-history" class="decision-history" aria-label="Riwayat pilihan" hidden></ol></div></div>`;
+      $('#conclusion').innerHTML=`<div class="conclusion-heading"><h2 id="conclusion-title" tabindex="-1"></h2><p id="conclusion-outcome" class="conclusion-outcome"></p><p id="conclusion-verification" class="conclusion-outcome" hidden></p><button class="secondary-button" type="button" id="retry-choice">Ulangi</button></div><div class="conclusion-body"><div class="conclusion-tabs" role="group" aria-label="Bagian hasil">${labels.map((label,index)=>`<button type="button" data-reading="${index}" aria-pressed="${index===0}">${label}</button>`).join('')}</div><div class="conclusion-reading-viewport" tabindex="0" role="region" aria-label="${labels[0]}"><p id="conclusion-reading"></p><ol id="decision-history" class="decision-history" aria-label="Riwayat pilihan" hidden></ol></div></div>`;
       $('#conclusion-outcome').textContent=content.consequence;
+      $('#conclusion-verification').hidden=!content.verification;
+      $('#conclusion-verification').textContent=content.verification||'';
       $('#conclusion-reading').textContent=content.reason;
       document.querySelectorAll('[data-reading]').forEach(button=>button.addEventListener('click',()=>{
         const index=Number(button.dataset.reading);

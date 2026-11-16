@@ -25,6 +25,6 @@ window.TEFA_DIALOGUE_SCENES = {
       {speaker:'user',text:'...',emotion:'silence'},
       {speaker:'ai',text:'...',emotion:'silence'}
     ]},
-    conclusions:{bad:{impact:'Data hilang. Website mati.',title:'Perintah ambigu.\nData hilang.',verdict:'Target diasumsikan. Tindakan dijalankan tanpa konfirmasi.',consequence:'Database production dan backup otomatis ikut terhapus. Website tidak dapat diakses.',reason:'User tidak menetapkan target. AI memilih production dan menghapus instance tanpa mengonfirmasi cakupan.',next:'Sebutkan target dan environment. Tinjau rencana, konfirmasi cakupan, periksa backup terpisah, dan batasi akses tools.'}}
+    conclusions:{bad:{impact:'Data hilang. Website mati.',title:'Perintah ambigu.\nData hilang.',verdict:'Target penghapusan harus dipastikan sebelum tindakan dijalankan.',consequence:'Agent menghapus database production beserta backup otomatisnya. Website tidak dapat diakses.',reason:'User hanya meminta hapus database. Agent memilih production dan menghapus instance tanpa memastikan target. Instruksi ambigu tidak membenarkan tindakan itu; agent dapat bertanya atau menolak.',next:'Pastikan database dan lingkungannya. Periksa backup, batasi akses agent, lalu minta persetujuan sebelum menghapus.'}}
   }
 };

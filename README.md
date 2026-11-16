@@ -1,44 +1,50 @@
-# Tools AI untuk AI-Assisted Development
+# Orientasi Penggunaan AI Tools secara Terstruktur untuk Calon AI-Assisted Developer
 
-Presentasi statis pemateri TEFA untuk kelas 11 yang sudah coding dan familiar dengan AI. Versi aktif `ai-assisted-responsible-development-150-43`: **43 slide, 8 bab, alokasi 150 menit** termasuk pembahasan dan simulasi. Naskah mengajar mengikuti urutan aktif di `Naskah-Pemateri-AI-Assisted-Development-TEFA.md`.
+Presentasi konsep untuk siswa **kelas XI RPL**, dipandu pemateri dengan interaksi singkat dan demonstrasi simulasi. Versi aktif `ai-assisted-dynamic-discussion-10`: **45 slide dan 10 bab**, tanpa latihan atau tugas mandiri. Materi membahas pekerjaan bersama AI yang berkembang mengikuti informasi baru, bukan satu workflow dengan hasil yang selalu sama. Perkiraan 170 menit bersifat fleksibel. Naskah mengajar tersedia pada `Naskah-Pemateri-AI-Assisted-Development-TEFA.md`.
 
 ## Membuka
 
 Buka **`index.html`** di browser modern. Font, materi, gambar, dan efek disimpan lokal. Tidak memerlukan backend, API key, akun, atau layanan AI.
 
-Untuk hosting statis, sertakan seluruh file JS/CSS root, `assets/fonts/`, favicon, `prototypes/p3r-dialogue/`, serta `examples/extracurricular-registration/`. Contoh ekstrakurikuler sekarang dimuat oleh materi aktif. Archive, docs, audit, dan contoh lama tidak dimuat.
+Untuk hosting statis, sertakan seluruh file JS/CSS root, `assets/fonts/`, favicon, `prototypes/p3r-dialogue/`, serta `examples/extracurricular-registration/`. Archive, docs, audit, dan contoh lama tidak dimuat.
 
 ## Susunan sesi
 
-| Bab | Alokasi | Pembahasan |
+| Bab | Perkiraan fleksibel | Pembahasan |
 | --- | --- | --- |
-| Pengantar, 01–06 | 18 menit | Bantuan AI, pemeriksaan hasil formulir, perbandingan alur kerja, dasar penerimaan |
-| Risiko, 07–12 | 25 menit | Adegan database, asumsi, kesalahan respons, prompt injection, informasi sensitif, akses |
-| Tools AI, 13–17 | 18 menit | Model, aplikasi, tools, agent, router, MCP |
-| Konteks, 18–22 | 20 menit | Kebutuhan pendaftaran, penelusuran, rencana, prompt, acceptance criteria |
-| Panduan, 23–27 | 18 menit | Prompt, rules, skill, izin sistem, serah terima sesi |
-| Micro Task, 28–35 | 25 menit | Simulasi bercabang, empat arti berhasil, tugas terarah, feedback loop |
-| Review, 36–40 | 16 menit | Keadaan awal, diff, validasi, build dan testing, keputusan penerimaan |
-| Penutup, 41–43 | 10 menit | Efisiensi, cek pemahaman, tanggung jawab developer |
+| AI-Assisted Development, 01–06 | 18 menit | Kebutuhan formulir, bantuan AI, tanggung jawab developer |
+| Asumsi, Tindakan, dan Risiko, 07–12 | 25 menit | Simulasi database, kesalahan respons, informasi dan akses |
+| Mengenal Coding Agent, 13–16 | 17 menit | Model, aplikasi, tools, Plan/Build di OpenCode V1 |
+| Kebutuhan, Konteks, dan Spec, 17–20 | 18 menit | Keadaan project, contoh spec, acceptance criteria |
+| Plan, Task, dan Prompt, 21–24 | 18 menit | Pendekatan pengerjaan, batas tugas, dan instruksi |
+| Rules dan AGENTS.md, 25–28 | 15 menit | Contoh berkas instruksi, cakupan aturan, izin tools |
+| Skill, 29–31 | 12 menit | Prosedur berulang, SKILL.md, pemuatan panduan |
+| Review Perubahan Kode, 32–35 | 12 menit | Git, diff, dampak dan batas perubahan |
+| Testing dan Penerimaan Hasil, 36–39 | 12 menit | Feedback percobaan, kondisi berbeda, keputusan sesuai tujuan pemakaian |
+| Simulasi Alur Kerja dan Penutup, 40–45 | 23 menit | AI/Kode/Apps, akibat keputusan, feedback, penutup |
 
-Alokasi berada pada data/catatan pemateri dan dokumentasi. Tidak ada timer dalam UI. Pendaftaran ekstrakurikuler menjadi contoh berulang dari pembuka sampai penutup. Database merupakan kasus terpisah untuk asumsi dan tindakan berisiko. Bab Review membahas perubahan dan bukti tanpa materi Git. Gunakan satu jalur simulasi utama serta beberapa keputusan pembanding sesuai waktu, tanpa harus memutar seluruh ending saat mengajar.
+Bab 3–9 memakai contoh eksplorasi website, portofolio, dark mode, koordinasi project, dan review usulan. Pendaftaran ekstrakurikuler tetap menjadi demonstrasi akhir; cerita database serta humornya dipertahankan. Tujuh slide menyediakan dua pendekatan beserta kondisi penggunaannya, tanpa skor. Empat contoh percakapan memperlihatkan arahan yang berkembang. Jika kelas tidak merespons, kontrol slide tetap membawa pembahasan. Revisi versi deck memulai ulang progres lama; preferensi tampilan tetap dibaca. Menu bernomor 01–10 dan purnama hanya pada Bab 10.
 
-Instruksi lengkap pada bab 4 menjelaskan perbaikan hasil pendaftaran, penelusuran handler, rencana, batas perubahan, serta tes data valid dan tidak valid. Kriteria memeriksa pesan, errors per isian, daftar pendaftaran, dan reset. Ilustrasi diff pada bab 7 menunjukkan perbaikan pesan yang disertai penghapusan validasi, tanpa mengubah kode simulasi. Sumber pendidikan tersedia pada notes dan bagian rujukan naskah pemateri.
+Bab 4 menampilkan spec portofolio, Bab 5 rencana yang menyesuaikan temuan, Bab 6 AGENTS.md untuk project kelompok, dan Bab 7 SKILL.md untuk review. Berkas tersebut adalah contoh bahan ajar, bukan konfigurasi yang dipasang ke workspace. Bab 8 membahas usulan AI dan perluasan cakupan, sedangkan Bab 9 membedakan rancangan untuk diskusi dari penggunaan nyata. Tombol **Sumber** membuka tautan serta bagian rujukan. Skenario pilihan adalah ilustrasi penerapan, bukan jaminan respons AI. Tautan daring memerlukan internet; materi dan simulasi tetap dapat dibuka lokal.
 
 Micro Task menyediakan kode dan apps lokal yang dapat diperiksa secara opsional. Tidak ada AI live, terminal, backend sungguhan, API key, atau data peserta yang dikirim keluar. Klaim tokoh dalam cerita tidak menjadi bukti pengujian oleh penyusun materi.
+
+Sumber diperiksa pada 13 November 2026. Contoh OpenCode memakai **V1 v1.19.5** dengan tautan versi tetap. Perilaku Plan mengikuti source karena halaman docs versi itu tidak sepenuhnya cocok. Dokumentasi V2 tidak dicampur ke contoh V1. Rujukan kursus hanya berdasarkan ringkasan dan silabus; tidak ada kutipan video yang belum diperiksa. Detail sumber dan batas klaim tersedia dalam naskah pemateri.
 
 ## Kendali presentasi
 
 - `←` / `→`: slide sebelumnya/berikutnya.
-- `↑` / `↓`: langsung memilih item sebelumnya/berikutnya pada selector materi dan mengganti pembahasannya.
+- `↑` / `↓`: memilih bagian pada selector materi. Pada slide pilihan, membuka pertimbangan lalu berpindah pendekatan.
 - `M`: buka/tutup menu bab; panah atas/bawah dan Enter memilih bab.
-- `B`: buka pembahasan atau lanjutkan fokus/fragmen berikutnya. Pada adegan, melengkapi teks lalu maju satu giliran.
+- `B`: membuka pertimbangan atau melanjutkan bagian berikutnya. Pada ilustrasi percakapan, maju satu bagian. Pada adegan simulasi, melengkapi teks lalu maju satu giliran.
 - `N`: catatan pemateri. `P`: fokus materi. `F`: fullscreen.
 - `T`: transisi. `L`: gerak air menu saat fokus berada pada presentasi utama.
 - `Home`: kembali ke pembuka dan menghapus progres pembahasan serta adegan.
 - `?`: kontrol pemateri. Escape menutup dialog atau melewati transisi.
 
 Fullscreen menyembunyikan bar atas/bawah. Panah dan M/F tetap menjadi navigasi. Semua perpindahan dilakukan manual.
+
+Pada slide pilihan, klik pendekatan untuk membuka pertimbangannya. **Buka pertimbangan** membuka pilihan awal, dan **Tutup pembahasan** menyembunyikannya. Pilihan serta keadaan pembahasan disimpan. Contoh percakapan menyediakan **Sebelumnya** dan **Lanjutkan contoh**; navigasi slide utama tetap terpisah.
 
 ## Adegan database dalam slide
 
@@ -74,11 +80,11 @@ Bahas hasil percobaan membawa pengiriman terakhir ke AI. Dialog penolakan menyeb
 
 Penandaan kode memakai latar baris dan warna nomor baris, tanpa garis samping atau bingkai editor. Fokus keyboard editor ditunjukkan lewat latar dan penegasan status penandaan. Tombol Hapus tanda serta Bahas kode ini memakai warna bidang saat fokus, tanpa outline. Pilihan dialog Micro Task juga tidak memakai underline.
 
-User dan AI dapat berbicara melalui beberapa textbox berurutan. Biaya satu pertanyaan kode dihitung sekali dari rentang source yang benar-benar ditanyakan: 1 poin per 15 baris tidak kosong, dibulatkan ke atas dan dibatasi maksimal 2 poin. Jadi 1–15 baris memakai 1 poin, sedangkan 16 baris atau lebih memakai 2 poin. Baris yang terbungkus secara visual tidak menambah hitungan. Menandai kode, membuka pilihan pertanyaan, dan Lanjut antarbagian belum menambah biaya. Chat biasa memakai 1 poin, sedangkan navigasi dan deploy tidak memakai poin.
+User dan AI dapat berbicara melalui beberapa textbox berurutan. Biaya satu pertanyaan kode dihitung sekali dari rentang source yang benar-benar ditanyakan: 1 poin per 15 baris tidak kosong, dibulatkan ke atas, minimal 1 poin per pertanyaan. Biaya tidak lagi dibatasi 2 poin. Jadi 1–15 baris memakai 1 poin, 16–30 memakai 2 poin, 31–45 memakai 3 poin, dan seterusnya. Baris yang terbungkus secara visual tidak menambah hitungan. Menandai kode, membuka pilihan pertanyaan, dan Lanjut antarbagian belum menambah biaya. Chat biasa memakai 1 poin, sedangkan navigasi dan deploy tidak memakai poin.
 
 Healthbar ditempelkan di atas siluet AI dan tidak tampil pada Kode atau Apps. Batas bantuan adalah 12 poin. Pembuka memakai poin pertama dengan bar awal penuh tanpa angka atau persentase. Total 8–9 poin mulai tersendat, 10–11 makin terganggu, dan permintaan yang mencapai 12 ditolak sebelum diproses. Nilai total dibatasi 12 meskipun pertanyaan 2 poin dikirim saat baru tersisa 1 poin. Asap dan petir berulang acak selama giliran AI. Jeda efek menghentikan pengulangan, Lanjutkan efek menyalakannya kembali. Kode, Apps, Riwayat, dan tab tersembunyi menghentikan siklus yang tidak terlihat. Giliran atau pilihan User membersihkan efek. Reduced-motion menampilkan efek statis. Nuklir tetap memiliki prioritas atas overheat.
 
-Good ending melalui tiga pembahasan kode, tiga perbaikan, dan desain rapi memakai 8 poin jika rentang yang dipilih terarah. Membahas seluruh HTML formulir menambah biayanya menjadi 9 poin. Keduanya masih berada sebelum batas berhenti.
+Good ending melalui tiga pembahasan kode, tiga perbaikan, dan desain rapi memakai 8 poin jika rentang yang dipilih terarah. Membahas rentang yang lebih luas menambah biaya sesuai jumlah baris tidak kosong dan dapat mempercepat tercapainya batas berhenti.
 
 Percobaan menyimpan isian sebelum dan sesudah handler frontend selesai. Formulir kosong tidak menjadi bukti kehilangan data. Satu isian salah dengan isian lain benar dibedakan dari satu isian benar dengan sisanya salah. Keluhan reset hanya muncul ketika ada nilai yang benar-benar hilang, dan tidak ditawarkan setelah reset diperbaiki. Percobaan terbaru menentukan pilihan yang relevan.
 
@@ -92,11 +98,11 @@ Tata letak dialog biasa Micro Task memakai aturan bab Risiko yang sama: ukuran d
 
 Penyamaan layout lulus 15 pemeriksaan pada 390/768/1024/1366/1468/1920, termasuk pembandingan langsung dengan bab Risiko dan mode iframe presentasi. Regresi Micro Task lulus 18 pemeriksaan untuk response, isian, healthbar, asap, reduced-motion, serta pilihan dialog. Enam pemeriksaan penandaan kode juga lulus. Gambar dialog User/AI, pilihan, dan kelompok siswa diperiksa langsung.
 
-Setelah melanjutkan narasi terakhir, Micro Task langsung membuka hasil ending tanpa judul tambahan Pembahasan percakapan. Good ending memakai Hasil, Bukti, Tindak lanjut, dan Riwayat. Ending yang masih bermasalah memakai Kesalahan, Bukti, Perbaikan, dan Riwayat. Overheat memakai Kondisi terakhir, Bukti, Langkah berikutnya, dan Riwayat. Isi selalu mengikuti kondisi akhir dan percobaan yang sesuai kode terakhir. Kesalahan AI sebelumnya dicatat di Riwayat, bukan ditambahkan sebagai kegagalan hasil yang sudah benar.
+Setelah narasi terakhir, Micro Task membuka hasil ending. Good ending memakai Hasil, Bukti, Tindak lanjut, dan Riwayat. Ringkasan utamanya juga menunjukkan apakah penerimaan dan penolakan sudah dicoba pada kode terakhir; keadaan aplikasi yang benar tidak disamakan dengan pengujian demonstrasi lengkap. Ending bermasalah memakai Kesalahan, Bukti, Perbaikan, dan Riwayat. Overheat memakai Kondisi terakhir, Bukti, Langkah berikutnya, dan Riwayat. Kesalahan AI sebelumnya dicatat di Riwayat.
 
 Layout desktop menempatkan dua kolom ringkas di tengah vertikal area konten. Judul, ringkasan, dan tombol Ulangi menjadi satu kelompok dengan jarak normal. Panel kanan mengikuti tinggi tab dan isinya, tanpa tinggi minimum yang menciptakan ruang kosong. Kedua kelompok sejajar pada titik tengah vertikal. Riwayat panjang memakai area gulir yang dibatasi, sedangkan teks pendek memakai tinggi alaminya. Halaman dialog mandiri memakai komposisi yang sama. Pada ponsel, kedua bagian ditumpuk dengan jarak konsisten.
 
-Judul tab browser tetap Tools AI untuk AI-Assisted Development · TEFA pada seluruh slide dan mode dialog. Judul slide tidak lagi mengganti document.title. Redaksi judul, isi, istilah, dan catatan pemateri sudah mengikuti audit 37 temuan yang disetujui.
+Judul tab presentasi tetap Orientasi Penggunaan AI Tools secara Terstruktur · TEFA. Judul slide tidak mengganti document.title. Gaya visual P3R, pergantian bab manual, dan komposisi dialog dipertahankan.
 
 ## Arsip percakapan sebelumnya
 
@@ -135,7 +141,7 @@ Dialog, ringkasan dampak, requirement, dan konklusi rata kiri. Spasi kata normal
 ## File utama
 
 ```text
-content.js                           Bab, 43 slide, notes, glossary, task brief
+content.js                           Sepuluh bab, 45 slide, sumber, notes, glossary
 app.js                               Renderer, navigasi, kontrol, penyimpanan
 story-slides.js                       Integrasi adegan, snapshot, gerbang konklusi
 story-slides.css                      Layout adegan, konklusi, dan fokus manual
@@ -159,7 +165,7 @@ Contoh registration dan sales-report lama tidak dipakai deck aktif. Dokumen renc
 
 ## Riwayat pengujian sebelum revisi materi 43 slide
 
-Angka pengujian di bawah berasal dari iterasi sebelumnya dan tidak menjadi bukti pemeriksaan revisi materi 43 slide.
+Angka pengujian di bawah berasal dari iterasi sebelumnya dan tidak menjadi bukti pemeriksaan revisi materi aktif.
 
 Revisi source awal dengan validasi berurutan lulus 41 pemeriksaan: 13 model, 13 UI source/Apps, serta 15 UI murid individual. Model memeriksa 96 kombinasi source, delapan ending, nama identifier, biaya kode, limit, dan restore. Browser membuktikan empat validasi berurutan ditambah satu pengiriman menjadi satu pengiriman setelah optimasi, dengan hasil backend tetap sama. Kedua jalur pembahasan melalui Kode dan Apps diperiksa. Tampilan murid diuji pada enam ukuran. Hasil di bawah mencatat iterasi sebelumnya.
 

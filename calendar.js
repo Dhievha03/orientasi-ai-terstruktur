@@ -80,10 +80,7 @@ window.TEFA_CALENDAR = (() => {
       $('.calendar-month').style.opacity=String(entry);$('.calendar-month').style.transform=`translateY(${(1-entry)*30}px)`;$('.calendar-heading').style.opacity=String(clamp((progress-.08)/.14));
       $('#calendar-axis-line').style.strokeDashoffset=String(running.geometry.lineLength*(1-entry));$('#transition-moon').style.opacity=String(clamp((progress-.16)/.1));
       const phase=ease(clamp((progress-.18)/.46));
-      if(Number.isFinite(previous.phaseIndex)&&Number.isFinite(chapter.phaseIndex)){
-        const position=previous.phaseIndex+(chapter.phaseIndex-previous.phaseIndex)*phase;
-        updateMoon((1-Math.cos(position*Math.PI/4))/2,position>4);
-      }else updateMoon(previous.moon+(chapter.moon-previous.moon)*phase);
+      updateMoon(previous.moon+(chapter.moon-previous.moon)*phase,phase<.5?previous.waning:chapter.waning);
       if(progress>=.64){overlay.classList.add('is-landed');if(!running.committed){running.committed=true;onCommit();}}
       if(progress>=.82)$('#app-shell').classList.add('is-revealing');
       if(progress>=1)finish();else frame=requestAnimationFrame(step);

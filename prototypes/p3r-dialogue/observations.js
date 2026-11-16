@@ -59,8 +59,9 @@
       }
       if(focus.kind==='code'&&example.sourceKey(state,focus.file)===focus.key){
         const section=focus.range?example.codeSelection(state,focus.file,focus.range.start,focus.range.end):example.codeSections(state,focus.file).find(item=>item.id===focus.topic);
-        const item={...focus,observationKey:codeKey(focus)};
-        if(section?.id===focus.topic&&!reported.includes(item.observationKey))return [item];
+        const selected=section?{...focus,topic:section.id}:null;
+        const item=selected?{...selected,observationKey:codeKey(selected)}:null;
+        if(item&&!reported.includes(item.observationKey)&&!reported.includes(codeKey(focus)))return [item];
       }
       if(focus.kind==='appearance'&&state.created&&state.filesAvailable&&focus.key===example.sourceKey(state,'css')){
         const item={...focus,observationKey:`appearance:${focus.key}`};
@@ -78,7 +79,7 @@
     const saved=cleanWorkspace(value),result=[];
     const names={ai:'AI',code:'Kode',apps:'Apps'};
     const files={html:'index.html',css:'styles.css',js:'app.js'};
-    const topicNames={response:'penanganan response',errors:'pesan per isian',reset:'reset formulir',accepted:'pendaftaran diterima','rejected-match':'penolakan yang sesuai',fields:'label dan isian',choices:'pilihan kelas dan kegiatan',design:'tampilan formulir',structure:'isian yang dihapus',performance:'pemrosesan data berulang',general:'bagian kode biasa'};
+    const topicNames={response:'penanganan response',errors:'pesan per isian',reset:'reset formulir',accepted:'pendaftaran diterima','rejected-match':'penolakan yang sesuai',fields:'label dan isian',choices:'pilihan kelas dan kegiatan',design:'tampilan formulir',structure:'isian yang dihapus',performance:'pemrosesan data berulang',general:'bagian kode yang ditandai'};
     for(let index=0;index<=choices.length;index++){
       for(const event of saved.events.filter(item=>item.after===index)){
         let text;

@@ -150,5 +150,17 @@ body[data-workspace-view]:not([data-workspace-view=ai]) .playback-controls{displ
 .scene[data-setting=micro] .choice-list button.is-selected{background:none;color:#1438ac;transform:translateX(7px)}
 .scene[data-setting=micro] .choice-list button.is-selected::before{background:#fff}
 .scene[data-setting=micro] .choice-list button:focus-visible{outline:0;text-decoration:none}
+.scene[data-setting=micro] .speech-shell,.scene[data-setting=micro] .speech-content,.scene[data-setting=micro] .spoken-line{min-width:0}
+.scene[data-setting=micro] .speech-content{width:100%}
+.scene[data-setting=micro] .spoken-line{overflow-wrap:anywhere}
+.code-reference{font:700 14px/1.35 Archivo,sans-serif;letter-spacing:.2px;color:#7ce8ff;overflow-wrap:anywhere;margin-bottom:8px;flex-shrink:0}
+@media(min-width:761px){
+ .scene[data-setting=micro][data-mode=choice] .playfield{padding-bottom:max(9dvh,88px)}
+ .scene[data-setting=micro][data-mode=choice] .choices{display:flex;flex-direction:column;flex:0 1 auto;min-height:0}
+ .scene[data-setting=micro][data-mode=choice] .choice-list{flex:1 1 auto;min-height:0;grid-auto-rows:max-content;align-content:start;overflow-y:auto;overscroll-behavior:contain;padding-right:8px;scrollbar-width:thin;scrollbar-color:#ecfbff #12245c}
+ .scene[data-setting=micro][data-mode=choice] .choice-list::-webkit-scrollbar{width:8px}
+ .scene[data-setting=micro][data-mode=choice] .choice-list::-webkit-scrollbar-track{background:#12245c}
+ .scene[data-setting=micro][data-mode=choice] .choice-list::-webkit-scrollbar-thumb{background:#ecfbff;border-left:2px solid #7ce8ff}
+}
 .scene[data-setting=micro][data-speaker=ai] #portrait-ai>.emotion-layer{clip-path:inset(0 -120% -20% -120%)}
-@media(max-width:760px){.scene[data-setting=micro] .choices{width:fit-content;max-width:calc(100% - 12px);align-self:flex-start;margin:24px 0 12px 6px;padding:12px 14px 14px 8px}.scene[data-setting=micro] .choice-list button{font-size:19px;padding:12px 18px 12px 14px}}
+@media(max-width:760px){.scene[data-setting=micro] .choices{width:fit-content;max-width:calc(100% - 12px);align-self:flex-start;margin:24px 0 12px 6px;padding:12px 14px 14px 8px}.scene[data-setting=micro] .choice-list button{font-size:19px;padding:12px 18px 12px 14px;scroll-margin-bottom:140px}}
