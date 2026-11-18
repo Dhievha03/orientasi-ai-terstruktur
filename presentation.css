@@ -1,5 +1,5 @@
 /* Submenu language: diagonal information bands, opaque reading surfaces, and quiet blue depth. */
-.slide-content{display:flex;flex:1 0 auto;flex-direction:column;justify-content:safe center;gap:22px;min-width:0}
+.slide-content{display:flex;flex:1 0 auto;flex-direction:column;justify-content:safe center;gap:clamp(24px,3vh,36px);min-width:0}
 #slide .slide-content>*{margin-block:0!important;flex-shrink:0}
 #slide .slide-content>.slide-note{padding-top:0!important}
 #slide .slide-content>:is(.concept-layout,.document-layout,.discussion-layout,.conversation-layout,.focus-layout,.explorer-layout,.context-layout,.scene-brief-layout,.story-conclusion,.roles-layout,.closing-layout,.comparison-content){align-items:center!important}
@@ -8,7 +8,7 @@
 .concept-example{padding:30px;background:#f7fafb;color:#102d5b;min-width:0}
 .concept-example .small-label{color:#1746ab;margin-bottom:16px}
 .concept-example p{font-size:clamp(25px,2.1vw,36px);line-height:1.4}
-.plan-reading{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center;gap:24px 42px;width:100%;margin-inline:auto}
+.plan-reading{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center;gap:clamp(24px,3vh,36px) 42px;width:100%;margin-inline:auto}
 .plan-explanation>p{font-size:clamp(23px,1.8vw,29px);line-height:1.4;margin:0}
 .plan-explanation>.plan-introduction{margin-bottom:22px}
 .plan-example{background:#f7fafb;color:#173b64;padding:25px 30px}

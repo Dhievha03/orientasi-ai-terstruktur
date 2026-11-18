@@ -121,7 +121,7 @@
     if(slide.type!=='cover'&&slide.type!=='storyScene'){
       const content=document.createElement('div');
       content.className='slide-content';
-      [...article.children].filter(child=>!child.matches('.submenu-section,.slide-heading')).forEach(child=>content.append(child));
+      [...article.children].filter(child=>!child.matches('.submenu-section')).forEach(child=>content.append(child));
       article.append(content);
     }
     story.mount(slide);
